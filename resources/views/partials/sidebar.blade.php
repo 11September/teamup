@@ -15,6 +15,7 @@
                     <li class="{{ request()->is('admin/activities*') ? 'active' : '' }}"><a href="index.html"><i class="fas fa-stopwatch"></i> <span>Activities</span></a></li>
                     <li class="{{ request()->is('admin/measures*') ? 'active' : '' }}"><a href="index.html"><i class="fas fa-weight-hanging"></i> <span>Measures</span></a></li>
                     <li class="{{ request()->is('admin/reports*') ? 'active' : '' }}"><a href="index.html"><i class="far fa-file-alt"></i> <span>Reports</span></a></li>
+                    <li class="{{ request()->is('admin/settings*') ? 'active' : '' }}"><a href="index.html"><i class="fas fa-cogs"></i> <span>Settings</span></a></li>
                 </ul>
             </nav>
         </div>
