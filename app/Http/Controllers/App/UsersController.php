@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\App;
 
 use App\User;
 use Validator;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
-class UserController extends Controller
+class UsersController
 {
     public $successStatus = 200;
     /**
