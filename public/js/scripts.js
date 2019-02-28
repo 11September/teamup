@@ -70,7 +70,7 @@
     /*================================
     form bootstrap validation
     ==================================*/
-    $('[data-toggle="popover"]').popover()
+    $('[data-toggle="popover"]').popover();
 
     /*------------- Start form Validation -------------*/
     window.addEventListener('load', function() {
@@ -134,40 +134,6 @@
         $('.offset-area').toggleClass('show_hide');
         $('.settings-btn').toggleClass('active');
     });
-
-    /*================================
-    Owl Carousel
-    ==================================*/
-    function slider_area() {
-        var owl = $('.testimonial-carousel').owlCarousel({
-            margin: 50,
-            loop: true,
-            autoplay: false,
-            nav: false,
-            dots: true,
-            responsive: {
-                0: {
-                    items: 1
-                },
-                450: {
-                    items: 1
-                },
-                768: {
-                    items: 2
-                },
-                1000: {
-                    items: 2
-                },
-                1360: {
-                    items: 3
-                },
-                1600: {
-                    items: 3
-                }
-            }
-        });
-    }
-    slider_area();
 
     /*================================
     Fullscreen Page
