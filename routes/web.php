@@ -11,17 +11,31 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Auth::routes();
 
+Route::get('/', 'WelcomeController@welcome')->name('welcome');
 Route::get('/home', 'HomeController@index')->name('home');
 
-
 Route::group(['namespace' => 'Admin'], function () {
-    Route::group(['middleware' => 'auth'], function () {
-        Route::get('/admin', 'AdminController@admin')->name('home');
+    Route::group(['prefix' => 'admin'], function () {
+        Route::group(['middleware' => 'auth'], function () {
+
+            Route::get('/', 'AdminController@admin')->name('home');
+
+            Route::middleware(['admin'])->group(function () {
+
+                Route::resource('users', 'UsersController');
+
+                Route::prefix('teams')->group(function () {
+
+                });
+
+            });
+
+            Route::middleware(['adminOrCoach'])->group(function () {
+
+            });
+
+        });
     });
 });

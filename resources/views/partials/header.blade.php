@@ -24,8 +24,8 @@
                     <div class="user-profile pull-right">
                         <h4 class="user-name dropdown-toggle" data-toggle="dropdown">
 
-                            @if(Auth::user()->name)
-                                {{ Auth::user()->name }}
+                            @if(Auth::user()->first_name)
+                                {{ Auth::user()->fullname  }}
                             @endif
 
                             <i class="fa fa-angle-down"></i>
