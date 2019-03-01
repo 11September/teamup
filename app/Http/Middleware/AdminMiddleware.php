@@ -3,6 +3,8 @@
 namespace App\Http\Middleware;
 
 use Closure;
+
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
 class AdminMiddleware
@@ -22,6 +24,7 @@ class AdminMiddleware
             }
         }
 
-        return redirect('/');
+//        return redirect('/');
+        return new Response(view("unauthorized"));
     }
 }

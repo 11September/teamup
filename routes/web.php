@@ -20,9 +20,9 @@ Route::group(['namespace' => 'Admin'], function () {
     Route::group(['prefix' => 'admin'], function () {
         Route::group(['middleware' => 'auth'], function () {
 
-            Route::get('/', 'AdminController@admin')->name('home');
-
             Route::middleware(['admin'])->group(function () {
+
+                Route::get('/', 'AdminController@admin')->name('home');
 
                 Route::resource('users', 'UsersController');
 

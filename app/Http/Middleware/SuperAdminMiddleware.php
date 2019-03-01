@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
 class SuperAdminMiddleware
@@ -22,6 +23,7 @@ class SuperAdminMiddleware
             }
         }
 
-        return redirect('/');
+//        return redirect('/');
+        return new Response(view("unauthorized"));
     }
 }
