@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\User;
 use Illuminate\Http\Request;
+use App\Http\Requests\UserStore;
 use App\Http\Controllers\Controller;
 
 class UsersController extends Controller
@@ -14,7 +16,9 @@ class UsersController extends Controller
      */
     public function index()
     {
-        return view('admin.users.index');
+        $users = User::select('id', 'first_name', 'last_name', 'phone', 'email', 'expiration_date', 'type', 'status')->get();
+
+        return view('admin.users.index', compact('users'));
     }
 
     /**
@@ -24,7 +28,7 @@ class UsersController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.users.create');
     }
 
     /**
@@ -33,9 +37,14 @@ class UsersController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(UserStore $request)
     {
-        //
+        User::create($request->all());
+
+        return redirect()->action('Admin\UsersController@index')
+            ->with(['alert-status' => 'success',
+                'message' => 'Користувач успішно доданий! Перевiрте пошту!'
+            ]);
     }
 
     /**
@@ -44,9 +53,9 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(User $user)
     {
-        //
+        return view('admin.users.show', compact('user'));
     }
 
     /**
@@ -55,9 +64,9 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(User $user)
     {
-        //
+        return view('admin.users.edit', compact('user'));
     }
 
     /**

@@ -21,18 +21,20 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->rememberToken();
 
-            $table->enum('type', ['user', 'coach', 'admin'])->default('user');
+            $table->enum('type', ['athlete', 'coach', 'admin']);
 
             $table->smallInteger('number_students')->nullable();
             $table->string('activation_code', 50)->nullable();
             $table->date('expiration_date', 50)->nullable();
-
-            $table->enum('status', ['active', 'disable'])->default('active');
+            $table->enum('activation', ['full', 'demo', 'expired'])->default('demo');
+            $table->enum('status', ['active', 'inactive'])->default('active');
 
             $table->string('player_id', 50)->unique()->nullable();
             $table->enum('push', ['enabled', 'disabled'])->default('enabled');
             $table->enum('push_chat', ['true', 'false'])->default('true');
             $table->timestamp('email_verified_at')->nullable();
+            $table->string('phone', 15)->nullable();
+            $table->string('school', 191)->nullable();
             $table->timestamps();
         });
     }

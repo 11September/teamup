@@ -1532,7 +1532,6 @@ table.dbkit-table tr td {
 
 .tstu-img {
     width: 70px;
-    width: 70px;
     border-radius: 50%;
     overflow: hidden;
     float: left;
@@ -2835,3 +2834,27 @@ table.dataTable thead td {
 }
 
 /*-------------------- END Offset Sidebar ------------------- */
+
+
+.datatable-actions-link{
+    padding: 0 10px;
+}
+
+.datatable-actions-link i{
+    font-size: 20px;
+    color: #6a56a5;
+}
+
+.datatable-actions-link a:hover{
+    color: #444;
+}
+
+.datatable-actions-link i:hover{
+    color: #444;
+}
+
+.create-link{
+    font-size: 20px;
+    color: #6a56a5;
+    font-weight: 600;
+}
