@@ -33,47 +33,45 @@ class UserStore extends FormRequest
                 'required',
                 Rule::in(['athlete', 'coach', 'admin']),
             ],
-            'number_students' => 'required|int|min:1',
+            'activation' =>  [
+                'required',
+                Rule::in(['demo', 'full']),
+            ],
             'activation_code' => 'required|string|min:10',
             'expiration_date' => 'required|date',
+            'number_students' => 'required|int|min:1',
             'phone' => 'string|min:10|max:18|unique:users,phone',
             'school' => 'string|min:6',
         ];
     }
 
-    public function messages()
-    {
-        return [
-            'name.first_name' => "ПІБ дитини обов'язкове поле",
-            'name.min' => "ПІБ дитини повинен містити не менше 6 символів",
-
-            'birthday.required' => "Дата народження дитини обов'язкове поле",
-            'birthday.date' => "Дата народження має бути датою",
-
-            'parent_name.required' => "ПІБ батьків обов'язкове поле",
-            'parent_name.min' => "ПІБ батьків повинен містити не менше 6 символів",
-
-            'parent_phone.required' => "Номер телефону батьків обов'язкове поле",
-            'parent_phone.unique' => "Номер телефону вже прив'язаний до користувача",
-
-            'email.required' => "Email батьків обов'язкове поле",
-            'email.email' => "Email маэ бути згiдно формату",
-            'email.unique' => "Email повинен бути унікальним",
-
-            'address.required' => "Адреса батьків обов'язкове поле",
-            'address.min' => "Мінімальна кількість символів 6 для адреси",
-
-            'password.required' => "Пароль обов'язкове поле",
-            'password.min' => "Пароль повинен містити не менше 6 символів",
-            'password.confirmed' => "Паролі повинні співпадати",
-
-            'school_id.required' => "Садок обов'язкове поле",
-            'group_id.required' => "Група обов'язкове поле",
-            'status.required' => "Статус обов'язкове поле",
-            'parents.required' => "ВибБатько / Мати обов'язкове поле",
-
-            'parent_phone.min' => "Мінімальна кількість символів 10 для номеру телефона",
-            'parent_phone.max' => "Максимальна кількість символів 13 для номеру телефона",
-        ];
-    }
+//    public function messages()
+//    {
+//        return [
+//            'first_name.required' => "First name required field",
+//            'first_name.min' => "First name must contain at least 6 characters",
+//
+//            'last_name.required' => "Last name required field",
+//            'last_name.min' => "Last name must contain at least 6 characters",
+//
+//            'email.required' => "Email required field",
+//            'email.email' => "Email маэ бути згiдно формату",
+//            'email.unique' => "Email повинен бути унікальним",
+//
+//            'address.required' => "Адреса батьків обов'язкове поле",
+//            'address.min' => "Мінімальна кількість символів 6 для адреси",
+//
+//            'password.required' => "Пароль обов'язкове поле",
+//            'password.min' => "Пароль повинен містити не менше 6 символів",
+//            'password.confirmed' => "Паролі повинні співпадати",
+//
+//            'school_id.required' => "Садок обов'язкове поле",
+//            'group_id.required' => "Група обов'язкове поле",
+//            'status.required' => "Статус обов'язкове поле",
+//            'parents.required' => "ВибБатько / Мати обов'язкове поле",
+//
+//            'parent_phone.min' => "Мінімальна кількість символів 10 для номеру телефона",
+//            'parent_phone.max' => "Максимальна кількість символів 13 для номеру телефона",
+//        ];
+//    }
 }
