@@ -3,9 +3,11 @@
 namespace App\Http\Requests;
 
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Foundation\Http\FormRequest;
+use Symfony\Component\VarDumper\Dumper\DataDumperInterface;
 
-class UserStore extends FormRequest
+class UserUpdatePassword extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,23 +27,19 @@ class UserStore extends FormRequest
     public function rules()
     {
         return [
-            'first_name' => 'required|string|min:6',
-            'last_name' => 'required|string|min:6',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6|max:255|confirmed',
-            'type' =>  [
-                'required',
-                Rule::in(['athlete', 'coach', 'admin']),
-            ],
-            'activation' =>  [
-                'required',
-                Rule::in(['demo', 'full']),
-            ],
-            'activation_code' => 'required|string|min:10',
-            'expiration_date' => 'required|date',
-            'number_students' => 'required|int|min:1',
-            'phone' => 'numeric|min:10|max:18|unique:users,phone',
-            'school' => 'string|min:6',
+            'password-old' =>
+                [
+                    'required',
+                    'string',
+                    'min:6',
+                    'max:255',
+                    function ($attribute, $value, $fail) {
+                        if (!Hash::check($value, $this->user()->password)) {
+                            $fail('Your current password doesnt match');
+                        }
+                    },
+                ],
+            'password' => 'required|string|min:6|max:255|confirmed|different:password-old'
         ];
     }
 

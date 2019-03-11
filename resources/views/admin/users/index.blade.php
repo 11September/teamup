@@ -78,19 +78,18 @@
                                             </a>
 
                                             <a class="datatable-actions-link"
-                                               href="{{ url('admin/users', $user->id) }}">
-                                                <i class="fas fa-trash-alt"></i>
+                                               href="{{ url('admin/users/reset_password/' . $user->id) }}">
+                                                <i class="fas fa-key"></i>
                                             </a>
 
-                                            {{--<form id="delete-form" method="POST" action="/admin/users/{{$user->id}}">--}}
-                                            {{--{{ csrf_field() }}--}}
-                                            {{--{{ method_field('DELETE') }}--}}
+                                            <a class="datatable-actions-link" href="">
+                                                <form method="POST" class="delete-form" action="{{ action('Admin\UsersController@destroy', $user->id) }}">
+                                                    {{ csrf_field() }}
+                                                    {{ method_field('DELETE') }}
 
-                                            {{--<div class="form-group">--}}
-                                            {{--<i class="fas fa-trash-alt"></i>--}}
-                                            {{--<input type="submit" class="btn btn-danger" value="">--}}
-                                            {{--</div>--}}
-                                            {{--</form>--}}
+                                                    <button type="submit" class="delete-button"><i class="fas fa-trash-alt"></i></button>
+                                                </form>
+                                            </a>
                                         </td>
                                     </tr>
                                 @endforeach

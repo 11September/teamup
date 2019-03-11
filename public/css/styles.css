@@ -2837,7 +2837,7 @@ table.dataTable thead td {
 
 
 .datatable-actions-link{
-    padding: 0 10px;
+    padding: 0 5px;
 }
 
 .datatable-actions-link i{
@@ -2857,4 +2857,13 @@ table.dataTable thead td {
     font-size: 20px;
     color: #6a56a5;
     font-weight: 600;
+}
+
+.delete-form{
+    display: contents;
+}
+
+.delete-button{
+    background-color: transparent;
+    border:transparent;
 }

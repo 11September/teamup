@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\UserStore;
+use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserUpdatePassword;
 
 class UsersController extends Controller
 {
@@ -76,9 +78,15 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, User $user)
     {
-        //
+        $user->update($request->all());
+        $user->save();
+
+        return redirect()->action('Admin\UsersController@index')
+            ->with(['alert-status' => 'success',
+                'message' => 'User password successfully changed!'
+            ]);
     }
 
     /**
@@ -89,6 +97,31 @@ class UsersController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = User::where('id', $id)->first();
+        $user->delete();
+
+        return redirect()->action('Admin\UsersController@index')
+            ->with(['alert-status' => 'success',
+                'message' => 'User password successfully changed!'
+            ]);
+    }
+
+
+    public function reset_password(User $user)
+    {
+        return view('admin.users.reset-password', compact('user'));
+    }
+
+
+    public function update_password(UserUpdatePassword $request, $id)
+    {
+        $user = User::where('id', $id)->first();
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        return redirect()->action('Admin\UsersController@index')
+            ->with(['alert-status' => 'success',
+                'message' => 'User password successfully changed!'
+            ]);
     }
 }

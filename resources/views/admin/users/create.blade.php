@@ -164,8 +164,8 @@
 
                                             @if ($errors->has('activation'))
                                                 <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $errors->first('activation') }}</strong>
-                                            </span>
+                                                    <strong>{{ $errors->first('activation') }}</strong>
+                                                </span>
                                             @endif
 
                                         </div>
@@ -267,7 +267,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <button class="btn btn-primary" type="submit">Submit form</button>
+                                        <button class="btn btn-primary" type="submit">Create User</button>
                                     </div>
                                 </div>
                             </div>
