@@ -28,6 +28,7 @@ Route::group(['namespace' => 'Admin'], function () {
                 Route::post('/users/update_password/{id}', 'UsersController@update_password')->name('update_user_password');
                 Route::resource('users', 'UsersController');
 
+                Route::resource('activities', 'ActivitiesController');
 
                 Route::prefix('teams')->group(function () {
 

@@ -8,7 +8,7 @@ class Activity extends Model
 {
     protected $table = 'activities';
 
-    protected $fillable = ['name', 'measure_id', 'type_graph', 'status'];
+    protected $fillable = ['name', 'measure_id', 'type_graph', 'status', 'user_id'];
 
     public function measure()
     {
@@ -23,5 +23,10 @@ class Activity extends Model
     public function coach()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public static function selectAll()
+    {
+        return Activity::select('id', 'name', 'measure_id', 'type_graph', 'user_id', 'status')->get();
     }
 }

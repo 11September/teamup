@@ -11,7 +11,7 @@
                     <li class="{{ request()->is('admin') ? 'active' : '' }}"><a href="{{ url('admin') }}"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a></li>
                     <li class="{{ request()->is('admin/users*') ? 'active' : '' }}"><a href="{{ url('admin/users') }}"><i class="fa fa-users"></i> <span>Users</span></a></li>
                     <li class="{{ request()->is('admin/teams*') ? 'active' : '' }}"><a href="index.html"><i class="fas fa-users-cog"></i> <span>Teams</span></a></li>
-                    <li class="{{ request()->is('admin/activities*') ? 'active' : '' }}"><a href="index.html"><i class="fas fa-stopwatch"></i> <span>Activities</span></a></li>
+                    <li class="{{ request()->is('admin/activities*') ? 'active' : '' }}"><a href="{{ url('admin/activities') }}"><i class="fas fa-stopwatch"></i> <span>Activities</span></a></li>
                     <li class="{{ request()->is('admin/measures*') ? 'active' : '' }}"><a href="index.html"><i class="fas fa-weight-hanging"></i> <span>Measures</span></a></li>
                     <li class="{{ request()->is('admin/reports*') ? 'active' : '' }}"><a href="index.html"><i class="far fa-file-alt"></i> <span>Reports</span></a></li>
                     <li class="{{ request()->is('admin/settings*') ? 'active' : '' }}"><a href="{{ url('admin/settings') }}"><i class="fas fa-cogs"></i> <span>Settings</span></a></li>

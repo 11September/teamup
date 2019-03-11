@@ -2867,3 +2867,7 @@ table.dataTable thead td {
     background-color: transparent;
     border:transparent;
 }
+
+.wrapper-add-new-one{
+    margin: 50px 0;
+}
