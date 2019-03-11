@@ -18,7 +18,7 @@ class UsersController extends Controller
      */
     public function index()
     {
-        $users = User::select('id', 'first_name', 'last_name', 'phone', 'email', 'expiration_date', 'type', 'status')->get();
+        $users = User::selectAll();
 
         return view('admin.users.index', compact('users'));
     }
