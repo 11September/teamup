@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\User;
 use Illuminate\Http\Request;
+use App\Services\UserService;
 use App\Http\Requests\UserStore;
-use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserUpdatePassword;
 
@@ -16,9 +16,17 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    protected $userservice;
+
+    public function __construct(UserService $userservice)
+    {
+        $this->userservice = $userservice;
+    }
+
     public function index()
     {
-        $users = User::selectAll();
+        $users = $this->userservice->index();
 
         return view('admin.users.index', compact('users'));
     }
@@ -41,7 +49,7 @@ class UsersController extends Controller
      */
     public function store(UserStore $request)
     {
-        User::create($request->all());
+        $this->userservice->create($request);
 
         return redirect()->action('Admin\UsersController@index')
             ->with(['alert-status' => 'success',
@@ -80,8 +88,7 @@ class UsersController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        $user->update($request->all());
-        $user->save();
+        $user = $this->userservice->update($request, $user->id);
 
         return redirect()->action('Admin\UsersController@index')
             ->with(['alert-status' => 'success',
@@ -97,8 +104,7 @@ class UsersController extends Controller
      */
     public function destroy($id)
     {
-        $user = User::where('id', $id)->first();
-        $user->delete();
+        $this->userservice->delete($id);
 
         return redirect()->action('Admin\UsersController@index')
             ->with(['alert-status' => 'success',
@@ -115,9 +121,7 @@ class UsersController extends Controller
 
     public function update_password(UserUpdatePassword $request, $id)
     {
-        $user = User::where('id', $id)->first();
-        $user->password = Hash::make($request->password);
-        $user->save();
+        $this->userservice->update_password($request, $id);
 
         return redirect()->action('Admin\UsersController@index')
             ->with(['alert-status' => 'success',

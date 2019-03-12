@@ -2871,3 +2871,7 @@ table.dataTable thead td {
 .wrapper-add-new-one{
     margin: 50px 0;
 }
+
+.form-control .invalid-feedback{
+    display: block;
+}
