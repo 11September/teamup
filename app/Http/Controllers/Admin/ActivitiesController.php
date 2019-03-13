@@ -3,11 +3,20 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Activity;
+
 use Illuminate\Http\Request;
+use App\Services\ActivityService;
 use App\Http\Controllers\Controller;
 
 class ActivitiesController extends Controller
 {
+    protected $activityService;
+
+    public function __construct(ActivityService $activityService)
+    {
+        $this->activityService = $activityService;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -15,7 +24,7 @@ class ActivitiesController extends Controller
      */
     public function index()
     {
-        $activities = Activity::selectAll();
+        $activities = $this->activityService->index();
 
         return view('admin.activities.index', compact('activities'));
     }
