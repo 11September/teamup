@@ -8,7 +8,7 @@ class Activity extends Model
 {
     protected $table = 'activities';
 
-    protected $fillable = ['name', 'measure_id', 'type_graph', 'status', 'user_id'];
+    protected $fillable = ['name', 'measure_id', 'type_graph', 'type_graph' ,'status', 'user_id'];
 
     public function measure()
     {
