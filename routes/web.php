@@ -34,9 +34,9 @@ Route::group(['namespace' => 'Admin'], function () {
 
                 });
 
-
-                Route::get('/settings', 'SettingsController@index')->name('settings');
-                Route::post('/settings', 'SettingsController@store')->name('settings_update');
+                Route::resource('settings', 'SettingsController')->only([
+                    'index', 'store'
+                ]);
             });
 
             Route::middleware(['adminOrCoach'])->group(function () {
