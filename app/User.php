@@ -43,10 +43,12 @@ class User extends Authenticatable
         return $this->first_name . ' '. $this->last_name;
     }
 
-    public function goal()
-    {
-        return $this->hasOne(Goal::class);
-    }
+    use Relations\HasOne\Goal;
+
+//    public function goal()
+//    {
+//        return $this->hasOne(Goal::class);
+//    }
 
     public function notes()
     {
