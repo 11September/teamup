@@ -10,20 +10,14 @@
 @endsection
 
 @section('content')
-
     <div class="page-title-area">
         <div class="row align-items-center">
             <div class="col-sm-12">
                 <div class="breadcrumbs-area clearfix">
-                    <h4 class="page-title pull-left">Dashboard</h4>
                     <ul class="breadcrumbs pull-left">
-                        <li><a href="{{ url('/admin') }}">Home</a></li>
+                        <li><a href="{{ url('/admin') }}">Dashboard</a></li>
                         <li><span>Users</span></li>
                     </ul>
-
-                    <div class="pull-right flex-pull-right">
-                        <a class="create-link" href="{{ url('/admin/users/create') }}">Create new User</a>
-                    </div>
                 </div>
             </div>
 
@@ -39,6 +33,13 @@
             <!-- Dark table start -->
             <div class="col-12 mt-5">
                 <div class="card">
+
+                    <div class="card-header">
+                        <div class="col-sm-12 flex-pull-right">
+                            <a class="create-link" href="{{ url('/admin/users/create') }}">Create new User</a>
+                        </div>
+                    </div>
+
                     <div class="card-body">
                         <h4 class="header-title">Data Table Dark</h4>
                         <div class="data-tables datatable-dark">

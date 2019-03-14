@@ -2163,13 +2163,13 @@ table.dataTable thead td {
 /* datatable-dark */
 
 .datatable-dark thead {
-    background: #444;
+    background: #303641;
     color: #fff;
 }
 
 .datatable-dark .dataTables_paginate .page-item.active .page-link,
 .datatable-dark .dataTables_paginate .page-item .page-link:hover {
-    background-color: #444;
+    background: #303641;
     border-color: #444;
     color: #fff;
 }
@@ -2190,6 +2190,10 @@ table.dataTable thead td {
     color: #999;
     background-color: #f9f9f9;
     border-color: #999;
+}
+
+.dataTables_wrapper .dataTables_paginate li.paginate_button{
+    padding: 0;
 }
 
 /*-------------------- END Datatable ------------------- */
@@ -3422,7 +3426,7 @@ ul ul li,
 ul ol li,
 ol ol li,
 ol ul li {
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
 button {
@@ -3510,4 +3514,9 @@ blockquote p{
 
 .form-control .invalid-feedback{
     display: block;
+}
+
+.jsgrid-header-row > .jsgrid-header-cell{
+    background: #303641 !important;
+    color: #fff;
 }

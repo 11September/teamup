@@ -16,10 +16,9 @@
         <div class="row align-items-center">
             <div class="col-sm-12">
                 <div class="breadcrumbs-area clearfix">
-                    <h4 class="page-title pull-left">Dashboard</h4>
                     <ul class="breadcrumbs pull-left">
-                        <li><a href="{{ url('/admin') }}">Home</a></li>
-                        <li><span>Users</span></li>
+                        <li><a href="{{ url('/admin') }}">Dashboard</a></li>
+                        <li><span>Exercises</span></li>
                     </ul>
                 </div>
             </div>
@@ -64,7 +63,6 @@
         (function () {
 
             var db = {
-
                 loadData: function (filter) {
                     return $.grep(this.clients, function (client) {
                         return (!filter.Name || client.Name.indexOf(filter.Name) > -1)
@@ -212,50 +210,4 @@
 
         });
     </script>
-
-    {{--<script>--}}
-    {{--$(document).ready(function (e) {--}}
-
-    {{--$("#new-one").on("click", function () {--}}
-
-    {{--var content = $('#activities');--}}
-
-    {{--itemStart = '<tr>';--}}
-    {{--itemActivityName = '<td><input type="text"></td>';--}}
-
-    {{--itemActivityUnits =--}}
-    {{--'<td>' +--}}
-    {{--'<select name="" id="">' +--}}
-    {{--'<option value="reps">reps</option> ' +--}}
-    {{--'</select>' +--}}
-    {{--'</td>';--}}
-
-    {{--itemActivityGraphicType =--}}
-    {{--'<td>' +--}}
-    {{--'<select name="" id="">' +--}}
-    {{--'<option value="reps">reps</option> ' +--}}
-    {{--'</select>' +--}}
-    {{--'</td>';--}}
-
-    {{--itemActivityColor =--}}
-    {{--'<td>' +--}}
-    {{--'<input type="color" id="head" name="head" value="#e66465">' +--}}
-    {{--'</td>';--}}
-
-    {{--itemActivityActions =--}}
-    {{--'<td>' +--}}
-    {{--'<a class="datatable-actions-link" href="#"><i class="fas fa-save"></i></a>' +--}}
-    {{--'<a class="datatable-actions-link" href="#"><i class="fas fa-trash-alt"></i></a>' +--}}
-    {{--'</td>';--}}
-
-    {{--itemEnd = '</tr>';--}}
-
-    {{--content.append(itemStart, itemActivityName, itemActivityUnits, itemActivityGraphicType, itemActivityColor, itemActivityActions, itemEnd);--}}
-
-    {{--console.log($(this).text());--}}
-    {{--});--}}
-
-    {{--});--}}
-    {{--</script>--}}
-
 @endsection
