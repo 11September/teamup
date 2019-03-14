@@ -16,7 +16,7 @@ class CreateActivitiesTable extends Migration
         Schema::create('activities', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->string('measure_id');
+            $table->integer('measure_id')->unsigned();
             $table->enum('graph_type', ['straight', 'reverse']);
             $table->enum('graph_color', ['red', 'yellow', 'blue', 'violet', 'orange', 'green', 'indigo']);
             $table->enum('status', ['default', 'custom']);
@@ -24,6 +24,7 @@ class CreateActivitiesTable extends Migration
 
             $table->timestamps();
 
+            $table->foreign('measure_id')->references('id')->on('measures');
             $table->foreign('user_id')->references('id')->on('users');
         });
     }

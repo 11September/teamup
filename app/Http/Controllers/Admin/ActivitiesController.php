@@ -26,6 +26,8 @@ class ActivitiesController extends Controller
     {
         $activities = $this->activityService->index();
 
+        dd($activities);
+
         return view('admin.activities.index', compact('activities'));
     }
 
