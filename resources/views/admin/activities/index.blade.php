@@ -1,19 +1,17 @@
 @extends('layouts.admin')
 
 @section('css')
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/demos.css') }}"/>
     <link rel="stylesheet" type="text/css" href="{{ asset('css/jsgrid.css') }}"/>
     <link rel="stylesheet" type="text/css" href="{{ asset('css/theme.css') }}"/>
 
     <style>
         .jsgrid-grid-body {
-            height: 500px;
+            height: 500px !important;
         }
     </style>
 @endsection
 
 @section('content')
-
     <div class="page-title-area">
         <div class="row align-items-center">
             <div class="col-sm-12">
@@ -23,10 +21,6 @@
                         <li><a href="{{ url('/admin') }}">Home</a></li>
                         <li><span>Users</span></li>
                     </ul>
-
-                    <div class="pull-right">
-                        <a class="create-link" href="{{ url('/admin/users/create') }}">Create new User</a>
-                    </div>
                 </div>
             </div>
 
@@ -38,98 +32,18 @@
     </div>
 
     <div class="main-content-inner">
-        {{--<div class="row">--}}
-        {{--<!-- Dark table start -->--}}
-        {{--<div class="col-12 mt-5">--}}
-        {{--<div class="card">--}}
-        {{--<div class="card-body">--}}
-        {{--<h4 class="header-title">Activities</h4>--}}
-
-        {{--<div class="wrapper-activities">--}}
-        {{--<table id="activities" class="text-center">--}}
-        {{--<thead class="text-capitalize">--}}
-        {{--<tr>--}}
-        {{--<th>Activity Name*</th>--}}
-        {{--<th>Units*</th>--}}
-        {{--<th>Graphic Type*</th>--}}
-        {{--<th>Activity Color*</th>--}}
-        {{--<td>Actions</td>--}}
-        {{--</tr>--}}
-        {{--</thead>--}}
-
-        {{--<tbody>--}}
-        {{--@foreach($activities as $activity)--}}
-
-        {{--<tr>--}}
-        {{--<td>--}}
-        {{--{{ $activity->name }}--}}
-        {{--</td>--}}
-        {{--<td>--}}
-        {{--{{ $activity->measure_id }}--}}
-        {{--</td>--}}
-        {{--<td>--}}
-        {{--{{ $activity->graph_type }}--}}
-        {{--</td>--}}
-        {{--<td>--}}
-        {{--{{ $activity->graph_color }}--}}
-        {{--</td>--}}
-        {{--<td class="datatable-actions">--}}
-        {{--<a class="datatable-actions-link"--}}
-        {{--href="{{ url('admin/users/' . $activity->id . '/edit') }}">--}}
-        {{--<i class="fas fa-save"></i>--}}
-        {{--</a>--}}
-
-        {{--<a class="datatable-actions-link" href="">--}}
-        {{--<form method="POST" class="delete-form"--}}
-        {{--action="{{ action('Admin\UsersController@destroy', $activity->id) }}">--}}
-        {{--{{ csrf_field() }}--}}
-        {{--{{ method_field('DELETE') }}--}}
-
-        {{--<button type="submit" class="delete-button"><i--}}
-        {{--class="fas fa-trash-alt"></i></button>--}}
-        {{--</form>--}}
-        {{--</a>--}}
-        {{--</td>--}}
-        {{--</tr>--}}
-
-        {{--@endforeach--}}
-        {{--</tbody>--}}
-
-        {{--</table>--}}
-        {{--</div>--}}
-
-        {{--<div class="wrapper-add-new-one">--}}
-        {{--<div class="row">--}}
-        {{--<div class="col-md-12">--}}
-        {{--<button id="new-one" class="btn new-one">+</button>--}}
-        {{--</div>--}}
-        {{--</div>--}}
-        {{--</div>--}}
-
-        {{--</div>--}}
-        {{--</div>--}}
-        {{--<!-- Dark table end -->--}}
-        {{--</div>--}}
-        {{--</div>--}}
-
-
         <div class="row">
-
             <div class="col-12 mt-5">
                 <div class="card">
                     <div class="card-body">
 
+                        <div id="jsGrid"></div>
 
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
-
-
-    <div id="jsGrid"></div>
-
 @endsection
 
 @section('scripts')
@@ -157,9 +71,7 @@
                             && (!filter.Units || client.Units === filter.Units)
                             && (!filter.Graphtype || client.Graphtype === filter.Graphtype)
                             && (!filter.Colors || client.Colors === filter.Colors)
-                            // && (filter.Age === undefined || client.Age === filter.Age)
-                            // && (!filter.Address || client.Address.indexOf(filter.Address) > -1)
-                            // && (!filter.Country || client.Country === filter.Country)
+                            && (filter.Status === undefined || client.Status === filter.Status)
                             && (filter.Married === undefined || client.Married === filter.Married);
                     });
                 },
@@ -199,19 +111,19 @@
             ];
 
             db.units = [
-                {Name: "", Id: 0},
+                // {Name: "", Id: 0},
                 {Name: "Sec", Id: 1},
                 {Name: "Miles", Id: 2}
             ];
 
             db.graphtype = [
-                {Name: "", Id: 0},
+                // {Name: "", Id: 0},
                 {Name: "Straight", Id: 1},
                 {Name: "Reverse", Id: 2}
             ];
 
             db.colors = [
-                {Name: "", Id: 0},
+                // {Name: "", Id: 0},
                 {Name: "Red", Id: 1},
                 {Name: "Blue", Id: 2}
             ];
@@ -223,7 +135,8 @@
                     "Units": 1,
                     "Graphtype": 1,
                     "Colors": 1,
-                    "Married": true
+                    "Status": "default"
+                    // "Married": true
                 },
                 {
                     "Id": 1,
@@ -231,7 +144,8 @@
                     "Units": 2,
                     "Graphtype": 2,
                     "Colors": 2,
-                    "Married": false
+                    "Status": "custom"
+                    // "Married": false
                 }
             ];
         }());
@@ -244,7 +158,7 @@
             $("#jsGrid").jsGrid({
                 height: "70%",
                 width: "100%",
-                filtering: true,
+                filtering: false,
                 editing: true,
                 inserting: true,
                 sorting: true,
@@ -257,15 +171,12 @@
 
                 fields: [
                     {
-                        name: "Name",
-                        textField: "Activity Name",
-                        type: "text",
-                        width: 150,
+                        name: "Name", textField: "Activity Name", type: "text", width: 150, sorting: true,
                         validate: "required"
                     },
 
                     {
-                        name: "Units", type: "select", items: db.units, valueField: "Id", textField: "Name",
+                        name: "Units", type: "select", items: db.units, valueField: "Id", textField: "Name", sorting: true,
                         validate: {
                             message: "Units should be specified", validator: function (value) {
                                 return value > 0;
@@ -274,7 +185,7 @@
                     },
 
                     {
-                        name: "Graphtype", type: "select", items: db.graphtype, valueField: "Id", textField: "Name",
+                        name: "Graphtype", type: "select", items: db.graphtype, valueField: "Id", textField: "Name", sorting: true,
                         validate: {
                             message: "Graphtype should be specified", validator: function (value) {
                                 return value > 0;
@@ -283,7 +194,7 @@
                     },
 
                     {
-                        name: "Colors", type: "select", items: db.colors, valueField: "Id", textField: "Name",
+                        name: "Colors", type: "select", items: db.colors, valueField: "Id", textField: "Name", sorting: true,
                         validate: {
                             message: "Graphtype should be specified", validator: function (value) {
                                 return value > 0;
@@ -291,7 +202,10 @@
                         }
                     },
 
-                    {name: "Married", type: "checkbox", title: "Is Married", sorting: false},
+                    {
+                        name: "Status", type: "checkbox", title: "Is Custom", sorting: true
+                    },
+                    // {name: "Married", type: "checkbox", title: "Is Married", sorting: false},
                     {type: "control"}
                 ]
             });

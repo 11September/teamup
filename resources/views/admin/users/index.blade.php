@@ -21,7 +21,7 @@
                         <li><span>Users</span></li>
                     </ul>
 
-                    <div class="pull-right">
+                    <div class="pull-right flex-pull-right">
                         <a class="create-link" href="{{ url('/admin/users/create') }}">Create new User</a>
                     </div>
                 </div>
