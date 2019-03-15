@@ -12,6 +12,7 @@
     <meta name="author" content="">
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="_token" content="{{ csrf_token() }}" />
 
     @include('partials.css')
 

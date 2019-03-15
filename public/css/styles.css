@@ -3520,3 +3520,7 @@ blockquote p{
     background: #303641 !important;
     color: #fff;
 }
+
+.jsgrid-grid-body {
+    height: 500px !important;
+}

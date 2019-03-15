@@ -19,7 +19,7 @@ class CreateActivitiesTable extends Migration
             $table->integer('measure_id')->unsigned();
             $table->enum('graph_type', ['straight', 'reverse']);
             $table->enum('graph_color', ['red', 'yellow', 'blue', 'violet', 'orange', 'green', 'indigo']);
-            $table->enum('status', ['default', 'custom']);
+            $table->enum('status', ['default', 'custom'])->default('default');
             $table->integer('user_id')->unsigned()->nullable();
 
             $table->timestamps();

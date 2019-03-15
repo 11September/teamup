@@ -3,12 +3,6 @@
 @section('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('css/jsgrid.css') }}"/>
     <link rel="stylesheet" type="text/css" href="{{ asset('css/theme.css') }}"/>
-
-    <style>
-        .jsgrid-grid-body {
-            height: 500px !important;
-        }
-    </style>
 @endsection
 
 @section('content')
@@ -60,91 +54,179 @@
     <script src="{{ asset('js/vendor/datatable/fields/jsgrid.field.control.js') }}"></script>
 
     <script>
+        function InsertData(insertData) {
+            var data = insertData;
+            var success = "false";
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            });
+            jQuery.ajax({
+                url: "{{ url('admin/activities') }}",
+                method: 'post',
+                data: data,
+                async: false,
+                success: function (data) {
+                    if (data.success) {
+                        success = "true";
+                    }
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            });
+
+            return success;
+        }
+
+        function UpdateData(updateData) {
+            var data = updateData;
+            var success = "false";
+
+            if (updateData['Id']) {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                    }
+                });
+                jQuery.ajax({
+                    url: "{{ url('admin/activities/') }}" + "/" + updateData['Id'],
+                    method: 'PATCH',
+                    data: data,
+                    async: false,
+                    success: function (data) {
+                        if (data.success) {
+                            success = "true";
+                        }
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+                });
+            }
+
+            return success;
+        }
+
+
+        function DeleteData(updateData) {
+            var success = "false";
+
+            if (updateData['Id']) {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                    }
+                });
+                jQuery.ajax({
+                    url: "{{ url('admin/activities/') }}" + "/" + updateData['Id'],
+                    method: 'DELETE',
+                    async: false,
+                    success: function (data) {
+                        if (data.success) {
+                            success = "true";
+                        }
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+                });
+            }
+
+            return success;
+        }
+
         (function () {
 
             var db = {
                 loadData: function (filter) {
-                    return $.grep(this.clients, function (client) {
-                        return (!filter.Name || client.Name.indexOf(filter.Name) > -1)
-                            && (!filter.Units || client.Units === filter.Units)
-                            && (!filter.Graphtype || client.Graphtype === filter.Graphtype)
-                            && (!filter.Colors || client.Colors === filter.Colors)
-                            && (filter.Status === undefined || client.Status === filter.Status)
-                            && (filter.Married === undefined || client.Married === filter.Married);
+                    return $.grep(this.activities, function (client) {
+                        return (!filter.Name || activity.Name.indexOf(filter.Name) > -1)
+                            && (!filter.Units || activity.Units === filter.Units)
+                            && (!filter.Graphtype || activity.Graphtype === filter.Graphtype)
+                            && (!filter.Colors || activity.Colors === filter.Colors)
+                            // && (filter.Status === undefined || activity.Status === filter.Status)
+                            && (filter.Married === undefined || activity.Married === filter.Married);
                     });
                 },
 
-                insertItem: function (insertingClient) {
+                insertItem: function (insertingActivity) {
                     console.log('insert');
-                    console.log(insertingClient);
-                    this.clients.push(insertingClient);
+                    console.log(insertingActivity);
+
+                    var status = InsertData(insertingActivity);
+                    if (status) {
+                        this.activities.push(insertingActivity);
+                    }
                 },
 
-                updateItem: function (updatingClient) {
+                updateItem: function (updatingActivity) {
                     console.log('update');
-                    console.log(updatingClient);
+                    console.log(updatingActivity);
+
+                    var status = UpdateData(updatingActivity);
                 },
 
-                deleteItem: function (deletingClient) {
+                deleteItem: function (deletingActivity) {
                     console.log('delete');
-                    console.log(deletingClient);
+                    console.log(deletingActivity);
 
-                    var clientIndex = $.inArray(deletingClient, this.clients);
-                    this.clients.splice(clientIndex, 1);
+                    var status = DeleteData(deletingActivity);
+
+                    if (status) {
+                        var clientIndex = $.inArray(deletingActivity, this.activities);
+                        this.activities.splice(clientIndex, 1);
+                    }
                 }
-
             };
 
             window.db = db;
 
-            db.countries = [
-                {Name: "", Id: 0},
-                {Name: "United States", Id: 1},
-                {Name: "Canada", Id: 2},
-                {Name: "United Kingdom", Id: 3},
-                {Name: "France", Id: 4},
-                {Name: "Brazil", Id: 5},
-                {Name: "China", Id: 6},
-                {Name: "Russia", Id: 7}
-            ];
-
             db.units = [
-                // {Name: "", Id: 0},
-                {Name: "Sec", Id: 1},
-                {Name: "Miles", Id: 2}
+                    @foreach($measures as $measure)
+                {
+                    Name: "{{ $measure->name }}", Id: {{ $measure->id }}
+                },
+                @endforeach
             ];
 
             db.graphtype = [
-                // {Name: "", Id: 0},
-                {Name: "Straight", Id: 1},
-                {Name: "Reverse", Id: 2}
+                {Name: "Straight", Id: "straight"},
+                {Name: "Reverse", Id: "reverse"}
             ];
 
             db.colors = [
-                // {Name: "", Id: 0},
-                {Name: "Red", Id: 1},
-                {Name: "Blue", Id: 2}
+                {Name: "red", Id: "red"},
+                {Name: "yellow", Id: "yellow"},
+                {Name: "blue", Id: "blue"},
+                {Name: "violet", Id: "violet"},
+                {Name: "orange", Id: "orange"},
+                {Name: "green", Id: "green"},
+                {Name: "indigo", Id: "indigo"}
             ];
 
-            db.clients = [
+            db.activities = [
+                    @foreach($activities as $activity)
                 {
-                    "Id": 1,
-                    "Name": "Stuart Wallace",
-                    "Units": 1,
-                    "Graphtype": 1,
-                    "Colors": 1,
-                    "Status": "default"
-                    // "Married": true
+                    "Id": {{ $activity->id }},
+                    "Name": "{{ $activity->name }}",
+                    "Units": {{ $activity->measure_id }},
+                    "Graphtype": "{{ $activity->graph_type }}",
+                    "Colors": "{{ $activity->graph_color }}",
+                    "Status": "{{ $activity->status }}"
                 },
-                {
-                    "Id": 1,
-                    "Name": "Stuart Wallace",
-                    "Units": 2,
-                    "Graphtype": 2,
-                    "Colors": 2,
-                    "Status": "custom"
-                    // "Married": false
-                }
+                @endforeach
+
+                // {
+                //     "Id": 1,
+                //     "Name": "Stuart Wallace",
+                //     "Units": 2,
+                //     "Graphtype": "reverse",
+                //     "Colors": "yellow",
+                //     "Status": "custom"
+                // },
             ];
         }());
 
@@ -164,46 +246,59 @@
                 autoload: true,
                 pageSize: 15,
                 pageButtonCount: 5,
-                deleteConfirm: "Do you really want to delete the client?",
+                deleteConfirm: "Do you really want to delete the activity?",
                 controller: db,
 
                 fields: [
                     {
-                        name: "Name", textField: "Activity Name", type: "text", width: 150, sorting: true,
+                        name: "Id", textField: "Activity Name", type: "text", width: 150, sorting: true, visible: false,
                         validate: "required"
                     },
 
                     {
-                        name: "Units", type: "select", items: db.units, valueField: "Id", textField: "Name", sorting: true,
-                        validate: {
-                            message: "Units should be specified", validator: function (value) {
-                                return value > 0;
+                        name: "Name", textField: "Activity Name", type: "text", width: 150, sorting: true,
+                        validate: [
+                            "required",
+                            {validator: "minLength", param: 6},
+                            function (value, item) {
+                                return item.IsRetired ? value > 6 : true;
                             }
-                        }
+                        ]
                     },
 
                     {
-                        name: "Graphtype", type: "select", items: db.graphtype, valueField: "Id", textField: "Name", sorting: true,
-                        validate: {
-                            message: "Graphtype should be specified", validator: function (value) {
-                                return value > 0;
-                            }
-                        }
+                        name: "Units",
+                        type: "select",
+                        items: db.units,
+                        valueField: "Id",
+                        textField: "Name",
+                        sorting: true,
+                        validate: "required"
                     },
 
                     {
-                        name: "Colors", type: "select", items: db.colors, valueField: "Id", textField: "Name", sorting: true,
-                        validate: {
-                            message: "Graphtype should be specified", validator: function (value) {
-                                return value > 0;
-                            }
-                        }
+                        name: "Graphtype",
+                        type: "select",
+                        items: db.graphtype,
+                        valueField: "Id",
+                        textField: "Name",
+                        sorting: true,
+                        validate: "required"
                     },
 
                     {
-                        name: "Status", type: "checkbox", title: "Is Custom", sorting: true
+                        name: "Colors",
+                        type: "select",
+                        items: db.colors,
+                        valueField: "Id",
+                        textField: "Name",
+                        sorting: true,
+                        validate: "required"
                     },
-                    // {name: "Married", type: "checkbox", title: "Is Married", sorting: false},
+
+                    // {
+                    //     name: "Status", type: "checkbox", title: "Is Custom", sorting: true, readOnly: true
+                    // },
                     {type: "control"}
                 ]
             });

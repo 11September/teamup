@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Activity;
-
-use Illuminate\Http\Request;
 use App\Services\ActivityService;
+use App\Http\Requests\ActivityStore;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ActivityUpdate;
 
 class ActivitiesController extends Controller
 {
@@ -26,19 +25,9 @@ class ActivitiesController extends Controller
     {
         $activities = $this->activityService->index();
 
-        dd($activities);
+        $measures = $this->activityService->measures();
 
-        return view('admin.activities.index', compact('activities'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return view('admin.activities.index', compact('activities', 'measures'));
     }
 
     /**
@@ -47,31 +36,11 @@ class ActivitiesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ActivityStore $request)
     {
-        //
-    }
+        $activity = $this->activityService->store($request);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        return response()->json(['data' => $activity, 'success' => true, 'text' => 'Activity is successfully added!']);
     }
 
     /**
@@ -81,9 +50,11 @@ class ActivitiesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ActivityUpdate $request, $id)
     {
-        //
+        $activity = $this->activityService->update($request);
+
+        return response()->json(['data' => $activity, 'success' => true, 'text' => 'Activity is successfully updated!']);
     }
 
     /**
@@ -94,6 +65,8 @@ class ActivitiesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $activity = $this->activityService->delete($id);
+
+        return response()->json(['data' => $activity, 'success' => true, 'text' => 'Activity is successfully deleted!']);
     }
 }
