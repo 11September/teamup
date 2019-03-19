@@ -1,18 +1,26 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: 11September
+ * Git: https://github.com/11September
+ * Date: 018 18.03.19
+ * Time: 13:36
+ */
 
 namespace App\Http\Controllers\App;
 
 use App\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
 
-class UsersController
-{
+class UserController{
+
     public function details()
     {
         return Auth::user();
@@ -27,21 +35,6 @@ class UsersController
             $string .= substr($chars, rand(1, $numChars) - 1, 1);
         }
         return $string;
-    }
-
-    public function logout(Request $request)
-    {
-        try {
-            $request->user()->token()->revoke();
-
-            return response()->json([
-                'success' => true,
-            ]);
-
-        } catch (\Exception $exception) {
-            Log::warning('UsersController@logout Exception: ' . $exception->getMessage());
-            return response()->json(['message' => 'Упс! Щось пішло не так!'], 500);
-        }
     }
 
 
@@ -119,11 +112,22 @@ class UsersController
         }
 
         try {
-            $user = Auth::user();
-            $user->phone = $request->avatar;
+            $user = User::where('token', '=', $request->header('x-auth-token'))->first();
+
+            $image = $this->storeBase64Image($request->avatar);
+
+            if (!$image) {
+                return response()->json(['message' => 'Збереження не вдалося. Перевірте картинку!'], 422);
+            }
+
+            if (isset($user->avatar) || !empty($user->avatar)) {
+                $this->deletePreviousImage($user->avatar);
+            }
+
+            $user->avatar = $image;
             $user->save();
 
-            return response()->json(['message' => 'Аватар змінено!', 'avatar' => $user->phone], 200);
+            return response()->json(['message' => 'Аватар змінено!', 'avatar' => Config::get('app.storageurl') . $image], 200);
 
         } catch (\Exception $exception) {
             Log::warning('UsersController@SetAvatar Exception: ' . $exception->getMessage() . " - " . $exception->getLine());
