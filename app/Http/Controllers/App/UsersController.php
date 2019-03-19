@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers\App;
 
-use App\User;
 use Illuminate\Http\Request;
 use App\Services\AuthService;
-use Illuminate\Support\Facades\Log;
+
+use App\Http\Requests\SetPush;
+use App\Http\Requests\SetAvatar;
+use App\Http\Requests\SetPlayer;
+use App\Http\Requests\SetPushChat;
 use App\Http\Requests\ResetPassword;
+use App\Http\Requests\ChangePassword;
+
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
 
 class UsersController
 {
@@ -35,59 +37,52 @@ class UsersController
         ]);
     }
 
+    /**
+     * ResetPassword
+     *
+     * @param  [string] email
+     *
+     * @return [json] text and Mail
+     */
 
     public function ResetPassword(ResetPassword $request)
     {
         $this->authService->resetPassword($request);
 
-        return response()->json(['message' => 'Перевірте пошту з новим паролем!'], 200);
+        return response()->json(['message' => 'Check your mail with a new password!'], 200);
     }
 
+    /**
+     * ResetPassword
+     *
+     * @param  [string] password_old
+     * @param  [string] password
+     * @param  [string] password_confirmation
+     *
+     * @return [json] text
+     */
 
-    public function ChangePassword(Request $request)
+    public function ChangePassword(ChangePassword $request)
     {
-        $validator = Validator::make($request->all(), [
-            'password_old' => 'required|string|min:6|max:255',
-            'password' => 'required|string|min:6|max:255',
-            'password_confirmation' => 'required|string|min:6|max:255',
-        ]);
+        $this->authService->changePassword($request);
 
-        if ($validator->fails()) {
-            return response()->json(['message' => 'Дані в запиті не заповнені або не вірні!'], 400);
-        }
-
-        if ($request->password !== $request->password_confirmation) {
-            return response()->json(['message' => 'Паролі не співпадають!'], 422);
-        }
-
-        $user = User::where('token', '=', $request->header('x-auth-token'))->first();
-
-        if (Hash::check($request->password_old, $user->password)) {
-            $user->password = Hash::make($request->password);
-            $user->save();
-
-            return response()->json(['message' => 'Пароль змінений!'], 200);
-        } else {
-            return response()->json(['message' => 'Старий пароль невірний!'], 422);
-        }
+        return response()->json(['message' => 'Password changed!'], 200);
     }
 
-    public function SetAvatar(Request $request)
+    /**
+     * SetAvatar
+     *
+     * @param  [string] avatar - base64
+     *
+     * @return [json] text
+     */
+
+    public function SetAvatar(SetAvatar $request)
     {
-        $validator = Validator::make($request->all(), [
-            'avatar' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['message' => 'Дані в запиті не заповнені або не вірні!'], 400);
-        }
-
         try {
-            $user = Auth::user();
-            $user->phone = $request->avatar;
-            $user->save();
+            $avatar = $this->authService->setAvatar($request);
 
-            return response()->json(['message' => 'Аватар змінено!', 'avatar' => $user->phone], 200);
+            return response()->json(['message' => 'Avatar changed!', 'avatar' => $avatar], 200);
 
         } catch (\Exception $exception) {
             Log::warning('UsersController@SetAvatar Exception: ' . $exception->getMessage() . " - " . $exception->getLine());
@@ -96,110 +91,50 @@ class UsersController
     }
 
 
-    public function SetPlayer(Request $request)
+    /**
+     * SetPlayer
+     *
+     * @param  [string] player
+     *
+     * @return [json] text
+     */
+
+    public function SetPlayer(SetPlayer $request)
     {
-        $validator = Validator::make($request->all(), [
-            'player' => 'required|string',
-        ]);
+        $this->authService->setPlayer($request);
 
-        if ($validator->fails()) {
-            return response()->json(['message' => 'Дані в запиті не заповнені або не вірні!'], 400);
-        }
-
-        try {
-            $user = User::where('token', '=', $request->header('x-auth-token'))->first();
-            $user->player_id = $request->player;
-            $user->save();
-
-            return response()->json(['message' => 'Player_id Встановлено!'], 200);
-
-        } catch (\Exception $exception) {
-            Log::warning('UsersController@SetPlayer Exception: ' . $exception->getMessage() . " - " . $exception->getLine());
-            return response()->json(['message' => 'Упс! Щось пішло не так!'], 500);
-        }
+        return response()->json(['message' => 'Player_id Installed!'], 200);
     }
 
 
-    public function SetPush(Request $request)
+    /**
+     * SetPush
+     *
+     * @param  [string] player
+     *
+     * @return [json] text
+     */
+
+    public function SetPush(SetPush $request)
     {
-        $validator = Validator::make($request->all(), [
-            'push' => [
-                'required',
-                'string',
-                Rule::in(['enabled', 'disabled']),
-            ]
-        ]);
+        $this->authService->setPush($request);
 
-        if ($validator->fails()) {
-            return response()->json(['message' => 'Дані в запиті не заповнені або не вірні!'], 400);
-        }
-
-        try {
-            $user = User::where('token', '=', $request->header('x-auth-token'))->first();
-            $user->push = $request->push;
-            $user->save();
-
-            return response()->json(['message' => 'Push повiдомлення змiнено!', 'data' => $user->push], 200);
-
-        } catch (\Exception $exception) {
-            Log::warning('UsersController@SetPlayer Exception: ' . $exception->getMessage() . " - " . $exception->getLine());
-            return response()->json(['message' => 'Упс! Щось пішло не так!'], 500);
-        }
+        return response()->json(['message' => 'Push notification changed!'], 200);
     }
 
-    public function SetPushChat(Request $request)
+
+    /**
+     * SetPushChat
+     *
+     * @param  [string] player
+     *
+     * @return [json] text
+     */
+
+    public function SetPushChat(SetPushChat $request)
     {
-        $validator = Validator::make($request->all(), [
-            'push' => [
-                'required',
-                'string',
-                Rule::in(['true', 'false']),
-            ]
-        ]);
+        $this->authService->setPushChat($request);
 
-        if ($validator->fails()) {
-            return response()->json(['message' => 'Дані в запиті не заповнені або не вірні!'], 400);
-        }
-
-        try {
-            $user = User::where('token', '=', $request->header('x-auth-token'))->first();
-            $user->push_chat = $request->push;
-            $user->save();
-
-            return response()->json(['message' => 'Push повiдомлення змiнено!', 'data' => $user->push_chat], 200);
-
-        } catch (\Exception $exception) {
-            Log::warning('UsersController@SetPushChat Exception: ' . $exception->getMessage() . " - " . $exception->getLine());
-            return response()->json(['message' => 'Упс! Щось пішло не так!'], 500);
-        }
-    }
-
-    public function storeBase64Image($data)
-    {
-        $folderPath = "images/uploads/avatars/";
-        $image_parts = explode(";base64,", $data);
-
-        if (!$image_parts || !isset($image_parts[1]) || $image_parts[1] == null || $image_parts[1] == "") {
-            return null;
-        }
-
-        explode("image/", $image_parts[0]);
-        $image_base64 = base64_decode($image_parts[1]);
-        $imageName = time() . "-" . uniqid() . '.png';
-
-        File::put(storage_path('app/public/images/uploads/avatars/') . $imageName, $image_base64);
-        $path = "/" . $folderPath . $imageName;
-
-        return $path;
-    }
-
-    public function deletePreviousImage($data)
-    {
-        $preview = storage_path('app/public') . $data;
-        if (file_exists($preview)) {
-            unlink($preview);
-        }
-
-        return true;
+        return response()->json(['message' => 'Push notification changed!'], 200);
     }
 }

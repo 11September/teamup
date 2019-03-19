@@ -16,7 +16,6 @@ use App\Repositories\ActivityRepository;
 
 class ActivityService
 {
-
     public function __construct(ActivityRepository $activityRepository)
     {
         $this->activityRepository = $activityRepository;

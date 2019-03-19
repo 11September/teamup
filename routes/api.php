@@ -20,6 +20,7 @@ use Illuminate\Http\Request;
 Route::namespace('App')->group(function () {
     Route::middleware(['cors'])->group(function () {
 
+        Route::get('settings', 'SettingsController@index')->name('settings');
         Route::post('login', 'AuthController@login')->name('login');
         Route::post('register', 'AuthController@register')->name('register');
 

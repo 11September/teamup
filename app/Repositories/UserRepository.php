@@ -50,6 +50,16 @@ class UserRepository
         return $this->user->find($id)->update(['password', $password]);
     }
 
+    public function update_field($id, $field, $attribute)
+    {
+        return $this->user->find($id)->update([$field, $attribute]);
+    }
+
+    public function update_avatar($id, $path)
+    {
+        return $this->user->find($id)->update(['avatar', $path]);
+    }
+
     public function delete($id)
     {
         return $this->user->find($id)->delete();
