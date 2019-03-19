@@ -13,9 +13,17 @@ use Illuminate\Support\Facades\Validator;
 
 class UsersController
 {
+    /**
+     * Get the authenticated User
+     *
+     * @return [json] user object
+     */
+
     public function details()
     {
-        return Auth::user();
+        return response()->json([
+            'data' => Auth::user()
+        ]);
     }
 
     public function generatePassword($length = 8)

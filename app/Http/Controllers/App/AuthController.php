@@ -25,7 +25,7 @@ class AuthController
      *
      * @param  [string] email
      * @param  [string] password
-     * @param  [boolean] remember_me
+     *
      * @return [string] access_token
      * @return [string] token_type
      * @return [string] expires_at
@@ -47,10 +47,14 @@ class AuthController
     /**
      * Create user
      *
-     * @param  [string] name
+     * @param  [string] first_name
+     * @param  [string] last_name
      * @param  [string] email
      * @param  [string] password
      * @param  [string] password_confirmation
+     * @param  [string] type
+     * @param  [int|nullable] number_students
+     *
      * @return [string] message
      */
     public function register(AuthRegister $request)
@@ -73,20 +77,10 @@ class AuthController
      */
     public function logout(Request $request)
     {
-        $request->user()->token()->revoke();
+        $this->authService->logout($request);
 
         return response()->json([
-            'message' => 'Successfully logged out'
+            'message' => 'Successfully logged out!'
         ]);
-    }
-
-    /**
-     * Get the authenticated User
-     *
-     * @return [json] user object
-     */
-    public function user(Request $request)
-    {
-        return response()->json($request->user());
     }
 }

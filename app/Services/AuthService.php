@@ -12,6 +12,7 @@ namespace App\Services;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Log;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -24,57 +25,49 @@ class AuthService
         $this->user = $user;
     }
 
-    public function validateLogin(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email|max:255',
-            'password' => 'required|string|min:6|max:255',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['message' => 'Дані в запиті не заповнені або не вірні!'], 400);
-        }
-
-        return true;
-    }
-
-    public function validateRegister(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'first_name' => 'required|string|min:6',
-            'last_name' => 'required|string|min:6',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6|max:255|confirmed',
-            'type' =>  [
-                'required',
-                Rule::in(['athlete', 'coach']),
-            ],
-            'number_students' => 'nullable|int|min:1',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['message' => 'Дані в запиті не заповнені або не вірні!'], 400);
-        }
-    }
-
     public function login(Request $request)
     {
-        if (!Auth::attempt(request(['email', 'password']))) {
-            return response()->json(['message' => 'Unauthorized'], 401);
+        try {
+
+            if (!Auth::attempt(request(['email', 'password']))) {
+                return response()->json(['message' => 'Unauthorized'], 401);
+            }
+
+            $token = $this->token($request->user());
+
+            return $token;
+
+        } catch (\Exception $exception) {
+            Log::warning('AuthService@login Exception: ' . $exception->getMessage());
+            return response()->json(['message' => 'Упс! Щось пішло не так!'], 500);
         }
-
-        $token = $this->token($request->user());
-
-        return $token;
     }
 
     public function register(Request $request)
     {
-        $user = $this->user->create($request->all());
+        try {
+            $user = $this->user->create($request->all());
 
-        $token = $this->token($user);
+            $token = $this->token($user);
 
-        return $token;
+            return $token;
+
+        } catch (\Exception $exception) {
+            Log::warning('AuthService@register Exception: ' . $exception->getMessage());
+            return response()->json(['message' => 'Упс! Щось пішло не так!'], 500);
+        }
+    }
+
+    public function logout(Request $request)
+    {
+        try {
+
+            $request->user()->token()->revoke();
+
+        } catch (\Exception $exception) {
+            Log::warning('AuthService@logout Exception: ' . $exception->getMessage());
+            return response()->json(['message' => 'Упс! Щось пішло не так!'], 500);
+        }
     }
 
     public function token($user)
