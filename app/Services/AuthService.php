@@ -28,7 +28,6 @@ class AuthService
     public function login(Request $request)
     {
         try {
-
             if (!Auth::attempt(request(['email', 'password']))) {
                 return response()->json(['message' => 'Unauthorized'], 401);
             }
@@ -61,7 +60,6 @@ class AuthService
     public function logout(Request $request)
     {
         try {
-
             $request->user()->token()->revoke();
 
         } catch (\Exception $exception) {
@@ -77,5 +75,33 @@ class AuthService
         $token->save();
 
         return $tokenResult;
+    }
+
+    public function resetPassword(Request $request)
+    {
+        try {
+            $user = $this->user->findEmail($request->email);
+
+            $new_password = bcrypt($this->generatePassword());
+
+            $user = $this->user->update_password($user->id, $new_password);
+
+            \Mail::to($request->email)->send(new ResetPassword($user, $new_password));
+
+        } catch (\Exception $exception) {
+            Log::warning('AuthService@resetPassword Exception: ' . $exception->getMessage());
+            return response()->json(['message' => 'Упс! Щось пішло не так!'], 500);
+        }
+    }
+
+    public function generatePassword($length = 8)
+    {
+        $chars = 'abdefhiknrstyzABDEFGHKNQRSTYZ23456789';
+        $numChars = strlen($chars);
+        $string = '';
+        for ($i = 0; $i < $length; $i++) {
+            $string .= substr($chars, rand(1, $numChars) - 1, 1);
+        }
+        return $string;
     }
 }

@@ -35,6 +35,11 @@ class UserRepository
         return $this->user->find($id);
     }
 
+    public function findEmail($email)
+    {
+        return $this->user->where('email', $email);
+    }
+
     public function update($id, array $attributes)
     {
         return $this->user->find($id)->update($attributes);

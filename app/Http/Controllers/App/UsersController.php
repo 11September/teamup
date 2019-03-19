@@ -4,7 +4,9 @@ namespace App\Http\Controllers\App;
 
 use App\User;
 use Illuminate\Http\Request;
+use App\Services\AuthService;
 use Illuminate\Support\Facades\Log;
+use App\Http\Requests\ResetPassword;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Config;
@@ -13,6 +15,13 @@ use Illuminate\Support\Facades\Validator;
 
 class UsersController
 {
+    protected $authService;
+
+    public function __construct(AuthService $authService)
+    {
+        $this->authService = $authService;
+    }
+
     /**
      * Get the authenticated User
      *
@@ -26,65 +35,12 @@ class UsersController
         ]);
     }
 
-    public function generatePassword($length = 8)
+
+    public function ResetPassword(ResetPassword $request)
     {
-        $chars = 'abdefhiknrstyzABDEFGHKNQRSTYZ23456789';
-        $numChars = strlen($chars);
-        $string = '';
-        for ($i = 0; $i < $length; $i++) {
-            $string .= substr($chars, rand(1, $numChars) - 1, 1);
-        }
-        return $string;
-    }
+        $this->authService->resetPassword($request);
 
-    public function logout(Request $request)
-    {
-        try {
-            $request->user()->token()->revoke();
-
-            return response()->json([
-                'success' => true,
-            ]);
-
-        } catch (\Exception $exception) {
-            Log::warning('UsersController@logout Exception: ' . $exception->getMessage());
-            return response()->json(['message' => 'Упс! Щось пішло не так!'], 500);
-        }
-    }
-
-
-    public function ResetPassword(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|string|email|max:255',
-        ]);
-
-        $validator_exist = Validator::make($request->all(), [
-            'email' => 'exists:users,email',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['message' => 'Дані в запиті не заповнені або не вірні!'], 400);
-        }
-
-        if ($validator_exist->fails()) {
-            return response()->json(['message' => 'Користувача не існує!'], 404);
-        }
-
-        try {
-            $user = User::where('email', $request->email)->first();
-            $new_password = $this->generatePassword();
-            $user->password = bcrypt($new_password);
-
-            \Mail::to($request->email)->send(new ResetPassword($user, $new_password));
-
-            $user->save();
-
-            return response()->json(['message' => 'Перевірте пошту з новим паролем!'], 200);
-        } catch (\Exception $exception) {
-            Log::warning('UsersController@resetPassword Exception: ' . $exception->getMessage());
-            return response()->json(['message' => 'Упс! Щось пішло не так!'], 500);
-        }
+        return response()->json(['message' => 'Перевірте пошту з новим паролем!'], 200);
     }
 
 
