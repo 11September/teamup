@@ -20,4 +20,22 @@ class Setting extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function scopeFilter($query, $params)
+    {
+        if ($title = array_get($params, 'type_graph_straight')) {
+            $query = $query->where('type_graph_straight', '=', $title);
+        }
+        if ($title = array_get($params, 'type_graph_reverse')) {
+            $query = $query->where('type_graph_reverse', '=', $title);
+        }
+        if ($title = array_get($params, 'privacy_policy')) {
+            $query = $query->where('privacy_policy', '=', $title);
+        }
+        if ($title = array_get($params, 'default_units')) {
+            $query = $query->where('default_units', '=', $title);
+        }
+
+        return $query;
+    }
 }

@@ -10,14 +10,21 @@
 namespace App\Services;
 
 use App\Setting;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use App\Repositories\SettingRepository;
 
 class SettingsService
 {
-    public function settings()
+    public function __construct(SettingRepository $settingRepository)
+    {
+        $this->settingRepository = $settingRepository;
+    }
+
+    public function settings(Request $request)
     {
         try {
-            return Setting::first();
+            return $this->settingRepository->index($request);
 
         } catch (\Exception $exception) {
             Log::warning('AuthService@settings Exception: ' . $exception->getMessage());

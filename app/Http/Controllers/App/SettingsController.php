@@ -23,7 +23,7 @@ class SettingsController extends Controller
 
     public function index(Request $request)
     {
-        $settings = $this->settingsService->settings();
+        $settings = $this->settingsService->settings($request);
 
         return response()->json([
             'data' => $settings

@@ -10,6 +10,7 @@
 namespace App\Repositories;
 
 use App\Setting;
+use Illuminate\Http\Request;
 
 class SettingRepository{
 
@@ -20,9 +21,9 @@ class SettingRepository{
         $this->setting = $setting;
     }
 
-    public function first()
+    public function index(Request $request)
     {
-        return $this->setting->first();
+        return $this->setting->filter($request)->first();
     }
 
     public function find($id)
