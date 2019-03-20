@@ -10,8 +10,6 @@ use App\Http\Requests\AuthLogin;
 use App\Http\Requests\CheckEmail;
 use App\Http\Requests\AuthRegister;
 use App\Http\Requests\ResetPassword;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
 
 class AuthController
 {

@@ -2,18 +2,13 @@
 
 namespace App\Http\Controllers\App;
 
-use Illuminate\Http\Request;
 use App\Services\AuthService;
-
 use App\Http\Requests\SetPush;
 use App\Http\Requests\SetAvatar;
 use App\Http\Requests\SetPlayer;
 use App\Http\Requests\SetPushChat;
-use App\Http\Requests\ResetPassword;
 use App\Http\Requests\ChangePassword;
-
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
 
 class UsersController
 {
