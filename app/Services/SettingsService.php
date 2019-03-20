@@ -24,11 +24,26 @@ class SettingsService
     public function settings(Request $request)
     {
         try {
-            return $this->settingRepository->index($request);
+            $setting = $this->settingRepository->index($request);
+
+            return $this->prepareData($setting);
 
         } catch (\Exception $exception) {
             Log::warning('AuthService@settings Exception: ' . $exception->getMessage());
             return response()->json(['message' => 'Упс! Щось пішло не так!'], 500);
         }
+    }
+
+    public function prepareData($setting)
+    {
+        $setting = collect($setting)->except(
+            [
+                'id',
+                'created_at',
+                'updated_at',
+            ]
+        );
+
+        return $setting;
     }
 }

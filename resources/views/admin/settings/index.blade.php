@@ -41,16 +41,13 @@
                                     <div class="form-group">
                                         <label for="type_graph_straight" class="col-form-label">Type Graph
                                             Straight</label>
-                                        <input type="hidden" name="id" value="@if(isset($setting->id)){{ $setting->id }}@endif">
+                                        <input type="hidden" name="id"
+                                               value="@if(isset($setting->id)){{ $setting->id }}@endif">
 
                                         <textarea
                                             class="form-control{{ $errors->has('type_graph_straight') ? ' is-invalid' : '' }}"
-                                            type="text" name="type_graph_straight" rows="5"
-                                            id="type_graph_straight" required>
-                                            @if(isset($setting->type_graph_straight))
-                                                {{ $setting->type_graph_straight }}
-                                            @else {{ old('type_graph_straight') }}
-                                            @endif
+                                            type="text" name="type_graph_straight" rows="5" id="type_graph_straight"
+                                            required>@if(isset($setting->type_graph_straight)){{ $setting->type_graph_straight }}@else{{ old('type_graph_straight') }}@endif
                                         </textarea>
 
                                         @if ($errors->has('type_graph_straight'))
@@ -61,15 +58,12 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="type_graph_reverse" class="col-form-label">Type Graph Reverse</label>
+                                        <label for="type_graph_reverse" class="col-form-label">Type Graph
+                                            Reverse</label>
                                         <textarea
                                             class="form-control{{ $errors->has('type_graph_reverse') ? ' is-invalid' : '' }}"
-                                            type="text" name="type_graph_reverse" rows="5"
-                                            id="type_graph_reverse" required>
-                                            @if(isset($setting->type_graph_reverse))
-                                                {{ $setting->type_graph_reverse }}
-                                            @else {{ old('type_graph_reverse') }}
-                                            @endif
+                                            type="text" name="type_graph_reverse" rows="5" id="type_graph_reverse"
+                                            required>@if(isset($setting->type_graph_reverse)){{ $setting->type_graph_reverse }}@else {{ old('type_graph_reverse') }}@endif
                                         </textarea>
 
                                         @if ($errors->has('type_graph_reverse'))
@@ -93,12 +87,8 @@
                                         <label for="privacy_policy" class="col-form-label">Privacy Policy</label>
                                         <textarea
                                             class="form-control{{ $errors->has('privacy_policy') ? ' is-invalid' : '' }}"
-                                            type="text" name="privacy_policy" rows="5"
-                                            id="privacy_policy" required>
-                                            @if(isset($setting->privacy_policy))
-                                                {{ $setting->privacy_policy }}
-                                            @else {{ old('privacy_policy') }}
-                                            @endif
+                                            type="text" name="privacy_policy" rows="5" id="privacy_policy"
+                                            required>@if(isset($setting->privacy_policy)){{ $setting->privacy_policy }}@else {{ old('privacy_policy') }}@endif
                                         </textarea>
 
                                         @if ($errors->has('privacy_policy'))
@@ -113,11 +103,7 @@
                                         <textarea
                                             class="form-control{{ $errors->has('default_units') ? ' is-invalid' : '' }}"
                                             type="text" name="default_units" rows="5"
-                                            id="default_units" required>
-                                            @if(isset($setting->default_units))
-                                                {{ $setting->default_units }}
-                                            @else {{ old('default_units') }}
-                                            @endif
+                                            id="default_units" required>@if(isset($setting->default_units)){{ $setting->default_units }}@else {{ old('default_units') }}@endif
                                         </textarea>
 
                                         @if ($errors->has('default_units'))

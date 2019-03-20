@@ -31,7 +31,8 @@ class SettingsController extends Controller
 
         return redirect()->back()
             ->with(['alert-status' => 'success',
-                'message' => 'User password successfully changed!'
+                'message' => 'Settings saved successfully!',
+                'setting' => $setting
             ]);
     }
 }

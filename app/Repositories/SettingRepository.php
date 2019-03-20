@@ -26,6 +26,11 @@ class SettingRepository{
         return $this->setting->filter($request)->first();
     }
 
+    public function first()
+    {
+        return $this->setting->first();
+    }
+
     public function find($id)
     {
         return $this->setting->find($id);
