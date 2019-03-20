@@ -77,6 +77,34 @@ class AuthService
         }
     }
 
+    public function confirm_code(Request $request)
+    {
+        try {
+            $user = $this->user->findByAttr('password_reset_code', $request->code);
+
+            if ($user->password_reset_code != $request->code){
+                return response()->json(['message' => 'Code does not match!'], 422);
+            }
+
+        } catch (\Exception $exception) {
+            Log::warning('AuthService@confirm_code Exception: ' . $exception->getMessage());
+            return response()->json(['message' => 'Упс! Щось пішло не так!'], 500);
+        }
+    }
+
+    public function reset_password(Request $request)
+    {
+        try {
+            $user = $this->user->findByAttr('password_reset_code', $request->code);
+
+            return $this->user->update_field($user->id, 'password', Hash::make($request->password));
+
+        } catch (\Exception $exception) {
+            Log::warning('AuthService@confirm_code Exception: ' . $exception->getMessage());
+            return response()->json(['message' => 'Упс! Щось пішло не так!'], 500);
+        }
+    }
+
     public function logout(Request $request)
     {
         try {

@@ -24,6 +24,7 @@ class UsersController
         $this->authService = $authService;
     }
 
+
     /**
      * Get the authenticated User
      *
@@ -39,20 +40,6 @@ class UsersController
         ]);
     }
 
-    /**
-     * ResetPassword
-     *
-     * @param  [string] email
-     *
-     * @return [json] text and Mail
-     */
-
-    public function ResetPassword(ResetPassword $request)
-    {
-        $this->authService->resetPassword($request);
-
-        return response()->json(['message' => 'Check your mail with a new password!'], 200);
-    }
 
     /**
      * ResetPassword

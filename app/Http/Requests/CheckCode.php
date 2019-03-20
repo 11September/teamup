@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CheckEmail extends FormRequest
+class CheckCode extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,7 @@ class CheckEmail extends FormRequest
     public function rules()
     {
         return [
-            'email' => 'required|string|email|max:255|exists:users',
+            'code' => 'required|string|max:191|exists:users,password_reset_code',
         ];
     }
 }

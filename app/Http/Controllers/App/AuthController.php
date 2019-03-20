@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\App;
 
-use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Services\AuthService;
+use App\Http\Requests\CheckCode;
 use App\Http\Requests\AuthLogin;
 use App\Http\Requests\CheckEmail;
 use App\Http\Requests\AuthRegister;
+use App\Http\Requests\ResetPassword;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
@@ -71,6 +72,13 @@ class AuthController
         ]);
     }
 
+    /**
+     * Method forgot_password
+     *
+     * @param  [string] email
+     *
+     * @return [string] message
+     */
 
     public function forgot_password(CheckEmail $request)
     {
@@ -78,6 +86,42 @@ class AuthController
 
         return response()->json([
             'message' => 'Successfully send code to Email!',
+        ]);
+    }
+
+
+    /**
+     * Method confirm_code
+     *
+     * @param  [string] code
+     *
+     * @return [string] message
+     */
+
+    public function confirm_code(CheckCode $request)
+    {
+        return response()->json([
+            'message' => 'Code is Valid!',
+        ]);
+    }
+
+
+    /**
+     * Method reset_password
+     *
+     * @param  [string] password
+     * @param  [string] password_confirmation
+     *
+     * @return [string] message
+     */
+
+    public function reset_password(ResetPassword $request)
+    {
+        $success = $this->authService->reset_password($request);
+
+        return response()->json([
+            'message' => 'Password changed!',
+            'data' => $success
         ]);
     }
 
