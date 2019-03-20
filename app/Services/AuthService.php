@@ -13,6 +13,7 @@ use App\Setting;
 use App\Mail\ResetPassword;
 use Illuminate\Http\Request;
 use App\Helpers\AvatarsHelper;
+use App\Mail\ResetPasswordCode;
 use App\Helpers\PasswordHelper;
 use App\Helpers\SubscribeHelper;
 use Illuminate\Support\Facades\Log;
@@ -55,6 +56,23 @@ class AuthService
 
         } catch (\Exception $exception) {
             Log::warning('AuthService@register Exception: ' . $exception->getMessage());
+            return response()->json(['message' => 'Упс! Щось пішло не так!'], 500);
+        }
+    }
+
+    public function forgot_password(Request $request)
+    {
+        try {
+            $code = PasswordHelper::generateEmailCode();
+
+            $user = $this->user->findEmail($request->email);
+
+            $this->user->update_field($user->id, 'password_reset_code', $code);
+
+            \Mail::to($request->email)->send(new ResetPasswordCode($code));
+
+        } catch (\Exception $exception) {
+            Log::warning('AuthService@forgot_password Exception: ' . $exception->getMessage());
             return response()->json(['message' => 'Упс! Щось пішло не так!'], 500);
         }
     }

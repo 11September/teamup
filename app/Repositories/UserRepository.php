@@ -37,31 +37,36 @@ class UserRepository
 
     public function findEmail($email)
     {
-        return $this->user->where('email', $email);
+        return $this->user->where('email', $email)->first();
+    }
+
+    public function findByAttr($attribute, $value)
+    {
+        return $this->user->where($attribute, $value)->first();
     }
 
     public function update($id, array $attributes)
     {
-        return $this->user->find($id)->update($attributes);
+        return $this->user->findOrFail($id)->update($attributes);
     }
 
     public function update_password($id, $password)
     {
-        return $this->user->find($id)->update(['password', $password]);
+        return $this->user->findOrFail($id)->update(['password' => $password]);
     }
 
     public function update_field($id, $field, $attribute)
     {
-        return $this->user->find($id)->update([$field, $attribute]);
+        return $this->user->findOrFail($id)->update([$field => $attribute]);
     }
 
     public function update_avatar($id, $path)
     {
-        return $this->user->find($id)->update(['avatar', $path]);
+        return $this->user->findOrFail($id)->update(['avatar' => $path]);
     }
 
     public function delete($id)
     {
-        return $this->user->find($id)->delete();
+        return $this->user->findOrFail($id)->delete();
     }
 }

@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Services\AuthService;
 use App\Http\Requests\AuthLogin;
+use App\Http\Requests\CheckEmail;
 use App\Http\Requests\AuthRegister;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -67,6 +68,16 @@ class AuthController
             'expires_at' => Carbon::parse(
                 $token->token->expires_at
             )->toDateTimeString()
+        ]);
+    }
+
+
+    public function forgot_password(CheckEmail $request)
+    {
+        $this->authService->forgot_password($request);
+
+        return response()->json([
+            'message' => 'Successfully send code to Email!',
         ]);
     }
 

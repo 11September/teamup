@@ -35,6 +35,7 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('phone', 15)->nullable();
             $table->string('school', 191)->nullable();
+            $table->string('password_reset_code', 191)->nullable();
             $table->timestamps();
         });
     }
