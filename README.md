@@ -1,6 +1,6 @@
 # teamup
-Test repo for teamup project
-
+Test repo for TeamUp project
+A service that interacts with coaches and athletes.
 
 <p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
 

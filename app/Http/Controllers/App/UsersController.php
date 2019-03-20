@@ -32,8 +32,10 @@ class UsersController
 
     public function details()
     {
+        $user = $this->authService->details();
+
         return response()->json([
-            'data' => Auth::user()
+            'data' => $user
         ]);
     }
 

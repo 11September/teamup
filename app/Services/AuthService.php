@@ -14,6 +14,7 @@ use App\Mail\ResetPassword;
 use Illuminate\Http\Request;
 use App\Helpers\AvatarsHelper;
 use App\Helpers\PasswordHelper;
+use App\Helpers\SubscribeHelper;
 use Illuminate\Support\Facades\Log;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Hash;
@@ -61,7 +62,7 @@ class AuthService
     public function logout(Request $request)
     {
         try {
-            $request->user()->token()->revoke();
+            return $request->user()->token()->revoke();
 
         } catch (\Exception $exception) {
             Log::warning('AuthService@logout Exception: ' . $exception->getMessage());
@@ -89,6 +90,8 @@ class AuthService
 
             \Mail::to($request->email)->send(new ResetPassword($user, $new_password));
 
+            return true;
+
         } catch (\Exception $exception) {
             Log::warning('AuthService@resetPassword Exception: ' . $exception->getMessage());
             return response()->json(['message' => 'Упс! Щось пішло не так!'], 500);
@@ -98,7 +101,7 @@ class AuthService
     public function changePassword(Request $request)
     {
         try {
-            $this->user->update_password(Auth::id(), Hash::make($request->password));
+            return $this->user->update_password(Auth::id(), Hash::make($request->password));
 
         } catch (\Exception $exception) {
             Log::warning('AuthService@changePassword Exception: ' . $exception->getMessage());
@@ -130,7 +133,7 @@ class AuthService
     public function setPlayer(Request $request)
     {
         try {
-            $this->user->update_field(Auth::id(), "player_id", $request->player);
+            return $this->user->update_field(Auth::id(), "player_id", $request->player);
 
         } catch (\Exception $exception) {
             Log::warning('AuthService@setPlayer Exception: ' . $exception->getMessage());
@@ -152,7 +155,7 @@ class AuthService
     public function setPushChat(Request $request)
     {
         try {
-            $this->user->update_field(Auth::id(), "push_chat", $request->push);
+            return $this->user->update_field(Auth::id(), "push_chat", $request->push);
 
         } catch (\Exception $exception) {
             Log::warning('AuthService@setPushChat Exception: ' . $exception->getMessage());
@@ -170,4 +173,37 @@ class AuthService
             return response()->json(['message' => 'Упс! Щось пішло не так!'], 500);
         }
     }
+
+    public function details()
+    {
+        try {
+            Auth::user()->dayLeft = SubscribeHelper::calculateDaysLeft(Auth::user()->expiration_date);
+
+            Auth::user()->number_students_busy = 0;
+
+            return $this->prepareDetailsData(Auth::user());
+
+        } catch (\Exception $exception) {
+            Log::warning('AuthService@settings Exception: ' . $exception->getMessage());
+            return response()->json(['message' => 'Упс! Щось пішло не так!'], 500);
+        }
+    }
+
+    public function prepareDetailsData($user)
+    {
+        $user = collect($user)->except(
+            [
+                'created_at',
+                'updated_at',
+                'email_verified_at',
+                'status',
+                'type',
+                'player_id'
+            ]
+        );
+
+        return $user;
+    }
+
+
 }
