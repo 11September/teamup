@@ -14,6 +14,7 @@ use App\Mail\ResetPassword;
 use Illuminate\Http\Request;
 use App\Helpers\AvatarsHelper;
 use App\Mail\ResetPasswordCode;
+use App\Helpers\UserHelper;
 use App\Helpers\PasswordHelper;
 use App\Helpers\SubscribeHelper;
 use Illuminate\Support\Facades\Log;
@@ -28,19 +29,47 @@ class AuthService
         $this->user = $user;
     }
 
-    public function login(Request $request)
+    public function loginCan(Request $request)
     {
         try {
-            if (!Auth::attempt(request(['email', 'password']))) {
-                return response()->json(['message' => 'Unauthorized'], 401);
-            }
+            $user = $this->user->findEmail($request->email);
 
-            $token = $this->token($request->user());
+            $active = UserHelper::isActive($user);
 
-            return $token;
+            $subscribe = SubscribeHelper::IsSubscriber($user);
+
+            return (bool)($active && $subscribe);
+
 
         } catch (\Exception $exception) {
-            Log::warning('AuthService@login Exception: ' . $exception->getMessage());
+            Log::warning('AuthService@loginCan Exception: ' . $exception->getMessage());
+            return response()->json(['message' => 'Упс! Щось пішло не так!'], 500);
+        }
+    }
+
+    public function loginAttempt(Request $request)
+    {
+        try {
+            return Auth::attempt(request(['email', 'password']));
+
+        } catch (\Exception $exception) {
+            Log::warning('AuthService@loginAttempt Exception: ' . $exception->getMessage());
+            return response()->json(['message' => 'Упс! Щось пішло не так!'], 500);
+        }
+    }
+
+    public function loginToken(Request $request)
+    {
+        try {
+            $user = $request->user();
+            $tokenResult = $user->createToken('Personal Access Token');
+            $token = $tokenResult->token;
+            $token->save();
+
+            return $tokenResult;
+
+        } catch (\Exception $exception) {
+            Log::warning('AuthService@loginToken Exception: ' . $exception->getMessage());
             return response()->json(['message' => 'Упс! Щось пішло не так!'], 500);
         }
     }
@@ -82,7 +111,7 @@ class AuthService
         try {
             $user = $this->user->findByAttr('password_reset_code', $request->code);
 
-            if ($user->password_reset_code != $request->code){
+            if ($user->password_reset_code != $request->code) {
                 return response()->json(['message' => 'Code does not match!'], 422);
             }
 
@@ -97,7 +126,9 @@ class AuthService
         try {
             $user = $this->user->findByAttr('password_reset_code', $request->code);
 
-            return $this->user->update_field($user->id, 'password', Hash::make($request->password));
+            $this->user->update_field($user->id, 'password', Hash::make($request->password));
+
+            return $this->user->update_field($user->id, 'password_reset_code', null);
 
         } catch (\Exception $exception) {
             Log::warning('AuthService@confirm_code Exception: ' . $exception->getMessage());
@@ -121,6 +152,8 @@ class AuthService
         $tokenResult = $user->createToken('Personal Access Token');
         $token = $tokenResult->token;
         $token->save();
+
+        dd($tokenResult);
 
         return $tokenResult;
     }
@@ -251,5 +284,12 @@ class AuthService
         return $user;
     }
 
+    public function attemptUser()
+    {
+        if (!Auth::attempt(request(['email', 'password']))) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
 
+        return true;
+    }
 }

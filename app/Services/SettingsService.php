@@ -24,7 +24,7 @@ class SettingsService
     public function settings(Request $request)
     {
         try {
-            $setting = $this->settingRepository->index($request);
+            $setting = $this->settingRepository->index();
 
             return $this->prepareData($setting);
 

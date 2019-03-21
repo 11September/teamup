@@ -21,9 +21,9 @@ class SettingRepository{
         $this->setting = $setting;
     }
 
-    public function index(Request $request)
+    public function index()
     {
-        return $this->setting->filter($request)->first();
+        return $this->setting->first();
     }
 
     public function first()

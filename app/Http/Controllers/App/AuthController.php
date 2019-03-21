@@ -32,7 +32,15 @@ class AuthController
      */
     public function login(AuthLogin $request)
     {
-        $token = $this->authService->login($request);
+        if (!$this->authService->loginCan($request)){
+            return response()->json(['message' => 'User is inactive!'], 403);
+        }
+
+        if(!$this->authService->loginAttempt($request)){
+            return response()->json(['message' => 'The user does not have or the login / password is not suitable!'], 401);
+        }
+
+        $token = $this->authService->loginToken($request);
 
         return response()->json([
             'access_token' => $token->accessToken,
