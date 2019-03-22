@@ -30,7 +30,7 @@ class SettingsService
 
         } catch (\Exception $exception) {
             Log::warning('AuthService@settings Exception: ' . $exception->getMessage());
-            return response()->json(['message' => 'Упс! Щось пішло не так!'], 500);
+            return response()->json(['message' => 'Oops! Something went wrong!'], 500);
         }
     }
 

@@ -9,6 +9,8 @@
 
 namespace App\Helpers;
 
+use Illuminate\Support\Facades\Hash;
+
 class PasswordHelper
 {
     /**
@@ -36,5 +38,10 @@ class PasswordHelper
             $string .= substr($chars, rand(1, $numChars) - 1, 1);
         }
         return $string;
+    }
+
+    public static function HashPassword($password)
+    {
+        return Hash::make($password);
     }
 }

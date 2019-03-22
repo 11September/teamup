@@ -19,7 +19,6 @@ use App\Helpers\PasswordHelper;
 use App\Helpers\SubscribeHelper;
 use Illuminate\Support\Facades\Log;
 use App\Repositories\UserRepository;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 
 class AuthService
@@ -43,7 +42,7 @@ class AuthService
 
         } catch (\Exception $exception) {
             Log::warning('AuthService@loginCan Exception: ' . $exception->getMessage());
-            return response()->json(['message' => 'Упс! Щось пішло не так!'], 500);
+            return response()->json(['message' => 'Oops! Something went wrong!'], 500);
         }
     }
 
@@ -70,13 +69,15 @@ class AuthService
 
         } catch (\Exception $exception) {
             Log::warning('AuthService@loginToken Exception: ' . $exception->getMessage());
-            return response()->json(['message' => 'Упс! Щось пішло не так!'], 500);
+            return response()->json(['message' => 'Oops! Something went wrong!'], 500);
         }
     }
 
     public function register(Request $request)
     {
         try {
+            $this->generateAndSetNewPassword($request);
+
             $user = $this->user->create($request->all());
 
             $token = $this->token($user);
@@ -85,7 +86,7 @@ class AuthService
 
         } catch (\Exception $exception) {
             Log::warning('AuthService@register Exception: ' . $exception->getMessage());
-            return response()->json(['message' => 'Упс! Щось пішло не так!'], 500);
+            return response()->json(['message' => 'Oops! Something went wrong!'], 500);
         }
     }
 
@@ -102,7 +103,7 @@ class AuthService
 
         } catch (\Exception $exception) {
             Log::warning('AuthService@forgot_password Exception: ' . $exception->getMessage());
-            return response()->json(['message' => 'Упс! Щось пішло не так!'], 500);
+            return response()->json(['message' => 'Oops! Something went wrong!'], 500);
         }
     }
 
@@ -117,7 +118,7 @@ class AuthService
 
         } catch (\Exception $exception) {
             Log::warning('AuthService@confirm_code Exception: ' . $exception->getMessage());
-            return response()->json(['message' => 'Упс! Щось пішло не так!'], 500);
+            return response()->json(['message' => 'Oops! Something went wrong!'], 500);
         }
     }
 
@@ -126,13 +127,13 @@ class AuthService
         try {
             $user = $this->user->findByAttr('password_reset_code', $request->code);
 
-            $this->user->update_field($user->id, 'password', Hash::make($request->password));
+            $this->user->update_field($user->id, 'password', PasswordHelper::HashPassword($request->password));
 
             return $this->user->update_field($user->id, 'password_reset_code', null);
 
         } catch (\Exception $exception) {
             Log::warning('AuthService@confirm_code Exception: ' . $exception->getMessage());
-            return response()->json(['message' => 'Упс! Щось пішло не так!'], 500);
+            return response()->json(['message' => 'Oops! Something went wrong!'], 500);
         }
     }
 
@@ -143,7 +144,7 @@ class AuthService
 
         } catch (\Exception $exception) {
             Log::warning('AuthService@logout Exception: ' . $exception->getMessage());
-            return response()->json(['message' => 'Упс! Щось пішло не так!'], 500);
+            return response()->json(['message' => 'Oops! Something went wrong!'], 500);
         }
     }
 
@@ -152,8 +153,6 @@ class AuthService
         $tokenResult = $user->createToken('Personal Access Token');
         $token = $tokenResult->token;
         $token->save();
-
-        dd($tokenResult);
 
         return $tokenResult;
     }
@@ -173,18 +172,18 @@ class AuthService
 
         } catch (\Exception $exception) {
             Log::warning('AuthService@resetPassword Exception: ' . $exception->getMessage());
-            return response()->json(['message' => 'Упс! Щось пішло не так!'], 500);
+            return response()->json(['message' => 'Oops! Something went wrong!'], 500);
         }
     }
 
     public function changePassword(Request $request)
     {
         try {
-            return $this->user->update_password(Auth::id(), Hash::make($request->password));
+            return $this->user->update_password(Auth::id(), PasswordHelper::HashPassword($request->password));
 
         } catch (\Exception $exception) {
             Log::warning('AuthService@changePassword Exception: ' . $exception->getMessage());
-            return response()->json(['message' => 'Упс! Щось пішло не так!'], 500);
+            return response()->json(['message' => 'Oops! Something went wrong!'], 500);
         }
     }
 
@@ -205,7 +204,7 @@ class AuthService
 
         } catch (\Exception $exception) {
             Log::warning('AuthService@setAvatar Exception: ' . $exception->getMessage());
-            return response()->json(['message' => 'Упс! Щось пішло не так!'], 500);
+            return response()->json(['message' => 'Oops! Something went wrong!'], 500);
         }
     }
 
@@ -216,7 +215,7 @@ class AuthService
 
         } catch (\Exception $exception) {
             Log::warning('AuthService@setPlayer Exception: ' . $exception->getMessage());
-            return response()->json(['message' => 'Упс! Щось пішло не так!'], 500);
+            return response()->json(['message' => 'Oops! Something went wrong!'], 500);
         }
     }
 
@@ -227,7 +226,7 @@ class AuthService
 
         } catch (\Exception $exception) {
             Log::warning('AuthService@setPush Exception: ' . $exception->getMessage());
-            return response()->json(['message' => 'Упс! Щось пішло не так!'], 500);
+            return response()->json(['message' => 'Oops! Something went wrong!'], 500);
         }
     }
 
@@ -238,7 +237,7 @@ class AuthService
 
         } catch (\Exception $exception) {
             Log::warning('AuthService@setPushChat Exception: ' . $exception->getMessage());
-            return response()->json(['message' => 'Упс! Щось пішло не так!'], 500);
+            return response()->json(['message' => 'Oops! Something went wrong!'], 500);
         }
     }
 
@@ -249,7 +248,7 @@ class AuthService
 
         } catch (\Exception $exception) {
             Log::warning('AuthService@settings Exception: ' . $exception->getMessage());
-            return response()->json(['message' => 'Упс! Щось пішло не так!'], 500);
+            return response()->json(['message' => 'Oops! Something went wrong!'], 500);
         }
     }
 
@@ -264,7 +263,7 @@ class AuthService
 
         } catch (\Exception $exception) {
             Log::warning('AuthService@settings Exception: ' . $exception->getMessage());
-            return response()->json(['message' => 'Упс! Щось пішло не так!'], 500);
+            return response()->json(['message' => 'Oops! Something went wrong!'], 500);
         }
     }
 
@@ -291,5 +290,14 @@ class AuthService
         }
 
         return true;
+    }
+
+    public function generateAndSetNewPassword(Request $request)
+    {
+        $password = PasswordHelper::HashPassword($request->password);
+
+        $request->merge([
+            'password' => $password,
+        ]);
     }
 }
