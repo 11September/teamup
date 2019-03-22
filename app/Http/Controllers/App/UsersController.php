@@ -94,7 +94,7 @@ class UsersController
     /**
      * SetPush
      *
-     * @param  [string] player
+     * @param  [string] push |  ['enabled', 'disabled']
      *
      * @return [json] text
      */
@@ -110,7 +110,7 @@ class UsersController
     /**
      * SetPushChat
      *
-     * @param  [string] player
+     * @param  [string] push | ['true', 'false']
      *
      * @return [json] text
      */

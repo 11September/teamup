@@ -60,11 +60,6 @@ class UserRepository
         return $this->user->findOrFail($id)->update([$field => $attribute]);
     }
 
-    public function update_avatar($id, $path)
-    {
-        return $this->user->findOrFail($id)->update(['avatar' => $path]);
-    }
-
     public function delete($id)
     {
         return $this->user->findOrFail($id)->delete();
