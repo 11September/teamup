@@ -9,6 +9,7 @@
 
 namespace App\Helpers;
 
+use Carbon\Carbon;
 
 class UserHelper
 {
@@ -19,5 +20,10 @@ class UserHelper
         }
 
         return true;
+    }
+
+    public static function getCurrentDate()
+    {
+        return Carbon::now()->format('Y-m-d');
     }
 }

@@ -25,6 +25,8 @@ Route::namespace('App')->group(function () {
         Route::post('login', 'AuthController@login')->name('login');
         Route::post('register', 'AuthController@register')->name('register');
 
+        Route::post('feedback', 'FeedbacksController@loginFeedback')->name('login_feedback');
+
         Route::post('forgot_password', 'AuthController@forgot_password')->name('forgot_password');
         Route::post('confirm_code', 'AuthController@confirm_code')->name('confirm_code');
         Route::post('reset_password', 'AuthController@reset_password')->name('reset_password');

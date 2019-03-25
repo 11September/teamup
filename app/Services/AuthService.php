@@ -9,23 +9,24 @@
 
 namespace App\Services;
 
-use App\Setting;
+use App\Helpers\UserHelper;
 use App\Mail\ResetPassword;
 use Illuminate\Http\Request;
 use App\Helpers\AvatarsHelper;
-use App\Mail\ResetPasswordCode;
-use App\Helpers\UserHelper;
 use App\Helpers\PasswordHelper;
+use App\Mail\ResetPasswordCode;
 use App\Helpers\SubscribeHelper;
 use Illuminate\Support\Facades\Log;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Auth;
+use App\Repositories\SettingRepository;
 
 class AuthService
 {
-    public function __construct(UserRepository $user)
+    public function __construct(UserRepository $user, SettingRepository $setting)
     {
         $this->user = $user;
+        $this->setting = $setting;
     }
 
     public function loginIsActive(Request $request)
@@ -256,7 +257,7 @@ class AuthService
     public function settings()
     {
         try {
-            return Setting::first();
+            return $this->setting->first();
 
         } catch (\Exception $exception) {
             Log::warning('AuthService@settings Exception: ' . $exception->getMessage());

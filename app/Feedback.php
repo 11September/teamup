@@ -10,6 +10,10 @@ class Feedback extends Model
 
     protected $fillable = ['user_id', 'feedback', 'date'];
 
+    protected $casts = [
+        'date' => 'date',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);

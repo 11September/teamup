@@ -40,7 +40,6 @@ class ActivityRepository
         return $this->activity->find($id)->update($attributes);
     }
 
-
     public function delete($id)
     {
         return $this->activity->find($id)->delete();
