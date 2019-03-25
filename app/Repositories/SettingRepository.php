@@ -11,6 +11,7 @@ namespace App\Repositories;
 
 use App\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SettingRepository{
 
@@ -38,11 +39,6 @@ class SettingRepository{
 
     public function updateOrCreate($id, array $attributes)
     {
-        if (!$attributes['id'] || empty($attributes['id'])){
-            unset($attributes['id']);
-            return $this->setting->create($attributes);
-        }
-
-        return $this->setting->find($id)->update($attributes);
+        return DB::table('settings')->updateOrInsert(['id' => $id], $attributes);
     }
 }

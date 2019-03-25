@@ -27,7 +27,7 @@ class SettingsController extends Controller
 
     public function store(SettingsStore $request)
     {
-        $setting = $this->settingSerive->update($request, $request->id);
+        $setting = $this->settingSerive->update($request);
 
         return redirect()->back()
             ->with(['alert-status' => 'success',

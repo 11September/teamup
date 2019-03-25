@@ -24,11 +24,11 @@ class SettingService{
         return $this->setting->first();
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        $attributes = $request->except('_token');
+        $attributes = $request->except('_token', 'id');
 
-        return $this->setting->updateOrCreate($id, $attributes);
+        return $this->setting->updateOrCreate($request->id, $attributes);
     }
 
 }
