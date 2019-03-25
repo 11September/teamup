@@ -20,6 +20,20 @@ class FeedbackRepository
         $this->feedback = $feedback;
     }
 
+    public function all()
+    {
+        return $this->feedback->all();
+    }
+
+    public function allWithUsersName()
+    {
+        return $this->feedback->with(array
+            ('user'=>function($query){
+                    $query->select('id', 'first_name', 'last_name', 'email');
+                })
+        )->get();
+    }
+
     public function create($attributes)
     {
         return $this->feedback->create($attributes);

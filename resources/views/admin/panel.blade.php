@@ -27,7 +27,7 @@
 
             @include('partials.dashboard_graph_activity')
 
-            @include('partials.dashboadr_feedbacks')
+            @include('partials.dashboard_feedbacks')
 
             @include('partials.dashboard_client_statuses')
 

@@ -30,6 +30,28 @@ class FeedbackService
         return $attributes;
     }
 
+    public function index()
+    {
+        try {
+            return $this->feedback->all();
+
+        } catch (\Exception $exception) {
+            Log::warning('FeedbackService@index Exception: ' . $exception->getMessage());
+            return response()->json(['message' => 'Oops! Something went wrong!'], 500);
+        }
+    }
+
+    public function toAdminPanel()
+    {
+        try {
+            return $this->feedback->allWithUsersName();
+
+        } catch (\Exception $exception) {
+            Log::warning('FeedbackService@index Exception: ' . $exception->getMessage());
+            return response()->json(['message' => 'Oops! Something went wrong!'], 500);
+        }
+    }
+
     public function SendFeedback(Request $request)
     {
         try {
