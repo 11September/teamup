@@ -20,9 +20,7 @@ class AppServiceProvider extends ServiceProvider
     {
         view()->composer('partials.dashboard_feedbacks', function($view)
         {
-            $feedback = new Feedback();
-            $feedbackRepo = new FeedbackRepository($feedback);
-            $feedbackService = new FeedbackService($feedbackRepo);
+            $feedbackService = new FeedbackService(new FeedbackRepository(new Feedback()));
             $feedbacks = $feedbackService->toAdminPanel();
 
             $view->with(['feedbacks' => $feedbacks]);
