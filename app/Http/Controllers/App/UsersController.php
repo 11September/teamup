@@ -8,7 +8,6 @@ use App\Http\Requests\SetAvatar;
 use App\Http\Requests\SetPlayer;
 use App\Http\Requests\SetPushChat;
 use App\Http\Requests\ChangePassword;
-use Illuminate\Support\Facades\Log;
 
 class UsersController
 {
@@ -63,15 +62,9 @@ class UsersController
 
     public function SetAvatar(SetAvatar $request)
     {
-        try {
-            $avatar = $this->authService->setAvatar($request);
+        $avatar = $this->authService->setAvatar($request);
 
-            return response()->json(['message' => 'Avatar changed!', 'avatar' => $avatar], 200);
-
-        } catch (\Exception $exception) {
-            Log::warning('UsersController@SetAvatar Exception: ' . $exception->getMessage() . " - " . $exception->getLine());
-            return response()->json(['message' => 'Упс! Щось пішло не так!'], 500);
-        }
+        return response()->json(['message' => 'Avatar changed!', 'avatar' => $avatar], 200);
     }
 
 
