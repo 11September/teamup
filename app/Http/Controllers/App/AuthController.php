@@ -32,11 +32,29 @@ class AuthController
      */
     public function login(AuthLogin $request)
     {
-        if (!$this->authService->loginCan($request)){
-            return response()->json(['message' => 'User is inactive!'], 403);
+        $responce = $this->authService->loginIsActive($request);
+
+        if (!$responce['status']) {
+            return response()->json(
+                [
+                    'message' => 'Your account is inactive. Please contact administrator!',
+                    'user' => $responce['user']
+                ],
+                403);
         }
 
-        if(!$this->authService->loginAttempt($request)){
+        $responce = $this->authService->loginIsSubscriber($request);
+
+        if (!$responce['status']) {
+            return response()->json(
+                [
+                    'message' => 'Your account has been expired. Please contact administrator!',
+                    'user' => $responce['user']
+                ],
+                403);
+        }
+
+        if (!$this->authService->loginAttempt($request)) {
             return response()->json(['message' => 'The user does not have or the login / password is not suitable!'], 401);
         }
 

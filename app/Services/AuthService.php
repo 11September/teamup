@@ -28,20 +28,32 @@ class AuthService
         $this->user = $user;
     }
 
-    public function loginCan(Request $request)
+    public function loginIsActive(Request $request)
     {
         try {
             $user = $this->user->findEmail($request->email);
 
-            $active = UserHelper::isActive($user);
+            $isActive = UserHelper::isActive($user);
+
+            return ['status' => (bool) $isActive , 'user' => $this->prepareDetailsLoginData($user)];
+
+        } catch (\Exception $exception) {
+            Log::warning('AuthService@loginIsActive Exception: ' . $exception->getMessage());
+            return response()->json(['message' => 'Oops! Something went wrong!'], 500);
+        }
+    }
+
+    public function loginIsSubscriber(Request $request)
+    {
+        try {
+            $user = $this->user->findEmail($request->email);
 
             $subscribe = SubscribeHelper::IsSubscriber($user);
 
-            return (bool)($active && $subscribe);
-
+            return ['status' => (bool) $subscribe , 'user' => $this->prepareDetailsLoginData($user)];
 
         } catch (\Exception $exception) {
-            Log::warning('AuthService@loginCan Exception: ' . $exception->getMessage());
+            Log::warning('AuthService@loginIsSubscriber Exception: ' . $exception->getMessage());
             return response()->json(['message' => 'Oops! Something went wrong!'], 500);
         }
     }
@@ -277,6 +289,19 @@ class AuthService
                 'status',
                 'type',
                 'player_id'
+            ]
+        );
+
+        return $user;
+    }
+
+    public function prepareDetailsLoginData($user)
+    {
+        $user = collect($user)->only(
+            [
+                'id',
+                'first_name',
+                'last_name',
             ]
         );
 
