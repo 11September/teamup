@@ -26,6 +26,7 @@ class FeedbackService
         $attributes['user_id'] = $data['id'];
         $attributes['date'] = UserHelper::getCurrentDate();
         $attributes['feedback'] = $data['feedback'];
+        $attributes['status'] = 'unread';
 
         return $attributes;
     }

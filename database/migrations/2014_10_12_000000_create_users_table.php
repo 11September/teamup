@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration
 
             $table->enum('type', ['athlete', 'coach', 'admin']);
 
+            $table->string('avatar')->nullable();
             $table->smallInteger('number_students')->nullable();
             $table->string('activation_code', 50)->nullable();
             $table->date('expiration_date', 50)->nullable();

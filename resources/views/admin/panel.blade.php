@@ -133,7 +133,7 @@
         function slider_area() {
             var owl = $('.testimonial-carousel').owlCarousel({
                 margin: 50,
-                loop: true,
+                loop: false,
                 autoplay: false,
                 nav: false,
                 dots: true,
@@ -148,7 +148,7 @@
                         items: 2
                     },
                     1000: {
-                        items: 2
+                        items: 3
                     },
                     1360: {
                         items: 3

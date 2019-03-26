@@ -8,7 +8,7 @@ class Feedback extends Model
 {
     protected $table = "feedbacks";
 
-    protected $fillable = ['user_id', 'feedback', 'date'];
+    protected $fillable = ['user_id', 'feedback', 'date', 'status'];
 
     protected $casts = [
         'date' => 'date',

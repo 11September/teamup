@@ -19,14 +19,12 @@ use App\Helpers\SubscribeHelper;
 use Illuminate\Support\Facades\Log;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Auth;
-use App\Repositories\SettingRepository;
 
 class AuthService
 {
-    public function __construct(UserRepository $user, SettingRepository $setting)
+    public function __construct(UserRepository $user)
     {
         $this->user = $user;
-        $this->setting = $setting;
     }
 
     public function loginIsActive(Request $request)
@@ -250,17 +248,6 @@ class AuthService
 
         } catch (\Exception $exception) {
             Log::warning('AuthService@setPushChat Exception: ' . $exception->getMessage());
-            return response()->json(['message' => 'Oops! Something went wrong!'], 500);
-        }
-    }
-
-    public function settings()
-    {
-        try {
-            return $this->setting->first();
-
-        } catch (\Exception $exception) {
-            Log::warning('AuthService@settings Exception: ' . $exception->getMessage());
             return response()->json(['message' => 'Oops! Something went wrong!'], 500);
         }
     }

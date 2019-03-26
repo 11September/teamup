@@ -166,6 +166,9 @@ return [
          * Package Service Providers...
          */
 
+        Asvae\ApiTester\ServiceProvider::class,
+        App\Providers\FeedbackServiceProvider::class,
+
         /*
          * Application Service Providers...
          */
@@ -174,7 +177,6 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-
     ],
 
     /*

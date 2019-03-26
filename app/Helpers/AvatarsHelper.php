@@ -42,8 +42,6 @@ class AvatarsHelper
     }
 
 
-
-
     /**
      * deletePreviousImage Method
      *
@@ -60,5 +58,32 @@ class AvatarsHelper
         }
 
         return true;
+    }
+
+
+    /**
+     * fullPathToAvatar Method
+     *
+     * @param  [array] data
+     *
+     * @return [array] data
+     */
+
+    public static function fullPathToAvatarApi($data)
+    {
+        if ($data && file_exists(storage_path("app/public") . $data)){
+            $data = Config::get('app.storageurl') . $data;
+        }
+
+        return $data;
+    }
+
+    public static function fullPathToAvatarWeb($data)
+    {
+        if ($data && file_exists(storage_path("app/public") . $data)){
+            $data = "storage". $data;
+        }
+
+        return $data;
     }
 }

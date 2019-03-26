@@ -2,9 +2,6 @@
 
 namespace App\Providers;
 
-use App\Feedback;
-use App\Repositories\FeedbackRepository;
-use App\Services\FeedbackService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -18,13 +15,7 @@ class AppServiceProvider extends ServiceProvider
 
     public function register()
     {
-        view()->composer('partials.dashboard_feedbacks', function($view)
-        {
-            $feedbackService = new FeedbackService(new FeedbackRepository(new Feedback()));
-            $feedbacks = $feedbackService->toAdminPanel();
 
-            $view->with(['feedbacks' => $feedbacks]);
-        });
     }
 
     /**
@@ -34,6 +25,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+
     }
 }

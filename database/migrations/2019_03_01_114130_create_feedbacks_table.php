@@ -18,6 +18,7 @@ class CreateFeedbacksTable extends Migration
             $table->integer('user_id')->unsigned();
             $table->string('feedback');
             $table->date('date');
+            $table->enum('status', ['read', 'unread'])->default('unread');
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');
