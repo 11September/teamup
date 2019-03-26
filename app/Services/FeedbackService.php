@@ -34,7 +34,7 @@ class FeedbackService
     public function index()
     {
         try {
-            return $this->feedback->all();
+            return $this->feedback->allWithUsersName();
 
         } catch (\Exception $exception) {
             Log::warning('FeedbackService@index Exception: ' . $exception->getMessage());

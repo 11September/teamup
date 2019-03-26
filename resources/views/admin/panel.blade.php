@@ -75,7 +75,7 @@
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
                         type: 'PUT',
-                        url: 'admin/feedbacks/' + id,
+                        url: '{{ url('admin/feedbacks')}}' + '/' + id,
                         dataType: 'json',
                         data: {id: id, status: "read"},
                         success: function (data) {

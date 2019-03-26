@@ -2,7 +2,9 @@
     <div class="wrapper-feedbacks">
         <div class="card">
             <div class="card-body bg1">
-                <h4 class="header-title text-white">Client Feadback</h4>
+                <h4 class="header-title text-white">
+                    <a class="allFeedbacks" href="{{ action('Admin\FeedbacksController@index') }}">Client Feadbacks</a>
+                </h4>
 
                 @if(isset($feedbacks))
                     @if(count($feedbacks) > 0)
@@ -21,7 +23,7 @@
                                             @endif
                                         </div>
                                         <div class="tstu-content">
-                                            <h4 class="tstu-name">{{ $feedback->user->getFullnameAttribute() }}</h4>
+                                            <h4 class="tstu-name"><a class="mailTo" href="{{ url('admin/users', $feedback->user->id) }}">{{ $feedback->user->getFullnameAttribute() }}</a></h4>
                                             <span class="profsn"><a class="mailTo" href="mailto:{{ $feedback->user->email }}">{{ $feedback->user->email }}</a></span>
                                             <span class="profsn">{{ $feedback->date->format('d-m-Y') }}</span>
                                             <p>{{ $feedback->feedback }}</p>

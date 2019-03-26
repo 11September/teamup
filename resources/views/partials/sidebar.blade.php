@@ -1,7 +1,7 @@
 <div class="sidebar-menu">
     <div class="sidebar-header">
         <div class="logo">
-            <a href="index.html"><img src="{{ asset('images/icon/logo.png') }}" alt="logo"></a>
+            <a href="{{ url('/admin') }}"><img src="{{ asset('images/icon/logo.png') }}" alt="logo"></a>
         </div>
     </div>
     <div class="main-menu">
@@ -14,6 +14,7 @@
                     <li class="{{ request()->is('admin/activities*') ? 'active' : '' }}"><a href="{{ url('admin/activities') }}"><i class="fas fa-stopwatch"></i> <span>Exercises</span></a></li>
                     <li class="{{ request()->is('admin/measures*') ? 'active' : '' }}"><a href="#"><i class="fas fa-weight-hanging"></i> <span>Measures</span></a></li>
                     <li class="{{ request()->is('admin/reports*') ? 'active' : '' }}"><a href="#"><i class="far fa-file-alt"></i> <span>Reports</span></a></li>
+                    <li class="{{ request()->is('admin/feedbacks*') ? 'active' : '' }}"><a href="{{ url('admin/feedbacks') }}"><i class="fas fa-comments"></i> <span>Feedbacks</span></a></li>
                     <li class="{{ request()->is('admin/settings*') ? 'active' : '' }}"><a href="{{ url('admin/settings') }}"><i class="fas fa-cogs"></i> <span>Settings</span></a></li>
                 </ul>
             </nav>

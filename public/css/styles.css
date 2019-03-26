@@ -3531,7 +3531,15 @@ blockquote p{
     color: rgb(5, 176, 133);
 }
 
+.tstu-name{
+    margin-bottom: 20px;
+}
+
 .mailTo{
     color: rgb(254, 208, 63);
     font-weight: bold;
+}
+
+.allFeedbacks{
+    color: white;
 }

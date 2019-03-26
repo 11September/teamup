@@ -17,12 +17,28 @@ class FeedbacksController extends Controller
 
 
     /**
+     * index
+     *
+     *
+     * @return [view]
+     */
+
+    public function index()
+    {
+        $feedbacks = $this->feedbackService->index();
+
+        return view('admin.feedbacks.index', compact('feedbacks'));
+    }
+
+
+    /**
      * loginFeedback
      *
      * @param  [int] id
      * @param  [text] feedback
      *
      * @return [json] text
+     * @return [json] status
      */
 
     public function update(Request $request)
@@ -31,6 +47,22 @@ class FeedbacksController extends Controller
             return response()->json(['message' => 'Feedback status changed!', 'success' => false], 200);
         }
 
+        return response()->json(['message' => 'Feedback status changed!', 'success' => true], 200);
+    }
+
+
+    /**
+     * destroy
+     *
+     * @param  [int] id
+     * @param  [text] feedback
+     *
+     * @return [json] text
+     * @return [json] status
+     */
+
+    public function destroy(Request $request)
+    {
         return response()->json(['message' => 'Feedback status changed!', 'success' => true], 200);
     }
 }

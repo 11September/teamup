@@ -41,7 +41,7 @@ Route::group(['namespace' => 'Admin'], function () {
                 ]);
 
                 Route::resource('feedbacks', 'FeedbacksController')->only([
-                    'update'
+                    'index', 'update', 'destroy'
                 ]);
             });
 
