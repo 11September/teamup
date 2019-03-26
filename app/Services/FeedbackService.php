@@ -65,4 +65,15 @@ class FeedbackService
             return response()->json(['message' => 'Oops! Something went wrong!'], 500);
         }
     }
+
+    public function updateStatus(Request $request)
+    {
+        try {
+            return $this->feedback->update_field($request->id, 'status', $request->status);
+
+        } catch (\Exception $exception) {
+            Log::warning('FeedbackService@updateStatus Exception: ' . $exception->getMessage());
+            return response()->json(['message' => 'Oops! Something went wrong!'], 500);
+        }
+    }
 }

@@ -11,7 +11,7 @@ class Feedback extends Model
     protected $fillable = ['user_id', 'feedback', 'date', 'status'];
 
     protected $casts = [
-        'date' => 'date',
+        'date' => 'datetime:Y-m',
     ];
 
     public function user()

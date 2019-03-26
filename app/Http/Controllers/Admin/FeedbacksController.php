@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Illuminate\Http\Request;
 use App\Services\FeedbackService;
 use App\Http\Controllers\Controller;
 
@@ -24,8 +25,12 @@ class FeedbacksController extends Controller
      * @return [json] text
      */
 
-    public function allFeedbacksProvider()
+    public function update(Request $request)
     {
-        dd('lol');
+        if (!$this->feedbackService->updateStatus($request)){
+            return response()->json(['message' => 'Feedback status changed!', 'success' => false], 200);
+        }
+
+        return response()->json(['message' => 'Feedback status changed!', 'success' => true], 200);
     }
 }

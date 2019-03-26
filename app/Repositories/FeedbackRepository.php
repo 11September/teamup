@@ -38,4 +38,9 @@ class FeedbackRepository
     {
         return $this->feedback->create($attributes);
     }
+
+    public function update_field($id, $field, $attribute)
+    {
+        return $this->feedback->findOrFail($id)->update([$field => $attribute]);
+    }
 }

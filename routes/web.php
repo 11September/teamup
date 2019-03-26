@@ -39,6 +39,10 @@ Route::group(['namespace' => 'Admin'], function () {
                 Route::resource('settings', 'SettingsController')->only([
                     'index', 'store'
                 ]);
+
+                Route::resource('feedbacks', 'FeedbacksController')->only([
+                    'update'
+                ]);
             });
 
             Route::middleware(['adminOrCoach'])->group(function () {
