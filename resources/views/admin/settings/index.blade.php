@@ -5,16 +5,13 @@
 @endsection
 
 @section('content')
-
     <div class="page-title-area">
         <div class="row align-items-center">
             <div class="col-sm-12">
                 <div class="breadcrumbs-area clearfix">
-                    <h4 class="page-title pull-left">Dashboard</h4>
                     <ul class="breadcrumbs pull-left">
-                        <li><a href="{{ url('/admin') }}">Home</a></li>
-                        <li><a href="{{ url('/admin/users') }}">Users</a></li>
-                        <li><span>Create new User</span></li>
+                        <li><a href="{{ url('/admin') }}">Dashboard</a></li>
+                        <li><span>Settings</span></li>
                     </ul>
                 </div>
             </div>
