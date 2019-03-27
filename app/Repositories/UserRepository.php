@@ -50,11 +50,6 @@ class UserRepository
         return $this->user->findOrFail($id)->update($attributes);
     }
 
-    public function update_password($id, $password)
-    {
-        return $this->user->findOrFail($id)->update(['password' => $password]);
-    }
-
     public function update_field($id, $field, $attribute)
     {
         return $this->user->findOrFail($id)->update([$field => $attribute]);

@@ -11,18 +11,19 @@ use App\Http\Requests\UserUpdatePassword;
 
 class UsersController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-
     protected $userservice;
 
     public function __construct(UserService $userservice)
     {
         $this->userservice = $userservice;
     }
+
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
 
     public function index()
     {
@@ -31,15 +32,18 @@ class UsersController extends Controller
         return view('admin.users.index', compact('users'));
     }
 
+
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
+
     public function create()
     {
         return view('admin.users.create');
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -47,15 +51,23 @@ class UsersController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
     public function store(UserStore $request)
     {
-        $this->userservice->create($request);
+        $status = $this->userservice->create($request);
 
         return redirect()->action('Admin\UsersController@index')
-            ->with(['alert-status' => 'success',
-                'message' => 'Користувач успішно доданий! Перевiрте пошту!'
-            ]);
+            ->with([
+                'success' => $status,
+                'status' => $status
+                    ? "success"
+                    : "danger",
+                'message' => $status
+                    ? "User successfully added!"
+                    : "Whoops, looks like something went wrong! Please try again later."
+            ], 200);
     }
+
 
     /**
      * Display the specified resource.
@@ -63,10 +75,12 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
     public function show(User $user)
     {
         return view('admin.users.show', compact('user'));
     }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -74,10 +88,12 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
     public function edit(User $user)
     {
         return view('admin.users.edit', compact('user'));
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -86,15 +102,23 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
     public function update(Request $request, User $user)
     {
-        $user = $this->userservice->update($request, $user->id);
+        $status = $this->userservice->update($request, $user->id);
 
         return redirect()->action('Admin\UsersController@index')
-            ->with(['alert-status' => 'success',
-                'message' => 'User password successfully changed!'
-            ]);
+            ->with([
+                'success' => $status,
+                'status' => $status
+                    ? "success"
+                    : "danger",
+                'message' => $status
+                    ? "User password successfully updated!"
+                    : "Whoops, looks like something went wrong! Please try again later."
+            ], 200);
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -102,16 +126,30 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
     public function destroy($id)
     {
-        $this->userservice->delete($id);
+        $status = $this->userservice->delete($id);
 
         return redirect()->action('Admin\UsersController@index')
-            ->with(['alert-status' => 'success',
-                'message' => 'User password successfully changed!'
-            ]);
+            ->with([
+                'success' => $status,
+                'status' => $status
+                    ? "success"
+                    : "danger",
+                'message' => $status
+                    ? "User password successfully deleted!"
+                    : "Whoops, looks like something went wrong! Please try again later."
+            ], 200);
     }
 
+
+    /**
+     * reset_password
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
 
     public function reset_password(User $user)
     {
@@ -119,13 +157,29 @@ class UsersController extends Controller
     }
 
 
+    /**
+     * update_password
+     *
+     * @param  string  $password-old
+     * @param  string  $password
+     * @param  string  $password-confirmation
+     *
+     * @return \Illuminate\Http\Response
+     */
+
     public function update_password(UserUpdatePassword $request, $id)
     {
-        $this->userservice->update_password($request, $id);
+        $status = $this->userservice->update_password($request, $id);
 
         return redirect()->action('Admin\UsersController@index')
-            ->with(['alert-status' => 'success',
-                'message' => 'User password successfully changed!'
-            ]);
+            ->with([
+                'success' => $status,
+                'status' => $status
+                    ? "success"
+                    : "danger",
+                'message' => $status
+                    ? "User password successfully changed!"
+                    : "Whoops, looks like something went wrong! Please try again later."
+            ], 200);
     }
 }

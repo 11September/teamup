@@ -16,11 +16,13 @@ class ActivitiesController extends Controller
         $this->activityService = $activityService;
     }
 
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index()
     {
         $activities = $this->activityService->index();
@@ -30,6 +32,7 @@ class ActivitiesController extends Controller
         return view('admin.activities.index', compact('activities', 'measures'));
     }
 
+
     /**
      * Store a newly created resource in storage.
      *
@@ -38,10 +41,20 @@ class ActivitiesController extends Controller
      */
     public function store(ActivityStore $request)
     {
-        $activity = $this->activityService->store($request);
+        $status = $this->activityService->store($request);
 
-        return response()->json(['data' => $activity, 'success' => true, 'text' => 'Activity is successfully added!']);
+        return response()->json(
+            [
+                'success' => $status,
+                'message' => $status
+
+                    ? "Activity is successfully added!"
+                    : "Whoops, looks like something went wrong! Please try again later."
+            ],
+            200
+        );
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -50,12 +63,23 @@ class ActivitiesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
     public function update(ActivityUpdate $request, $id)
     {
-        $activity = $this->activityService->update($request);
+        $status = $this->activityService->update($request);
 
-        return response()->json(['data' => $activity, 'success' => true, 'text' => 'Activity is successfully updated!']);
+        return response()->json(
+            [
+                'success' => $status,
+                'message' => $status
+
+                    ? "Activity is successfully updated!"
+                    : "Whoops, looks like something went wrong! Please try again later."
+            ],
+            200
+        );
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -63,10 +87,20 @@ class ActivitiesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
     public function destroy($id)
     {
-        $activity = $this->activityService->delete($id);
+        $status = $this->activityService->delete($id);
 
-        return response()->json(['data' => $activity, 'success' => true, 'text' => 'Activity is successfully deleted!']);
+        return response()->json(
+            [
+                'success' => $status,
+                'message' => $status
+
+                    ? "Activity is successfully deleted!"
+                    : "There were difficulties in removing the review"
+            ],
+            200
+        );
     }
 }

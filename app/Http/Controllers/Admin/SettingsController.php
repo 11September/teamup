@@ -2,10 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Setting;
-use Illuminate\Http\Request;
 use App\Services\SettingService;
-use App\Observers\SettingsObserver;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SettingsStore;
 
@@ -18,6 +15,14 @@ class SettingsController extends Controller
         $this->settingSerive = $userservice;
     }
 
+
+    /**
+     * index
+     *
+     * @param  int  $id
+     * @return ['view']
+     */
+
     public function index()
     {
         $setting = $this->settingSerive->index();
@@ -25,14 +30,27 @@ class SettingsController extends Controller
         return view('admin.settings.index', compact('setting'));
     }
 
+
+    /**
+     * store
+     *
+     * @param  int  $id
+     * @return "redirect"
+     */
+
     public function store(SettingsStore $request)
     {
-        $setting = $this->settingSerive->update($request);
+        $status = $this->settingSerive->update($request);
 
         return redirect()->back()
-            ->with(['alert-status' => 'success',
-                'message' => 'Settings saved successfully!',
-                'setting' => $setting
-            ]);
+            ->with([
+                'success' => $status,
+                'status' => $status
+                    ? "success"
+                    : "danger",
+                'message' => $status
+                    ? "Settings saved successfully!"
+                    : "Whoops, looks like something went wrong! Please try again later."
+            ], 200);
     }
 }

@@ -9,10 +9,10 @@
 
 namespace App\Services;
 
-use App\User;
 use Illuminate\Http\Request;
-use App\Repositories\UserRepository;
+use App\Helpers\PasswordHelper;
 use Illuminate\Support\Facades\Hash;
+use App\Repositories\UserRepository;
 
 class UserService
 {
@@ -29,6 +29,8 @@ class UserService
     public function create(Request $request)
     {
         $attributes = $request->all();
+
+        $attributes['password'] = PasswordHelper::HashPassword($attributes['password']);
 
         return $this->user->create($attributes);
     }
@@ -49,7 +51,7 @@ class UserService
     {
         $password = Hash::make($request->password);
 
-        return $this->user->update_password($id, $password);
+        return $this->user->update_field($id, "password", $password);
     }
 
     public function delete($id)

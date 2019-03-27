@@ -50,7 +50,7 @@ class FeedbacksController extends Controller
                 'message' => $status
 
                     ? "Feedback status changed!"
-                    : "There were difficulties in removing the review"
+                    : "Whoops, looks like something went wrong! Please try again later."
             ],
             200
         );
@@ -79,7 +79,7 @@ class FeedbacksController extends Controller
                     : "danger",
                 'message' => $status
                     ? "The review has been successfully deleted!"
-                    : "There were difficulties in removing the review"
+                    : "Whoops, looks like something went wrong! Please try again later."
             ], 200);
     }
 }

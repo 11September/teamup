@@ -68,7 +68,7 @@
                                     <div class="form-group">
                                         <label for="email" class="col-form-label">Email*</label>
                                         <input class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}"
-                                               type="email" name="email" value="{{ old('last_name') }}" id="email"
+                                               type="email" name="email" value="{{ old('email') }}" id="email"
                                                max="255" required>
 
                                         @if ($errors->has('email'))
