@@ -87,7 +87,8 @@
                             } else {
                                 toastr.error(data.message, {timeOut: 3000});
                             }
-                        }, error: function () {
+                        },
+                        error: function (data) {
                             console.log(data);
                         }
                     });

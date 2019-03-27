@@ -43,4 +43,9 @@ class FeedbackRepository
     {
         return $this->feedback->findOrFail($id)->update([$field => $attribute]);
     }
+
+    public function delete($id)
+    {
+        return $this->feedback->findOrFail($id)->delete();
+    }
 }

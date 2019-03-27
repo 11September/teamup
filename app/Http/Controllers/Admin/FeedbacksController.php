@@ -19,7 +19,6 @@ class FeedbacksController extends Controller
     /**
      * index
      *
-     *
      * @return [view]
      */
 
@@ -43,11 +42,18 @@ class FeedbacksController extends Controller
 
     public function update(Request $request)
     {
-        if (!$this->feedbackService->updateStatus($request)){
-            return response()->json(['message' => 'Feedback status changed!', 'success' => false], 200);
-        }
+        $status = $this->feedbackService->updateStatus($request);
 
-        return response()->json(['message' => 'Feedback status changed!', 'success' => true], 200);
+        return response()->json(
+            [
+                'success' => $status,
+                'message' => $status
+
+                    ? "Feedback status changed!"
+                    : "There were difficulties in removing the review"
+            ],
+            200
+        );
     }
 
 
@@ -61,8 +67,19 @@ class FeedbacksController extends Controller
      * @return [json] status
      */
 
-    public function destroy(Request $request)
+    public function destroy($id)
     {
-        return response()->json(['message' => 'Feedback status changed!', 'success' => true], 200);
+        $status = $this->feedbackService->delete($id);
+
+        return redirect()->action('Admin\FeedbacksController@index')
+            ->with([
+                'success' => $status,
+                'status' => $status
+                    ? "success"
+                    : "danger",
+                'message' => $status
+                    ? "The review has been successfully deleted!"
+                    : "There were difficulties in removing the review"
+            ], 200);
     }
 }

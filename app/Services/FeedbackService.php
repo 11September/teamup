@@ -76,4 +76,15 @@ class FeedbackService
             return response()->json(['message' => 'Oops! Something went wrong!'], 500);
         }
     }
+
+    public function delete($id)
+    {
+        try {
+            return $this->feedback->delete($id);
+
+        } catch (\Exception $exception) {
+            Log::warning('FeedbackService@delete Exception: ' . $exception->getMessage());
+            return response()->json(['message' => 'Oops! Something went wrong!'], 500);
+        }
+    }
 }
