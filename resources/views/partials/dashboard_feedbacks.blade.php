@@ -54,3 +54,54 @@
         </div>
     </div>
 </div>
+
+@section('section-script')
+    <script>
+        function clearOwl() {
+            if (!$('.tst-item').length){
+                $('.testimonial-carousel').remove();
+                var text = '<div class="wrapper-no-feedbacks">\n' +
+                    '<p>No feedbacks yet!</p>\n' +
+                    '</div>';
+                $('.wrapper-feedbacks .card-body').append(text);
+            }
+        }
+
+        $(document).ready(function () {
+            $(".wrapper-feedbacks").on("click", '.markReadFeedback', function (e) {
+                e.preventDefault();
+                var clicked = $(e.target);
+                var id = $(this).attr("data-id");
+                clicked.prop('disabled', true);
+
+                if (id) {
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        type: 'PUT',
+                        url: '{{ url('admin/feedbacks')}}' + '/' + id,
+                        dataType: 'json',
+                        data: {id: id, status: "read"},
+                        success: function (data) {
+                            if (data.success) {
+                                clicked.closest('.owl-item').remove();
+                                clearOwl();
+
+                                toastr.success(data.message, {timeOut: 3000});
+                            } else {
+                                toastr.error(data.message, {timeOut: 3000});
+                            }
+                        },
+                        error: function (data) {
+                            console.log(data);
+                        }
+                    });
+                }
+
+                clicked.prop('disabled', false);
+            });
+        });
+
+    </script>
+@endsection

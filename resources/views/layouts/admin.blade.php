@@ -45,5 +45,7 @@
 
 @yield('scripts')
 
+@yield('section-script')
+
 </body>
 </html>
