@@ -55,7 +55,9 @@
     </div>
 </div>
 
-@section('section-script')
+@section('scripts')
+    @parent
+
     <script>
         function clearOwl() {
             if (!$('.tst-item').length){
