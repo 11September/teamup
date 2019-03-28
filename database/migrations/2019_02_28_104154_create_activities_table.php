@@ -24,7 +24,7 @@ class CreateActivitiesTable extends Migration
 
             $table->timestamps();
 
-            $table->foreign('measure_id')->references('id')->on('measures');
+            $table->foreign('measure_id')->references('id')->on('measures')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users');
         });
     }

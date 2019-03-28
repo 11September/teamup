@@ -24,7 +24,6 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-
     public function index()
     {
         $users = $this->userservice->index();
@@ -38,7 +37,6 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-
     public function create()
     {
         return view('admin.users.create');
@@ -51,7 +49,6 @@ class UsersController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-
     public function store(UserStore $request)
     {
         $status = $this->userservice->create($request);
@@ -75,7 +72,6 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-
     public function show(User $user)
     {
         return view('admin.users.show', compact('user'));
@@ -88,7 +84,6 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-
     public function edit(User $user)
     {
         return view('admin.users.edit', compact('user'));
@@ -102,7 +97,6 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-
     public function update(Request $request, User $user)
     {
         $status = $this->userservice->update($request, $user->id);
@@ -126,7 +120,6 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-
     public function destroy($id)
     {
         $status = $this->userservice->delete($id);
@@ -150,7 +143,6 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-
     public function reset_password(User $user)
     {
         return view('admin.users.reset-password', compact('user'));
@@ -166,7 +158,6 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-
     public function update_password(UserUpdatePassword $request, $id)
     {
         $status = $this->userservice->update_password($request, $id);

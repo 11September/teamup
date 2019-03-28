@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('css')
-
+    <link rel="stylesheet" href="{{ asset('css/toastr.min.css') }}">
 @endsection
 
 @section('content')
@@ -40,19 +40,25 @@
 
                                             <div class="wrapper-measures-item">
                                                 <div class="row">
-                                                    <div class="col-md-3">
-                                                        <input class="form-control custom-form-control-measures"
-                                                               value="{{ $measure->name }}" data-id="{{ $measure->id }}"
-                                                               type="text" name="name">
-                                                    </div>
-                                                    <div class="col-md-2">
-                                                        <div class="wrapper-measures-delete-block">
-                                                            <a class="measures-button-block measures-button-block-save" href="#">
-                                                                <i class="fas fa-save"></i>
-                                                            </a>
-                                                            <a class="measures-button-block measures-button-block-delete" href="#">
-                                                                <i class="fas fa-trash-alt"></i>
-                                                            </a>
+                                                    <div class="col-md-4">
+                                                        <div class="wrapper-input-buttons">
+                                                            <div class="wrapper-measure-input">
+                                                                <input class="form-control custom-form-control-measures"
+                                                                       value="{{ $measure->name }}"
+                                                                       data-id="{{ $measure->id }}"
+                                                                       type="text" name="name">
+                                                            </div>
+
+                                                            <div class="wrapper-measures-delete-block">
+                                                                <a class="measures-button-block measures-button-block-save"
+                                                                   href="#">
+                                                                    <i class="fas fa-save"></i>
+                                                                </a>
+                                                                <a class="measures-button-block measures-button-block-delete"
+                                                                   href="#">
+                                                                    <i class="fas fa-trash-alt"></i>
+                                                                </a>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -82,6 +88,8 @@
 @endsection
 
 @section('scripts')
+    <script src="{{ asset('js/toastr.min.js') }}"></script>
+
     <script>
         $(document).ready(function () {
 
@@ -91,25 +99,40 @@
 
                 var clicked = $(e.target);
                 clicked.prop('disabled', true);
-                clicked.closest('.measures-container').find('.wrapper-measures').addClass('lol').append(
-                    '<div class="wrapper-measures-item">' +
-                    '<div class="row">' +
-                    '<div class="col-md-3">' +
-                    '<input class="form-control custom-form-control-measures" value="" data-id="" type="text" name="name">' +
-                    '</div>' +
-                    '<div class="col-md-2">' +
-                    '<div class="wrapper-measures-delete-block">' +
-                    '<a class="measures-button-block measures-button-block-save" href="#">' +
-                    '<i class="fas fa-save"></i>' +
-                    '</a>' +
-                    '<a class="measures-button-block measures-button-block-delete" href="#">' +
-                    '<i class="fas fa-trash-alt"></i>' +
-                    '</a>' +
-                    '</div>' +
-                    '</div>' +
-                    '</div>' +
-                    '</div>'
-                ).hide().fadeIn();
+
+                var previousBox = clicked.closest('.measures-container').find('.wrapper-measures-item:last');
+                var previousInput = previousBox.find('input');
+                var previousInputValue = previousInput.val();
+                if (!previousInputValue) {
+                    previousInput.css('border-bottom', '2px solid red');
+
+                    setTimeout(function () {
+                        previousInput.css('border-bottom', '1px solid grey');
+                    }, 3000);
+                }else{
+                    clicked.closest('.measures-container').find('.wrapper-measures').append(
+                        '<div class="wrapper-measures-item">' +
+                        '<div class="row">' +
+                        '<div class="col-md-4">' +
+                        '<div class="wrapper-input-buttons">' +
+                        '<div class="wrapper-measure-input">' +
+                        '<input class="form-control custom-form-control-measures" value="" data-id="" type="text" name="name">' +
+                        '</div>' +
+                        '<div class="wrapper-measures-delete-block">' +
+                        '<a class="measures-button-block measures-button-block-save" href="#">' +
+                        '<i class="fas fa-save"></i>' +
+                        '</a>' +
+                        '<a class="measures-button-block measures-button-block-delete" href="#">' +
+                        '<i class="fas fa-trash-alt"></i>' +
+                        '</a>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>'
+                    ).hide().fadeIn();
+                }
+
                 clicked.prop('disabled', false);
             });
 
@@ -117,35 +140,37 @@
             $(".wrapper-measures").on("click", '.measures-button-block-delete', function (e) {
                 e.preventDefault();
 
-                alert('delete click');
-
                 var clicked = $(e.target);
                 clicked.prop('disabled', true);
-                var delete_lesson_id = $(this).attr("data-id");
+                var input = $(this).closest('.wrapper-input-buttons').find('input');
+                var id = input.attr("data-id");
+                var name = input.val();
 
-                if (delete_lesson_id) {
+                if (id && name) {
                     $.ajax({
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
 
-                        type: 'POST',
-                        url: '/admin/nutritions/adminDeleteFoodByDay',
+                        type: 'delete',
+                        url: '{{ url('admin/measures')}}'  + '/' + id,
                         dataType: 'json',
-                        data: {id: delete_lesson_id},
                         success: function (data) {
                             if (data.success) {
-                                clicked.closest('div.append-day-item').fadeOut(300, function () {
+                                clicked.closest('.wrapper-measures-item').fadeOut(300, function () {
                                     $(this).remove();
                                 });
-                                toastr.success('Розклад успішно оновлено!', {timeOut: 3000});
+
+                                toastr.success(data.message, {timeOut: 3000});
+                            }else{
+                                toastr.error(data.message, {timeOut: 3000});
                             }
-                        }, error: function () {
+                        }, error: function (data) {
                             console.log(data);
                         }
                     });
                 } else {
-                    clicked.closest('div.append-day-item').fadeOut(300, function () {
+                    clicked.closest('.wrapper-measures-item').fadeOut(300, function () {
                         $(this).remove();
                     });
                 }
@@ -154,42 +179,54 @@
             });
 
 
-
             // save measure
             $(".wrapper-measures").on("click", '.measures-button-block-save', function (e) {
                 e.preventDefault();
 
-                alert('save click');
-
                 var clicked = $(e.target);
                 clicked.prop('disabled', true);
-                var delete_lesson_id = $(this).attr("data-id");
+                var input = $(this).closest('.wrapper-input-buttons').find('input');
+                var name = input.val();
+                var id = input.attr("data-id");
 
-                if (delete_lesson_id) {
+                if (name) {
                     $.ajax({
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
 
                         type: 'POST',
-                        url: '/admin/nutritions/adminDeleteFoodByDay',
+                        url: '{{ url('admin/measures')}}',
                         dataType: 'json',
-                        data: {id: delete_lesson_id},
+                        data: {id: id, name: name},
                         success: function (data) {
                             if (data.success) {
-                                clicked.closest('div.append-day-item').fadeOut(300, function () {
-                                    $(this).remove();
-                                });
-                                toastr.success('Розклад успішно оновлено!', {timeOut: 3000});
+                                if (!id && data.id){
+                                    input.attr( "data-id", data.id );
+                                }
+
+                                toastr.success(data.message, {timeOut: 3000});
+                            }else{
+                                toastr.error(data.message, {timeOut: 3000});
                             }
-                        }, error: function () {
+                        }, error: function (data) {
                             console.log(data);
+
+                            var errors = $.parseJSON(data.responseText);
+
+                            console.log(errors);
+
+                            $.each(errors.errors, function (key, value) {
+                                toastr.error(value, {timeOut: 2000});
+                            });
                         }
                     });
                 } else {
-                    clicked.closest('div.append-day-item').fadeOut(300, function () {
-                        $(this).remove();
-                    });
+                    input.css('border-bottom', '2px solid red');
+
+                    setTimeout(function () {
+                        input.css('border-bottom', '1px solid grey');
+                    }, 3000);
                 }
 
                 clicked.prop('disabled', false);

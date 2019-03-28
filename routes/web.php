@@ -38,7 +38,7 @@ Route::group(['namespace' => 'Admin'], function () {
 
                 Route::group(['as' => 'measure.'], function () {
                     Route::resource('measures', 'MeasuresController')->only([
-                        'index', 'update', 'destroy'
+                        'index', 'store', 'destroy'
                     ]);
                 });
 

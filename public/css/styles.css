@@ -3550,6 +3550,22 @@ blockquote p{
     width: 30px;
 }
 
+.measures-container{
+    margin-top: 50px;
+}
+
+.wrapper-input-buttons{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.wrapper-measure-input{
+    min-width: 80%;
+    margin-right: 30px;
+}
+
 .wrapper-measures-item{
     margin-bottom: 20px;
 }

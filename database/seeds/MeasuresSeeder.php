@@ -12,6 +12,6 @@ class MeasuresSeeder extends Seeder
      */
     public function run()
     {
-        factory(Measure::class, 5)->create();
+        factory(Measure::class, 0)->create();
     }
 }

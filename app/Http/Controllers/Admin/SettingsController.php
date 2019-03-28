@@ -22,7 +22,6 @@ class SettingsController extends Controller
      * @param  int  $id
      * @return ['view']
      */
-
     public function index()
     {
         $setting = $this->settingSerive->index();
@@ -37,7 +36,6 @@ class SettingsController extends Controller
      * @param  int  $id
      * @return "redirect"
      */
-
     public function store(SettingsStore $request)
     {
         $status = $this->settingSerive->update($request);

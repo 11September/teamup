@@ -22,7 +22,6 @@ class ActivitiesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-
     public function index()
     {
         $activities = $this->activityService->index();
@@ -63,7 +62,6 @@ class ActivitiesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-
     public function update(ActivityUpdate $request, $id)
     {
         $status = $this->activityService->update($request);
@@ -87,7 +85,6 @@ class ActivitiesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-
     public function destroy($id)
     {
         $status = $this->activityService->delete($id);

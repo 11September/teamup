@@ -21,7 +21,6 @@ class FeedbacksController extends Controller
      *
      * @return [view]
      */
-
     public function index()
     {
         $feedbacks = $this->feedbackService->index();
@@ -39,7 +38,6 @@ class FeedbacksController extends Controller
      * @return [json] text
      * @return [json] status
      */
-
     public function update(Request $request)
     {
         $status = $this->feedbackService->updateStatus($request);
@@ -66,7 +64,6 @@ class FeedbacksController extends Controller
      * @return [json] text
      * @return [json] status
      */
-
     public function destroy($id)
     {
         $status = $this->feedbackService->delete($id);

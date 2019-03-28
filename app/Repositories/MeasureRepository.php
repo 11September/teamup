@@ -10,6 +10,7 @@
 namespace App\Repositories;
 
 use App\Measure;
+use Illuminate\Support\Facades\DB;
 
 class MeasureRepository
 {
@@ -23,5 +24,20 @@ class MeasureRepository
     public function index()
     {
         return $this->measure->all();
+    }
+
+    public function findByAttr($attribute, $value)
+    {
+        return $this->measure->where($attribute, $value)->first();
+    }
+
+    public function updateOrCreate($id, array $attributes)
+    {
+        return $this->measure->updateOrInsert(['id' => $id], $attributes);
+    }
+
+    public function delete($id)
+    {
+        return $this->measure->findOrFail($id)->delete();
     }
 }

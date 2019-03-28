@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
 use App\Services\MeasureService;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\MeasureStoreOrUpdate;
 
 class MeasuresController extends Controller
 {
@@ -32,69 +32,48 @@ class MeasuresController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(MeasureStoreOrUpdate $request)
     {
-        $status = null;
+        $status = $this->measuresService->update($request);
 
-        return redirect()->action('Admin\UsersController@index')
-            ->with([
+        $measure = $this->measuresService->show($request);
+
+        return response()->json(
+            [
+                'id' => $measure->id,
                 'success' => $status,
-                'status' => $status
-                    ? "success"
-                    : "danger",
                 'message' => $status
-                    ? "User password successfully changed!"
+
+                    ? "Measures saved successfully!"
                     : "Whoops, looks like something went wrong! Please try again later."
-            ], 200);
-    }
-
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        $status = null;
-
-        return redirect()->action('Admin\UsersController@index')
-            ->with([
-                'success' => $status,
-                'status' => $status
-                    ? "success"
-                    : "danger",
-                'message' => $status
-                    ? "User password successfully changed!"
-                    : "Whoops, looks like something went wrong! Please try again later."
-            ], 200);
+            ],
+            200
+        );
     }
 
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        $status = null;
+        $id ? $status = $this->measuresService->delete($id) : $status = false;
 
-        return redirect()->action('Admin\UsersController@index')
-            ->with([
+        return response()->json(
+            [
                 'success' => $status,
-                'status' => $status
-                    ? "success"
-                    : "danger",
                 'message' => $status
-                    ? "User password successfully changed!"
+
+                    ? "Measures deleted successfully!"
                     : "Whoops, looks like something went wrong! Please try again later."
-            ], 200);
+            ],
+            200
+        );
     }
 }
