@@ -13,6 +13,11 @@ use Carbon\Carbon;
 
 class SubscribeHelper
 {
+    public static function getDateDemoSubscribe()
+    {
+        return Carbon::now()->addMonths(1)->toDateString();
+    }
+
     public static function SubscribeActive($expiredDate)
     {
         new Carbon($expiredDate);

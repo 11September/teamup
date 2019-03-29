@@ -72,7 +72,7 @@ class AuthService
     {
         try {
             $user = $request->user();
-            $tokenResult = $user->createToken('Personal Access Token');
+            $tokenResult = $user->createToken('TeamUP');
             $token = $tokenResult->token;
             $token->save();
 

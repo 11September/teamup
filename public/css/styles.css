@@ -3620,3 +3620,13 @@ blockquote p{
 .add-new-measure-link i{
     color: white;
 }
+
+.success{
+    color: #408e40;
+    font-weight: bold;
+}
+
+.danger{
+    color: #8e2713;
+    font-weight: bold;
+}

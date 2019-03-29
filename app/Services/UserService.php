@@ -11,6 +11,7 @@ namespace App\Services;
 
 use Illuminate\Http\Request;
 use App\Helpers\PasswordHelper;
+use App\Helpers\SubscribeHelper;
 use Illuminate\Support\Facades\Hash;
 use App\Repositories\UserRepository;
 
@@ -23,12 +24,16 @@ class UserService
 
     public function index()
     {
-        return $this->user->all();
+        return $this->addStatusFieldUsers($this->user->all());
     }
 
     public function create(Request $request)
     {
         $attributes = $request->all();
+
+        if ($request->activation == "demo"){
+            $attributes['expiration_date'] = SubscribeHelper::getDateDemoSubscribe();
+        }
 
         $attributes['password'] = PasswordHelper::HashPassword($attributes['password']);
 
@@ -58,4 +63,14 @@ class UserService
     {
         return $this->user->delete($id);
     }
+
+    public function addStatusFieldUsers($users)
+    {
+        foreach ($users as $user) {
+            $user->IsActive = SubscribeHelper::IsSubscriber($user);;
+        }
+
+        return $users;
+    }
 }
+

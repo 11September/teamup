@@ -25,8 +25,8 @@ class UserStore extends FormRequest
     public function rules()
     {
         return [
-            'first_name' => 'required|string|min:6',
-            'last_name' => 'required|string|min:6',
+            'first_name' => 'required|string|min:2',
+            'last_name' => 'required|string|min:3',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|max:255|confirmed',
             'type' =>  [
@@ -41,7 +41,7 @@ class UserStore extends FormRequest
             'expiration_date' => 'required|date',
             'number_students' => 'required|int|min:1',
             'phone' => 'numeric|min:10|unique:users,phone',
-            'school' => 'string|min:6',
+            'school' => 'nullable|string|min:6',
         ];
     }
 

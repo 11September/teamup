@@ -151,8 +151,8 @@
                                             <label for="activation" class="col-form-label">Activation type*</label>
                                             <select id="activation" name="activation" required
                                                     class="custom-select{{ $errors->has('activation') ? ' is-invalid' : '' }}">
-                                                <option @if($user->type == 'demo') selected @endif value="demo">Demo</option>
-                                                <option @if($user->type == 'full') selected @endif value="full">Full</option>
+                                                <option @if($user->activation == 'demo') selected @endif value="demo">Demo</option>
+                                                <option @if($user->activation == 'full') selected @endif value="full">Full</option>
                                             </select>
 
                                             @if ($errors->has('activation'))
@@ -163,7 +163,7 @@
 
                                         </div>
 
-                                        <div class="wrapper-code" style="display:block;">
+                                        <div class="wrapper-code" style="display: @if($user->activation == 'demo') none @else block @endif;">
                                             <div class="form-group">
                                                 <label for="activation_code" class="col-form-label">Code</label>
 
@@ -187,20 +187,20 @@
 
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <div class="form-group">
-                                            <label for="expiration_date" class="col-form-label">Date Expired*</label>
-                                            <input class="form-control" type="date" name="expiration_date"
-                                                   value="{{ $user->expiration_date }}"
-                                                   id="expiration_date" required>
+                                            <div class="form-group">
+                                                <label for="expiration_date" class="col-form-label">Date Expired*</label>
+                                                <input class="form-control" type="date" name="expiration_date"
+                                                       value="{{ $user->expiration_date }}"
+                                                       id="expiration_date" required>
 
-                                            @if ($errors->has('expiration_date'))
-                                                <span class="invalid-feedback" role="alert">
+                                                @if ($errors->has('expiration_date'))
+                                                    <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $errors->first('expiration_date') }}</strong>
                                                 </span>
-                                            @endif
+                                                @endif
 
+                                            </div>
                                         </div>
                                     </div>
 
@@ -237,8 +237,8 @@
 
 
         $(document).ready(function (e) {
-            var code = generateId(20);
-            $('#code').val(code);
+            var code = generateId(10);
+            $('#activation_code').val(code);
 
             function dec2hex(dec) {
                 return ('0' + dec.toString(16)).substr(-2)
@@ -252,10 +252,53 @@
 
             $("#code_generator").click(function (e) {
                 e.preventDefault();
-                var code = generateId(20);
-                // var code = Math.random().toString(36).replace('0.', '');
-                $('#code').val(code);
+                var code = generateId(10);
+                $('#activation_code').val(code);
             });
+
+            $('#activation').on('change', function () {
+                var activation = $(this).val();
+
+                if (activation == "demo") {
+                    $('.wrapper-code').fadeOut();
+                    $('#activation_code').val();
+                } else {
+                    $('.wrapper-code').fadeIn();
+                    $('#activation_code').val(generateId(10));
+                }
+            });
+
+            $('#type').on('change', function () {
+                var activation = $(this).val();
+
+                if (activation == "admin") {
+                    $('.wrapper-phone-school-block').fadeOut();
+                    $('.wrapper-access-block').fadeOut();
+                    $('#activation').val('full');
+                    $('#activation_code').val(generateId(10));
+                    $('#expiration_date').val(generateId(10));
+                    setTodayMinValue();
+                    setTodayValue();
+                }
+                else if (activation == "athlete") {
+                    $('.wrapper-phone-school-block').fadeIn();
+                    $('.wrapper-access-block').fadeOut();
+                    $('#activation').val('full');
+                    $('#activation_code').val(generateId(10));
+                    $('#expiration_date').val(generateId(10));
+                    setTodayMinValue();
+                    setTodayValue();
+                }
+                else {
+                    $('.wrapper-phone-school-block').fadeIn();
+                    $('.wrapper-access-block').fadeIn();
+                    $('#activation_code').val(generateId(10));
+                    $('#expiration_date').val(generateId(10));
+                    setTodayMinValue();
+                    setTodayValue();
+                }
+            });
+
         });
     </script>
 @endsection

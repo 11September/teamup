@@ -194,20 +194,20 @@
 
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <div class="form-group">
-                                            <label for="expiration_date" class="col-form-label">Date Expired*</label>
-                                            <input class="form-control" type="date" name="expiration_date"
-                                                   value="{{ old('expiration_date') }}"
-                                                   id="expiration_date" required>
+                                            <div class="form-group">
+                                                <label for="expiration_date" class="col-form-label">Date Expired*</label>
+                                                <input class="form-control" type="date" name="expiration_date"
+                                                       value="{{ old('expiration_date') }}"
+                                                       id="expiration_date" required>
 
-                                            @if ($errors->has('expiration_date'))
-                                                <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $errors->first('expiration_date') }}</strong>
-                                            </span>
-                                            @endif
+                                                @if ($errors->has('expiration_date'))
+                                                    <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $errors->first('expiration_date') }}</strong>
+                                                </span>
+                                                @endif
 
+                                            </div>
                                         </div>
                                     </div>
 

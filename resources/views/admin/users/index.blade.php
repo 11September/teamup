@@ -66,7 +66,13 @@
                                         <td>{{ $user->email }}</td>
                                         <td>{{ $user->expiration_date }}</td>
                                         <td>{{ $user->type }}</td>
-                                        <td>{{ $user->status }}</td>
+                                        <td>
+                                            @if($user->IsActive)
+                                                <span class="success">Active</span>
+                                            @else
+                                                <span class="danger">Disable</span>
+                                            @endif
+                                        </td>
                                         <td class="datatable-actions">
                                             <a class="datatable-actions-link"
                                                href="{{ url('admin/users', $user->id) }}">
@@ -84,11 +90,13 @@
                                             </a>
 
                                             <a class="datatable-actions-link" href="">
-                                                <form method="POST" class="delete-form" action="{{ action('Admin\UsersController@destroy', $user->id) }}">
+                                                <form method="POST" class="delete-form"
+                                                      action="{{ action('Admin\UsersController@destroy', $user->id) }}">
                                                     {{ csrf_field() }}
                                                     {{ method_field('DELETE') }}
 
-                                                    <button type="submit" class="delete-button"><i class="fas fa-trash-alt"></i></button>
+                                                    <button type="submit" class="delete-button"><i
+                                                            class="fas fa-trash-alt"></i></button>
                                                 </form>
                                             </a>
                                         </td>
