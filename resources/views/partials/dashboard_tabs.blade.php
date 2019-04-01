@@ -1,44 +1,96 @@
-<div class="col-lg-8">
-    <div class="row">
-        <div class="col-md-6 mt-5 mb-3">
-            <div class="card">
-                <div class="seo-fact sbg1">
-                    <div class="p-4 d-flex justify-content-between align-items-center">
-                        <div class="seofct-icon"><i class="fas fa-thumbs-up"></i> Likes</div>
-                        <h2>2,315</h2>
+@if(Auth::user()->type == "admin")
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="col-md-6 mt-2 mb-3">
+                <div class="card">
+                    <div class="seo-fact sbg1">
+                        <div class="p-4 d-flex justify-content-between align-items-center">
+                            <div class="seofct-icon"><i class="fas fa-users"></i> Users</div>
+                            <h2>{{ $tabs['users'] }}</h2>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-6 mt-md-5 mb-3">
-            <div class="card">
-                <div class="seo-fact sbg2">
-                    <div class="p-4 d-flex justify-content-between align-items-center">
-                        <div class="seofct-icon"><i class="fas fa-share-alt"></i> Share</div>
-                        <h2>3,984</h2>
+            <div class="col-md-6 mt-md-2 mb-3">
+                <div class="card">
+                    <div class="seo-fact sbg2">
+                        <div class="p-4 d-flex justify-content-between align-items-center">
+                            <div class="seofct-icon"><i class="fas fa-user-tag"></i> Coaches</div>
+                            <h2>{{ $tabs['coaches'] }}</h2>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-6 mb-3 mb-lg-0">
-            <div class="card">
-                <div class="seo-fact sbg3">
-                    <div class="p-4 d-flex justify-content-between align-items-center">
-                        <div class="seofct-icon"><i class="fas fa-thumbs-up"></i> Likes</div>
-                        <div class="seofct-icon">Impressions</div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="seo-fact sbg3">
+                        <div class="p-4 d-flex justify-content-between align-items-center">
+                            <div class="seofct-icon"><i class="fas fa-comments"></i> Feedbacks</div>
+                            <div class="seofct-icon">{{ $tabs['feedbacks'] }}</div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card">
-                <div class="seo-fact sbg4">
-                    <div class="p-4 d-flex justify-content-between align-items-center">
-                        <div class="seofct-icon"><i class="fas fa-thumbs-up"></i> Likes</div>
-                        <div class="seofct-icon">New Users</div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card">
+                        <div class="seo-fact sbg4">
+                            <div class="p-4 d-flex justify-content-between align-items-center">
+                                <div class="seofct-icon"><i class="far fa-file-alt"></i> Reports</div>
+                                <div class="seofct-icon">{{ $tabs['reports'] }}</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+@endif
+
+
+@if(Auth::user()->type == "coach")
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="col-md-6 mt-2 mb-3">
+                <div class="card">
+                    <div class="seo-fact sbg1">
+                        <div class="p-4 d-flex justify-content-between align-items-center">
+                            <div class="seofct-icon"><i class="fas fa-users-cog"></i> Teams</div>
+                            <h2>{{ $tabs['teams'] }}</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mt-md-2 mb-3">
+                <div class="card">
+                    <div class="seo-fact sbg2">
+                        <div class="p-4 d-flex justify-content-between align-items-center">
+                            <div class="seofct-icon"><i class="fas fa-user-friends"></i> Students</div>
+                            <h2>{{ $tabs['students'] }}</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="seo-fact sbg3">
+                        <div class="p-4 d-flex justify-content-between align-items-center">
+                            <div class="seofct-icon"><i class="far fa-sticky-note"></i> Notes</div>
+                            <div class="seofct-icon">{{ $tabs['notes'] }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="seo-fact sbg4">
+                        <div class="p-4 d-flex justify-content-between align-items-center">
+                            <div class="seofct-icon"><i class="fas fa-stopwatch"></i> Exercises</div>
+                            <div class="seofct-icon">{{ $tabs['actives'] }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endif

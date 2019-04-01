@@ -10,6 +10,10 @@ class Note extends Model
 
     protected $fillable = ['note', 'user_id', 'date'];
 
+    protected $casts = [
+        'date' => 'datetime:Y-m',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);

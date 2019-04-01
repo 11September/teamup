@@ -3,7 +3,6 @@
 namespace App\Http\Middleware;
 
 use Closure;
-
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
@@ -24,7 +23,6 @@ class AdminMiddleware
             }
         }
 
-//        return redirect('/');
-        return new Response(view("unauthorized"));
+        return redirect('/admin')->with('message', 'You do not have access to the page!');
     }
 }

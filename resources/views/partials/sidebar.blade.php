@@ -13,41 +13,62 @@
                             <span>Dashboard</span>
                         </a>
                     </li>
-                    <li class="{{ request()->is('admin/users*') ? 'active' : '' }}">
-                        <a href="{{ url('admin/users') }}"><i class="sidebar-menu-icon fa fa-users"></i>
-                            <span>Users</span>
-                        </a>
-                    </li>
+
+                    @if(Auth::user()->type == "admin")
+                        <li class="{{ request()->is('admin/users*') ? 'active' : '' }}">
+                            <a href="{{ url('admin/users') }}"><i class="sidebar-menu-icon fa fa-users"></i>
+                                <span>Users</span>
+                            </a>
+                        </li>
+
+                        <li class="{{ request()->is('admin/measures*') ? 'active' : '' }}">
+                            <a href="{{ url('admin/measures') }}"><i class="sidebar-menu-icon fas fa-weight-hanging"></i>
+                                <span>Measures</span>
+                            </a>
+                        </li>
+
+
+
+                        <li class="{{ request()->is('admin/feedbacks*') ? 'active' : '' }}">
+                            <a href="{{ url('admin/feedbacks') }}"><i class="sidebar-menu-icon fas fa-comments"></i>
+                                <span>Feedbacks</span>
+                            </a>
+                        </li>
+
+                        <li class="{{ request()->is('admin/settings*') ? 'active' : '' }}">
+                            <a href="{{ url('admin/settings') }}"><i class="sidebar-menu-icon fas fa-cogs"></i>
+                                <span>Settings</span>
+                            </a>
+                        </li>
+                    @endif
+
+
                     <li class="{{ request()->is('admin/teams*') ? 'active' : '' }}">
                         <a href="#"><i class="sidebar-menu-icon fas fa-users-cog"></i>
                             <span>Teams</span>
                         </a>
                     </li>
-                    <li class="{{ request()->is('admin/activities*') ? 'active' : '' }}">
-                        <a href="{{ url('admin/activities') }}"><i class="sidebar-menu-icon fas fa-stopwatch"></i>
-                            <span>Exercises</span>
-                        </a>
-                    </li>
-                    <li class="{{ request()->is('admin/measures*') ? 'active' : '' }}">
-                        <a href="{{ url('admin/measures') }}"><i class="sidebar-menu-icon fas fa-weight-hanging"></i>
-                            <span>Measures</span>
-                        </a>
-                    </li>
+
                     <li class="{{ request()->is('admin/reports*') ? 'active' : '' }}">
                         <a href="#"><i class="sidebar-menu-icon far fa-file-alt"></i>
                             <span>Reports</span>
                         </a>
                     </li>
-                    <li class="{{ request()->is('admin/feedbacks*') ? 'active' : '' }}">
-                        <a href="{{ url('admin/feedbacks') }}"><i class="sidebar-menu-icon fas fa-comments"></i>
-                            <span>Feedbacks</span>
+
+                    <li class="{{ request()->is('admin/activities*') ? 'active' : '' }}">
+                        <a href="{{ url('admin/activities') }}"><i class="sidebar-menu-icon fas fa-stopwatch"></i>
+                            <span>Exercises</span>
                         </a>
                     </li>
-                    <li class="{{ request()->is('admin/settings*') ? 'active' : '' }}">
-                        <a href="{{ url('admin/settings') }}"><i class="sidebar-menu-icon fas fa-cogs"></i>
-                            <span>Settings</span>
-                        </a>
-                    </li>
+
+                    @if(Auth::user()->type == "coach")
+                        <li class="{{ request()->is('admin/notes*') ? 'active' : '' }}">
+                            <a href="{{ url('admin/notes') }}"><i class="sidebar-menu-icon far fa-sticky-note"></i>
+                                <span>Notes</span>
+                            </a>
+                        </li>
+                    @endif
+
                 </ul>
             </nav>
         </div>

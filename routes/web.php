@@ -18,12 +18,14 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::group(['namespace' => 'Admin'], function () {
     Route::group(['prefix' => 'admin'], function () {
-        Route::group(['middleware' => 'auth'], function () {
+        Route::middleware(['auth', 'canAdmin', 'active', 'activationPeriod'])->group(function () {
+
+            Route::middleware(['canAdmin'])->group(function () {
+                Route::get('/', 'AdminController@admin')->name('admin');
+            });
+
 
             Route::middleware(['admin'])->group(function () {
-
-                Route::get('/', 'AdminController@admin')->name('home');
-
                 Route::group(['as' => 'user.'], function () {
                     Route::get('/users/reset_password/{user}', 'UsersController@reset_password')->name('reset_user_password');
                     Route::post('/users/update_password/{id}', 'UsersController@update_password')->name('update_user_password');
@@ -60,9 +62,14 @@ Route::group(['namespace' => 'Admin'], function () {
             });
 
 
+            Route::middleware(['coach'])->group(function () {
+//                Route::get('/', 'AdminController@admin')->name('home');
 
-            Route::middleware(['adminOrCoach'])->group(function () {
-
+                Route::group(['as' => 'notes.'], function () {
+                    Route::resource('notes', 'NotesController')->only([
+                        'index', 'edit', 'update', 'destroy'
+                    ]);
+                });
             });
 
         });

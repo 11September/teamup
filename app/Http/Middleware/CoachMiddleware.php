@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
 class CoachMiddleware
@@ -10,11 +11,10 @@ class CoachMiddleware
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param  \Illuminate\Http\Request $request
+     * @param  \Closure $next
      * @return mixed
      */
-
     public function handle($request, Closure $next)
     {
         if (auth()->check()) {
@@ -23,6 +23,6 @@ class CoachMiddleware
             }
         }
 
-        return $next($request);
+        return redirect('/admin')->with('message', 'You do not have access to the page!');
     }
 }

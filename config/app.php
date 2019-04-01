@@ -167,7 +167,7 @@ return [
          */
 
         Asvae\ApiTester\ServiceProvider::class,
-        App\Providers\FeedbackServiceProvider::class,
+        App\Providers\ViewServiceProvider::class,
 
         /*
          * Application Service Providers...

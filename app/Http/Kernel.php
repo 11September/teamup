@@ -63,6 +63,10 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'cors' => \App\Http\Middleware\Cors::class,
 
+        'canAdmin' => \App\Http\Middleware\CanAccessAdmin::class,
+        'active' => \App\Http\Middleware\IsActive::class,
+        'activationPeriod' => \App\Http\Middleware\ActivationPeriodAdmin::class,
+
         'super_admin' => \App\Http\Middleware\SuperAdminMiddleware::class,
         'admin' => \App\Http\Middleware\AdminMiddleware::class,
         'coach' => \App\Http\Middleware\CoachMiddleware::class,

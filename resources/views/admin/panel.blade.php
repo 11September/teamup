@@ -21,14 +21,18 @@
         </div>
     </div>
 
+    @include('errors.message')
+
+    @include('errors.errors')
+
     <div class="main-content-inner">
         <div class="row">
 
             @include('partials.dashboard_tabs')
 
-            @include('partials.dashboard_graph_activity')
-
             @include('partials.dashboard_feedbacks')
+
+            @include('partials.dashboard_graph_activity')
 
             @include('partials.dashboard_client_statuses')
 

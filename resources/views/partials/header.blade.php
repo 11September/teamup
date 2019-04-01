@@ -31,7 +31,10 @@
                             <i class="fa fa-angle-down"></i>
                         </h4>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">Settings</a>
+
+                            @if(Auth::user()->type == "admin")
+                                <a class="dropdown-item" href="{{ action('Admin\UsersController@edit', Auth::user()->id) }}">Settings</a>
+                            @endif
 
                             <a class="dropdown-item" href="{{ route('logout') }}"
                                onclick="event.preventDefault();

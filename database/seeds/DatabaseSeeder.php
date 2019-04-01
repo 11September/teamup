@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             MeasuresSeeder::class,
             ActivitySeeder::class,
             FeedbackSeeder::class,
+            NoteSeeder::class,
         ]);
     }
 }
