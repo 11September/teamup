@@ -58,13 +58,18 @@ class AuthController
             return response()->json(['message' => 'The user does not have or the login / password is not suitable!'], 401);
         }
 
-        $token = $this->authService->loginToken($request);
+//        $token = $this->authService->loginToken($request);
+
+        $user = $request->user();
+        $tokenResult = $user->createToken('Personal Access Token');
+        $token = $tokenResult->token;
+        $token->save();
 
         return response()->json([
-            'access_token' => $token->accessToken,
+            'access_token' => $tokenResult->accessToken,
             'token_type' => 'Bearer',
             'expires_at' => Carbon::parse(
-                $token->token->expires_at
+                $tokenResult->token->expires_at
             )->toDateTimeString()
         ]);
     }
