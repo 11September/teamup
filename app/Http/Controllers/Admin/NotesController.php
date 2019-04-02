@@ -39,7 +39,6 @@ class NotesController extends Controller
     {
 
 
-
         return view('admin.notes.edit', compact('note'));
     }
 

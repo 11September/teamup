@@ -34,7 +34,7 @@ class AuthService
 
             $isActive = UserHelper::isActive($user);
 
-            return ['status' => (bool) $isActive , 'user' => $this->prepareDetailsLoginData($user)];
+            return ['status' => (bool)$isActive, 'user' => $this->prepareDetailsLoginData($user)];
 
         } catch (\Exception $exception) {
             Log::warning('AuthService@loginIsActive Exception: ' . $exception->getMessage());
@@ -49,7 +49,7 @@ class AuthService
 
             $subscribe = SubscribeHelper::IsSubscriber($user);
 
-            return ['status' => (bool) $subscribe , 'user' => $this->prepareDetailsLoginData($user)];
+            return ['status' => (bool)$subscribe, 'user' => $this->prepareDetailsLoginData($user)];
 
         } catch (\Exception $exception) {
             Log::warning('AuthService@loginIsSubscriber Exception: ' . $exception->getMessage());
@@ -59,20 +59,14 @@ class AuthService
 
     public function loginAttempt(Request $request)
     {
-        try {
-            return Auth::attempt(request(['email', 'password']));
-
-        } catch (\Exception $exception) {
-            Log::warning('AuthService@loginAttempt Exception: ' . $exception->getMessage());
-            return response()->json(['message' => 'Упс! Щось пішло не так!'], 500);
-        }
+        return Auth::attempt(request(['email', 'password']));
     }
 
     public function loginToken(Request $request)
     {
         try {
             $user = $request->user();
-            $tokenResult = $user->createToken('TeamUP');
+            $tokenResult = $user->createToken('Personal Access Token');
             $token = $tokenResult->token;
             $token->save();
 
