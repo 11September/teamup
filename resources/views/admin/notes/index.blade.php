@@ -33,6 +33,13 @@
             <!-- Dark table start -->
             <div class="col-12 mt-5">
                 <div class="card">
+
+                    <div class="card-header">
+                        <div class="col-sm-12 flex-pull-right">
+                            <a class="create-link" href="{{ action('Admin\NotesController@create') }}">Create new Note</a>
+                        </div>
+                    </div>
+
                     <div class="card-body">
                         <h4 class="header-title">List Notes</h4>
                         <div class="data-tables datatable-dark">

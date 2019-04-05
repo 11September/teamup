@@ -43,5 +43,13 @@ Route::namespace('App')->group(function () {
             Route::post('set_push_chat', 'UsersController@SetPushChat')->name('set_push_chat');
             Route::post('logout', 'AuthController@logout')->name('logout');
         });
+
+        Route::group(['prefix' => 'notes'], function () {
+            Route::delete('delete', 'NotesController@destroy')->name('notes_delete');
+            Route::resource('notes', 'NotesController')->only([
+                'index', 'store', 'update', 'destroy'
+            ]);
+        });
+
     });
 });

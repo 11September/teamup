@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class NoteUpdateAdmin extends FormRequest
+class NoteStore extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,7 @@ class NoteUpdateAdmin extends FormRequest
     public function rules()
     {
         return [
-            'note' => 'required|string|max:1000',
-            'user_id' => 'required|int|exists:users,id|same:user_id'
+            'note' => 'required|string|min:1|max:1000',
         ];
     }
 }

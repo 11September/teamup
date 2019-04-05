@@ -2,63 +2,76 @@
 
 namespace App\Http\Controllers\App;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\NoteStore;
+use App\Http\Requests\NoteDelete;
+use App\Services\Api\NoteService;
+use App\Http\Requests\NoteUpdate;
 use App\Http\Controllers\Controller;
 
 class NotesController extends Controller
 {
+    protected $noteService;
+
+    public function __construct(NoteService $noteService)
+    {
+        $this->noteService = $noteService;
+    }
+
+
     /**
-     * Display a listing of the resource.
+     * index
      *
-     * @return \Illuminate\Http\Response
+     * @return [view]
      */
     public function index()
     {
-        //
+        $notes = $this->noteService->index();
+
+        return response()->json(['data' => $notes], 200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
     /**
-     * Display the specified resource.
+     * store
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  [string] note
+     *
+     * @return [json]
      */
-    public function show($id)
+    public function store(NoteStore $request)
     {
-        //
+        $this->noteService->store($request);
+
+        return response()->json(['message' => 'Notes have been saved!'], 201);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
 
     /**
-     * Remove the specified resource from storage.
+     * update [id]
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  [int] id
+     * @param  [string] note
+     *
+     * @return [json]
      */
-    public function destroy($id)
+    public function update(NoteUpdate $request)
     {
-        //
+        $this->noteService->update($request);
+
+        return response()->json(['message' => 'Notes have been updated!'], 200);
+    }
+
+
+    /**
+     * delete
+     * @param  [array] ids
+     *
+     * @return [json]
+     */
+    public function destroy(NoteDelete $request)
+    {
+        $this->noteService->deleteArray($request);
+
+        return response()->json(['message' => 'Notes have been deleted!'], 200);
     }
 }

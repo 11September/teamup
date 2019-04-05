@@ -11,8 +11,10 @@ class Note extends Model
     protected $fillable = ['note', 'user_id', 'date'];
 
     protected $casts = [
-        'date' => 'datetime:Y-m',
+        'date' => 'datetime:d-m-Y',
     ];
+
+    public $timestamps = true;
 
     public function user()
     {

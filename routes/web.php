@@ -20,8 +20,14 @@ Route::group(['namespace' => 'Admin'], function () {
     Route::group(['prefix' => 'admin'], function () {
         Route::middleware(['auth', 'canAdmin', 'active', 'activationPeriod'])->group(function () {
 
+            Route::get('/', 'AdminController@admin')->name('admin');
+
             Route::middleware(['canAdmin'])->group(function () {
-                Route::get('/', 'AdminController@admin')->name('admin');
+                Route::group(['as' => 'team.'], function () {
+                    Route::resource('teams', 'TeamsController')->except([
+                        'show'
+                    ]);
+                });
             });
 
 
@@ -44,10 +50,6 @@ Route::group(['namespace' => 'Admin'], function () {
                     ]);
                 });
 
-                Route::group(['as' => 'team.'], function () {
-
-                });
-
                 Route::group(['as' => 'setting.'], function () {
                     Route::resource('settings', 'SettingsController')->only([
                         'index', 'store'
@@ -63,11 +65,9 @@ Route::group(['namespace' => 'Admin'], function () {
 
 
             Route::middleware(['coach'])->group(function () {
-//                Route::get('/', 'AdminController@admin')->name('home');
-
                 Route::group(['as' => 'notes.'], function () {
-                    Route::resource('notes', 'NotesController')->only([
-                        'index', 'edit', 'update', 'destroy'
+                    Route::resource('notes', 'NotesController')->except([
+                        'show'
                     ]);
                 });
             });

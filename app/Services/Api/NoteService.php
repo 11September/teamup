@@ -7,11 +7,10 @@
  * Time: 16:04
  */
 
-namespace App\Services;
+namespace App\Services\Api;
 
 use App\Helpers\UserHelper;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use App\Repositories\NoteRepository;
 
 class NoteService
@@ -35,12 +34,14 @@ class NoteService
 
     public function update(Request $request)
     {
-        return $this->note->update_field($request->id, 'note', $request->note);
+        $attributes = $this->prepareData($request);
+
+        return $this->note->update($request->id, $attributes);
     }
 
-    public function delete($id)
+    public function deleteArray($request)
     {
-        return $this->note->delete($id);
+        return $this->note->deleteArray($request->ids);
     }
 
     public function prepareData(Request $request)
