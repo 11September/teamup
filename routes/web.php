@@ -28,6 +28,12 @@ Route::group(['namespace' => 'Admin'], function () {
                         'show'
                     ]);
                 });
+
+                Route::group(['as' => 'reports.'], function () {
+                    Route::resource('reports', 'ReportsController')->except([
+                        'show'
+                    ]);
+                });
             });
 
 

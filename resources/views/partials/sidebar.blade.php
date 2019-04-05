@@ -50,7 +50,7 @@
                     </li>
 
                     <li class="{{ request()->is('admin/reports*') ? 'active' : '' }}">
-                        <a href="#"><i class="sidebar-menu-icon far fa-file-alt"></i>
+                        <a href="{{ url('admin/reports') }}"><i class="sidebar-menu-icon far fa-file-alt"></i>
                             <span>Reports</span>
                         </a>
                     </li>
