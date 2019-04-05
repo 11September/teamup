@@ -7,7 +7,7 @@
  * Time: 16:31
  */
 
-namespace App\Services;
+namespace App\Services\Api;
 
 use App\Helpers\UserHelper;
 use App\Mail\ResetPassword;
@@ -16,7 +16,6 @@ use App\Helpers\AvatarsHelper;
 use App\Helpers\PasswordHelper;
 use App\Mail\ResetPasswordCode;
 use App\Helpers\SubscribeHelper;
-use Illuminate\Support\Facades\Log;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Auth;
 
@@ -50,16 +49,6 @@ class AuthService
         return Auth::attempt(request(['email', 'password']));
     }
 
-    public function loginToken(Request $request)
-    {
-        $user = $request->user();
-        $tokenResult = $user->createToken('Personal Access Token');
-        $token = $tokenResult->token;
-        $token->save();
-
-        return $tokenResult;
-    }
-
     public function register(Request $request)
     {
         $this->generateAndSetNewPassword($request);
@@ -71,7 +60,7 @@ class AuthService
         return $token;
     }
 
-    public function forgot_password(Request $request)
+    public function recovery_password(Request $request)
     {
         $code = PasswordHelper::generateEmailCode();
 
@@ -80,15 +69,6 @@ class AuthService
         $this->user->update_field($user->id, 'password_reset_code', $code);
 
         \Mail::to($request->email)->send(new ResetPasswordCode($code));
-    }
-
-    public function confirm_code(Request $request)
-    {
-        $user = $this->user->findByAttr('password_reset_code', $request->code);
-
-        if ($user->password_reset_code != $request->code) {
-            return response()->json(['message' => 'Code does not match!'], 422);
-        }
     }
 
     public function reset_password(Request $request)

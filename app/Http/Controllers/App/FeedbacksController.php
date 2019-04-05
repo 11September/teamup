@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\App;
 
-use App\Services\FeedbackService;
 use App\Http\Requests\LoginFeedback;
+use App\Services\Api\FeedbackService;
 
 use App\Http\Controllers\Controller;
 

@@ -26,4 +26,9 @@ class UserHelper
     {
         return Carbon::now()->format('Y-m-d');
     }
+
+    public static function getCurrentDateFormat($format = "Y-m-d")
+    {
+        return Carbon::now()->format($format);
+    }
 }

@@ -23,51 +23,27 @@ class MeasureService
 
     public function index()
     {
-        try {
-            return $this->measure->index();
-
-        } catch (\Exception $exception) {
-            Log::warning('MeasureService@index Exception: ' . $exception->getMessage());
-            return response()->json(['message' => 'Oops! Something went wrong!'], 500);
-        }
+        return $this->measure->index();
     }
 
 
     public function show(Request $request)
     {
-        try {
-            return $this->measure->findByAttr('name', $request->name);
-
-        } catch (\Exception $exception) {
-            Log::warning('MeasureService@show Exception: ' . $exception->getMessage());
-            return response()->json(['message' => 'Oops! Something went wrong!'], 500);
-        }
+        return $this->measure->findByAttr('name', $request->name);
     }
 
 
     public function update(Request $request)
     {
-        try {
-            $attributes = $request->all();
+        $attributes = $request->all();
 
-            return $this->measure->updateOrCreate($request->id, $attributes);
-
-        } catch (\Exception $exception) {
-            Log::warning('MeasureService@update Exception: ' . $exception->getMessage());
-            return response()->json(['message' => 'Oops! Something went wrong!'], 500);
-        }
+        return $this->measure->updateOrCreate($request->id, $attributes);
     }
 
 
     public function delete($id)
     {
-        try {
-            return $this->measure->delete($id);
-
-        } catch (\Exception $exception) {
-            Log::warning('MeasureService@update Exception: ' . $exception->getMessage());
-            return response()->json(['message' => 'Oops! Something went wrong!'], 500);
-        }
+        return $this->measure->delete($id);
     }
 
 }

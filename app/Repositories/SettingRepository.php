@@ -10,7 +10,6 @@
 namespace App\Repositories;
 
 use App\Setting;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class SettingRepository{

@@ -40,7 +40,7 @@ class UserStore extends FormRequest
             'activation_code' => 'required|string|min:10',
             'expiration_date' => 'required|date',
             'number_students' => 'required|int|min:1',
-            'phone' => 'numeric|min:10|unique:users,phone',
+            'phone' => 'numeric|digits_between:10,15|unique:users,phone',
             'school' => 'nullable|string|min:6',
         ];
     }

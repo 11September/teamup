@@ -4,9 +4,9 @@ namespace App\Http\Controllers\App;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use App\Services\AuthService;
 use App\Http\Requests\CheckCode;
 use App\Http\Requests\AuthLogin;
+use App\Services\Api\AuthService;
 use App\Http\Requests\CheckEmail;
 use App\Http\Requests\AuthRegister;
 use App\Http\Requests\ResetPassword;
@@ -58,8 +58,6 @@ class AuthController
             return response()->json(['message' => 'The user does not have or the login / password is not suitable!'], 401);
         }
 
-//        $token = $this->authService->loginToken($request);
-
         $user = $request->user();
         $tokenResult = $user->createToken('Personal Access Token');
         $token = $tokenResult->token;
@@ -109,13 +107,13 @@ class AuthController
      * @return [string] message
      */
 
-    public function forgot_password(CheckEmail $request)
+    public function recovery_password(CheckEmail $request)
     {
-        $this->authService->forgot_password($request);
+         $this->authService->recovery_password($request);
 
         return response()->json([
             'message' => 'Successfully send code to Email!',
-        ]);
+        ], 202);
     }
 
 
@@ -131,7 +129,7 @@ class AuthController
     {
         return response()->json([
             'message' => 'Code is Valid!',
-        ]);
+        ], 202);
     }
 
 
@@ -146,13 +144,13 @@ class AuthController
 
     public function reset_password(ResetPassword $request)
     {
-        $success = $this->authService->reset_password($request);
+        $this->authService->reset_password($request);
 
         return response()->json([
             'message' => 'Password changed!',
-            'data' => $success
-        ]);
+        ], 200);
     }
+
 
     /**
      * Logout user (Revoke the token)
@@ -165,6 +163,6 @@ class AuthController
 
         return response()->json([
             'message' => 'Successfully logged out!'
-        ]);
+        ], 200);
     }
 }

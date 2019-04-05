@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\App;
 
 use Illuminate\Http\Request;
-use App\Services\SettingsService;
+use App\Services\Api\SettingService;
 use App\Http\Controllers\Controller;
 
 class SettingsController extends Controller
 {
     protected $settingsService;
 
-    public function __construct(SettingsService $settingsService)
+    public function __construct(SettingService $settingsService)
     {
         $this->settingsService = $settingsService;
     }

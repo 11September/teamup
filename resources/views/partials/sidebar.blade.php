@@ -44,7 +44,7 @@
 
 
                     <li class="{{ request()->is('admin/teams*') ? 'active' : '' }}">
-                        <a href="#"><i class="sidebar-menu-icon fas fa-users-cog"></i>
+                        <a href="{{ url('admin/teams') }}"><i class="sidebar-menu-icon fas fa-users-cog"></i>
                             <span>Teams</span>
                         </a>
                     </li>

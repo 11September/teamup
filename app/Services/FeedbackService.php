@@ -21,70 +21,23 @@ class FeedbackService
         $this->feedback = $feedback;
     }
 
-    public function prepareFeedbackData($data)
-    {
-        $attributes['user_id'] = $data['id'];
-        $attributes['date'] = UserHelper::getCurrentDate();
-        $attributes['feedback'] = $data['feedback'];
-        $attributes['status'] = 'unread';
-
-        return $attributes;
-    }
-
     public function index()
     {
-        try {
-            return $this->feedback->allWithUsersName();
-
-        } catch (\Exception $exception) {
-            Log::warning('FeedbackService@index Exception: ' . $exception->getMessage());
-            return response()->json(['message' => 'Oops! Something went wrong!'], 500);
-        }
+        return $this->feedback->allWithUsersName();
     }
 
     public function toAdminPanel()
     {
-        try {
-            return $this->feedback->allWithUsersName();
-
-        } catch (\Exception $exception) {
-            Log::warning('FeedbackService@index Exception: ' . $exception->getMessage());
-            return response()->json(['message' => 'Oops! Something went wrong!'], 500);
-        }
-    }
-
-    public function SendFeedback(Request $request)
-    {
-        try {
-            $feedback = $this->prepareFeedbackData($request->all());
-
-            return $this->feedback->create($feedback);
-
-        } catch (\Exception $exception) {
-            Log::warning('FeedbackService@SendFeedback Exception: ' . $exception->getMessage());
-            return response()->json(['message' => 'Oops! Something went wrong!'], 500);
-        }
+        return $this->feedback->allWithUsersName();
     }
 
     public function updateStatus(Request $request)
     {
-        try {
-            return $this->feedback->update_field($request->id, 'status', $request->status);
-
-        } catch (\Exception $exception) {
-            Log::warning('FeedbackService@updateStatus Exception: ' . $exception->getMessage());
-            return response()->json(['message' => 'Oops! Something went wrong!'], 500);
-        }
+        return $this->feedback->update_field($request->id, 'status', $request->status);
     }
 
     public function delete($id)
     {
-        try {
-            return $this->feedback->delete($id);
-
-        } catch (\Exception $exception) {
-            Log::warning('FeedbackService@delete Exception: ' . $exception->getMessage());
-            return response()->json(['message' => 'Oops! Something went wrong!'], 500);
-        }
+        return $this->feedback->delete($id);
     }
 }

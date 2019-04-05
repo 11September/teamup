@@ -7,14 +7,12 @@
  * Time: 16:31
  */
 
-namespace App\Services;
+namespace App\Services\Api;
 
-use App\Setting;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use App\Repositories\SettingRepository;
 
-class SettingsService
+class SettingService
 {
     public function __construct(SettingRepository $settingRepository)
     {
@@ -23,15 +21,9 @@ class SettingsService
 
     public function settings(Request $request)
     {
-        try {
-            $setting = $this->settingRepository->index();
+        $setting = $this->settingRepository->index();
 
-            return $this->prepareData($setting);
-
-        } catch (\Exception $exception) {
-            Log::warning('AuthService@settings Exception: ' . $exception->getMessage());
-            return response()->json(['message' => 'Oops! Something went wrong!'], 500);
-        }
+        return $this->prepareData($setting);
     }
 
     public function prepareData($setting)
