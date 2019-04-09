@@ -47,61 +47,41 @@
                                 <thead class="text-capitalize">
                                 <tr>
                                     <th>№</th>
-                                    <th>Full Name</th>
-                                    <th>Phone</th>
-                                    <th>E-mail</th>
-                                    <th>Expired Date</th>
-                                    <th>Role</th>
-                                    <th>Status</th>
+                                    <th>Team Name</th>
+                                    <th>Code</th>
+                                    <th>Coach Name</th>
+                                    <th>Count Athlets</th>
                                     <td>Actions</td>
                                 </tr>
                                 </thead>
                                 <tbody>
 
-                                {{--@foreach($users as $user)--}}
-                                    {{--<tr>--}}
-                                        {{--<td>{{ $user->id }}</td>--}}
-                                        {{--<td>{{ $user->getFullnameAttribute() }}</td>--}}
-                                        {{--<td>{{ $user->phone }}</td>--}}
-                                        {{--<td>{{ $user->email }}</td>--}}
-                                        {{--<td>{{ $user->expiration_date }}</td>--}}
-                                        {{--<td>{{ $user->type }}</td>--}}
-                                        {{--<td>--}}
-                                            {{--@if($user->IsActive)--}}
-                                                {{--<span class="success">Active</span>--}}
-                                            {{--@else--}}
-                                                {{--<span class="danger">Disable</span>--}}
-                                            {{--@endif--}}
-                                        {{--</td>--}}
-                                        {{--<td class="datatable-actions">--}}
-                                            {{--<a class="datatable-actions-link"--}}
-                                               {{--href="{{ url('admin/users', $user->id) }}">--}}
-                                                {{--<i class="fas fa-eye"></i>--}}
-                                            {{--</a>--}}
+                                @foreach($teams as $team)
+                                    <tr>
+                                        <td>{{ $team->id }}</td>
+                                        <td>{{ $team->name }}</td>
+                                        <td>{{ $team->code }}</td>
+                                        <td>{{ $team->coach->getFullnameAttribute() }}</td>
+                                        <td>{{ $team->count }}</td>
+                                        <td class="datatable-actions">
+                                            <a class="datatable-actions-link"
+                                               href="{{ url('admin/teams/' . $team->id . '/edit') }}">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
 
-                                            {{--<a class="datatable-actions-link"--}}
-                                               {{--href="{{ url('admin/users/' . $user->id . '/edit') }}">--}}
-                                                {{--<i class="fas fa-edit"></i>--}}
-                                            {{--</a>--}}
+                                            <a class="datatable-actions-link" href="">
+                                                <form method="POST" class="delete-form"
+                                                      action="{{ action('Admin\TeamsController@destroy', $team->id) }}">
+                                                    {{ csrf_field() }}
+                                                    {{ method_field('DELETE') }}
 
-                                            {{--<a class="datatable-actions-link"--}}
-                                               {{--href="{{ url('admin/users/reset_password/' . $user->id) }}">--}}
-                                                {{--<i class="fas fa-key"></i>--}}
-                                            {{--</a>--}}
-
-                                            {{--<a class="datatable-actions-link" href="">--}}
-                                                {{--<form method="POST" class="delete-form"--}}
-                                                      {{--action="{{ action('Admin\UsersController@destroy', $user->id) }}">--}}
-                                                    {{--{{ csrf_field() }}--}}
-                                                    {{--{{ method_field('DELETE') }}--}}
-
-                                                    {{--<button type="submit" class="delete-button"><i--}}
-                                                            {{--class="fas fa-trash-alt"></i></button>--}}
-                                                {{--</form>--}}
-                                            {{--</a>--}}
-                                        {{--</td>--}}
-                                    {{--</tr>--}}
-                                {{--@endforeach--}}
+                                                    <button type="submit" class="delete-button"><i
+                                                            class="fas fa-trash-alt"></i></button>
+                                                </form>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @endforeach
 
                                 </tbody>
                             </table>

@@ -72,5 +72,15 @@ class UserService
 
         return $users;
     }
+
+    public function getAllAvailableCoaches()
+    {
+        return $this->user->getAllAvailableCoaches();
+    }
+
+    public function getAllAvailableAthlets()
+    {
+        return $this->user->getAllAvailableAthlets();
+    }
 }
 

@@ -9,9 +9,11 @@
 
 namespace App\Repositories;
 
+use App\User;
 use App\Team;
 
-class TeamRepository{
+class TeamRepository
+{
 
     protected $team;
 
@@ -20,9 +22,18 @@ class TeamRepository{
         $this->team = $team;
     }
 
+    public function getAllWithRelationCoach()
+    {
+        return $this->team->with(array(
+                'coach' => function ($query) {
+                    $query->select('id', 'first_name', 'last_name');
+                })
+        )->get();
+    }
+
     public function index()
     {
-        return $this->team->first();
+        return $this->team->all();
     }
 
     public function first()
@@ -34,4 +45,25 @@ class TeamRepository{
     {
         return $this->team->find($id);
     }
+
+    public function store($attributes)
+    {
+        return $this->team->create($attributes);
+    }
+
+    public function update($id, array $attributes)
+    {
+        return $this->team->find($id)->update($attributes);
+    }
+
+    public function last()
+    {
+        return $this->team->latest()->first();
+    }
+
+    public function delete($id)
+    {
+        return $this->team->findOrFail($id)->delete();
+    }
 }
+

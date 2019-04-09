@@ -11,6 +11,7 @@ namespace App\Services;
 
 use App\Helpers\UserHelper;
 use App\Mail\ResetPassword;
+use App\Team;
 use Illuminate\Http\Request;
 use App\Helpers\AvatarsHelper;
 use App\Helpers\PasswordHelper;
@@ -130,6 +131,20 @@ class AuthService
     public function changePassword(Request $request)
     {
         return $this->user->update_password(Auth::id(), PasswordHelper::HashPassword($request->password));
+    }
+
+    public function setCodeAndRelationTeam(Request $request)
+    {
+        $team = Team::where('code', $request->code)->first();
+
+//        $team->users()->sync($request->ids, true);
+//        $team->users()->attach(Auth::id());
+
+        $team->users()->sync(Auth::id(), true);
+//        Attach to team
+
+        return true;
+//        Send user teams list
     }
 
     public function setAvatar(Request $request)

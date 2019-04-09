@@ -59,4 +59,14 @@ class UserRepository
     {
         return $this->user->findOrFail($id)->delete();
     }
+
+    public function getAllAvailableCoaches()
+    {
+        return $this->user->all();
+    }
+
+    public function getAllAvailableAthlets()
+    {
+        return $this->user->all();
+    }
 }

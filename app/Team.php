@@ -12,11 +12,11 @@ class Team extends Model
 
     public function coach()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function users()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class, 'team_user')->withTimestamps();
     }
 }

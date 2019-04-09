@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
+use App\Activity;
+use App\User;
+use App\Team;
 use App\Feedback;
 use App\Helpers\AvatarsHelper;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
 
 class ViewServiceProvider extends ServiceProvider
@@ -19,7 +21,7 @@ class ViewServiceProvider extends ServiceProvider
         view()->composer('partials.dashboard_feedbacks', function ($view) {
 
             $feedbacks = Feedback::where('status', 'unread')->with(array
-                ('user'=>function($query){
+                ('user' => function ($query) {
                         $query->select('id', 'first_name', 'last_name', 'email', 'avatar');
                     })
             )->get();
@@ -29,6 +31,15 @@ class ViewServiceProvider extends ServiceProvider
             }
 
             $view->with(['feedbacks' => $feedbacks]);
+        });
+
+        view()->composer('partials.report_filter', function ($view) {
+
+            $teams = Team::all();
+            $athlets = User::all();
+            $activities = Activity::all();
+
+            $view->with(['teams' => $teams, 'athlets' => $athlets, 'activities' => $activities]);
         });
     }
 

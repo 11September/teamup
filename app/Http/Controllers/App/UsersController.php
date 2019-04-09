@@ -8,6 +8,7 @@ use App\Http\Requests\SetAvatar;
 use App\Http\Requests\SetPlayer;
 use App\Http\Requests\SetPushChat;
 use App\Http\Requests\ChangePassword;
+use App\Http\Requests\SetInvitationCode;
 
 class UsersController
 {
@@ -51,6 +52,23 @@ class UsersController
 
         return response()->json(['message' => 'Password changed!'], 200);
     }
+
+
+    /**
+     * SetCodeTeam
+     *
+     * @param  [string] player
+     *
+     * @return [json] text
+     */
+
+    public function SetCodeTeam(SetInvitationCode $request)
+    {
+        $this->authService->setCodeAndRelationTeam($request);
+
+        return response()->json(['message' => 'Player_id Installed!'], 200);
+    }
+
 
     /**
      * SetAvatar
