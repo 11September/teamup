@@ -57,16 +57,16 @@ class UsersController
     /**
      * SetCodeTeam
      *
-     * @param  [string] player
+     * @param  [string] code
      *
      * @return [json] text
      */
 
     public function SetCodeTeam(SetInvitationCode $request)
     {
-        $this->authService->setCodeAndRelationTeam($request);
+        $teams = $this->authService->setCodeAndRelationTeam($request);
 
-        return response()->json(['message' => 'Player_id Installed!'], 200);
+        return response()->json(['message' => 'Invitation complete!', 'data' => $teams], 200);
     }
 
 

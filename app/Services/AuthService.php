@@ -137,14 +137,16 @@ class AuthService
     {
         $team = Team::where('code', $request->code)->first();
 
-//        $team->users()->sync($request->ids, true);
-//        $team->users()->attach(Auth::id());
+        $team->users()->sync(Auth::id(), false);
 
-        $team->users()->sync(Auth::id(), true);
-//        Attach to team
+        $user_id = Auth::id();
 
-        return true;
-//        Send user teams list
+        $teams = Team::select('id', 'name')
+            ->whereHas('users', function ($query) use ($user_id) {
+                $query->where('user_id', $user_id);
+            })->get();
+
+        return $teams;
     }
 
     public function setAvatar(Request $request)
@@ -183,7 +185,10 @@ class AuthService
 
         Auth::user()->number_students_busy = 0;
 
-        return $this->prepareDetailsData(Auth::user());
+        $user = Auth::user();
+        $user->load('teams');
+
+        return $this->prepareDetailsData($user);
     }
 
     public function prepareDetailsData($user)
