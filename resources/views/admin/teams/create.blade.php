@@ -33,7 +33,7 @@
             {{ csrf_field() }}
 
             <div class="row">
-                <div class="col-lg-6 col-ml-12">
+                <div class="col-lg-4 col-ml-12">
                     <div class="row">
                         <div class="col-12 mt-5">
                             <div class="card">
@@ -61,7 +61,8 @@
                                                     required>
 
                                                 @foreach($coaches as $coach)
-                                                    <option selected="selected" name="user_id" value="{{ $coach->id }}">{{ $coach->getFullnameAttribute() }}</option>
+                                                    <option selected="selected" name="user_id"
+                                                            value="{{ $coach->id }}">{{ $coach->getFullnameAttribute() }}</option>
                                                 @endforeach
                                             </select>
 
@@ -88,7 +89,7 @@
                                             </div>
                                             <input class="form-control" type="text" name="code"
                                                    value="{{ old('code') }}" id="code"
-                                                   required min="10">
+                                                   required min="5">
 
                                             @if ($errors->has('code'))
                                                 <span class="invalid-feedback" role="alert">
@@ -98,35 +99,65 @@
 
                                         </div>
                                     </div>
+
+                                    <div class="form-group">
+                                        <button class="btn btn-primary" type="submit">Create Team</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <!-- Textual inputs end -->
                     </div>
                 </div>
-                <div class="col-lg-6 col-ml-12">
+                <div class="col-lg-8 col-ml-12">
                     <div class="row">
                         <div class="col-12 mt-5">
                             <div class="card">
                                 <div class="card-body">
-                                    <h4 class="header-title">Access</h4>
 
-                                    <div class="form-group">
-                                        <label for="ids" class="col-form-label">Athlets in team</label>
 
-                                        <select name="ids[]" id="ids" multiple>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h4 class="header-title">Team Members</h4>
 
-                                            @foreach($athlets as $athlet)
-                                                <option value='{{ $athlet->id }}'>{{ $athlet->getFullnameAttribute() }}</option>
-                                            @endforeach
+                                            <div class="wrapper-multiselect">
+                                                <div class="form-group">
+                                                    <label for="ids" class="col-form-label">Choose athlets in your
+                                                        team</label>
 
-                                        </select>
+                                                    <select name="ids[]" class="thisMultiselect" id="ids" multiple>
+
+                                                        @foreach($athlets as $athlet)
+                                                            <option
+                                                                value='{{ $athlet->id }}'>{{ $athlet->getFullnameAttribute() }}</option>
+                                                        @endforeach
+
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="wrapper-multiselect">
+                                                <h4 class="header-title">Default Activities</h4>
+
+                                                <div class="form-group">
+                                                    <label for="activityIds" class="col-form-label">Choose default
+                                                        Exercises</label>
+
+                                                    <select name="activityIds[]" class="thisMultiselect"
+                                                            id="activityIds" multiple>
+
+                                                        @foreach($activities as $activity)
+                                                            <option value='{{ $activity->id }}' selected>
+                                                                {{ $activity->name }}
+                                                            </option>
+                                                        @endforeach
+
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-
-                                    <div class="form-group">
-                                        <button class="btn btn-primary" type="submit">Create Team</button>
-                                    </div>
-
                                 </div>
                             </div>
                         </div>
@@ -143,6 +174,7 @@
 
     <script type="text/javascript">
         $('#ids').multiSelect();
+        $('#activityIds').multiSelect();
     </script>
 
     <script>
@@ -158,7 +190,7 @@
 
         $("#code_generator").click(function (e) {
             e.preventDefault();
-            var code = generateId(10);
+            var code = generateId(6);
             $('#code').val(code);
         });
 

@@ -10,6 +10,7 @@
 namespace App\Services;
 
 use App\Measure;
+use App\Team;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\ActivityRepository;
@@ -23,7 +24,21 @@ class ActivityService
 
     public function index()
     {
-        return $this->activityRepository->all();
+        if (auth::user()->type == "coach"){
+            return $this->activityRepository->getCoachActivities();
+        }
+
+        return $this->activityRepository->indexWithTeam();
+    }
+
+    public function blankActivities()
+    {
+        return $this->activityRepository->getBlankActivities();
+    }
+
+    public function getTeamsList()
+    {
+        return Team::all();
     }
 
     public function measures()

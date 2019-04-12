@@ -27,19 +27,20 @@ class UserUpdatePassword extends FormRequest
     public function rules()
     {
         return [
-            'password-old' =>
-                [
-                    'required',
-                    'string',
-                    'min:6',
-                    'max:255',
-                    function ($attribute, $value, $fail) {
-                        if (!Hash::check($value, $this->user()->password)) {
-                            $fail('Your current password doesnt match');
-                        }
-                    },
-                ],
-            'password' => 'required|string|min:6|max:255|confirmed|different:password-old'
+//            'password-old' =>
+//                [
+//                    'required',
+//                    'string',
+//                    'min:6',
+//                    'max:255',
+//                    function ($attribute, $value, $fail) {
+//                        if (!Hash::check($value, $this->user()->password)) {
+//                            $fail('Your current password doesnt match');
+//                        }
+//                    },
+//                ],
+            'password' => 'required|string|min:6|max:255|confirmed'
+//          different:password-old
         ];
     }
 

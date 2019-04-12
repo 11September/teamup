@@ -23,6 +23,7 @@ class User extends Authenticatable
         'password',
         'type',
         'number_students',
+        'number_students_current',
         'activation_code',
         'expiration_date',
         'password_reset_code',

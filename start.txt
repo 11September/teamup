@@ -1,0 +1,9 @@
+php artisan key:generate
+php artisan migrate:fresh --seed
+php artisan passport:keys
+php artisan passport:client --client
+php artisan passport:client --personal
+
+TeamUp
+
+'Authorization' => 'Bearer '.$accessToken,

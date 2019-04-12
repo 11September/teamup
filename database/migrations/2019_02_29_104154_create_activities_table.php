@@ -18,14 +18,15 @@ class CreateActivitiesTable extends Migration
             $table->string('name');
             $table->integer('measure_id')->unsigned();
             $table->enum('graph_type', ['straight', 'reverse']);
-            $table->enum('graph_color', ['red', 'yellow', 'blue', 'violet', 'orange', 'green', 'indigo']);
-            $table->enum('status', ['default', 'custom'])->default('default');
+            $table->enum('status', ['blank', 'default', 'custom'])->default('default');
             $table->integer('user_id')->unsigned()->nullable();
+            $table->integer('team_id')->unsigned()->nullable();
 
             $table->timestamps();
 
             $table->foreign('measure_id')->references('id')->on('measures')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
         });
     }
 

@@ -9,6 +9,7 @@ use App\Http\Requests\SetPlayer;
 use App\Http\Requests\SetPushChat;
 use App\Http\Requests\ChangePassword;
 use App\Http\Requests\SetInvitationCode;
+use App\Http\Requests\SetActivationCode;
 
 class UsersController
 {
@@ -67,6 +68,22 @@ class UsersController
         $teams = $this->authService->setCodeAndRelationTeam($request);
 
         return response()->json(['message' => 'Invitation complete!', 'data' => $teams], 200);
+    }
+
+
+    /**
+     * SetActivationCode
+     *
+     * @param  [string] code
+     *
+     * @return [json] text
+     */
+
+    public function SetActivationCode(SetActivationCode $request)
+    {
+        $status = $this->authService->setUserActive();
+
+        return response()->json(['message' => $status ? 'Activation complete!' : 'Failed activation!'], $status ? 202 : 409);
     }
 
 

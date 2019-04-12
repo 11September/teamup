@@ -64,7 +64,13 @@
                                         <td>{{ $user->getFullnameAttribute() }}</td>
                                         <td>{{ $user->phone }}</td>
                                         <td>{{ $user->email }}</td>
-                                        <td>{{ $user->expiration_date }}</td>
+                                        <td>
+                                            @if($user->type == "athlete")
+
+                                            @else
+                                                {{ $user->expiration_date }}
+                                            @endif
+                                        </td>
                                         <td>{{ $user->type }}</td>
                                         <td>
                                             @if($user->IsActive)

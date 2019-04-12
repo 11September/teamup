@@ -22,6 +22,6 @@ $factory->define(Team::class, function (Faker $faker) {
         'name' => $faker->name,
         'user_id' => User::all()->random()->id,
         'count' => $faker->randomDigit,
-        'code' => Str::random(40),
+        'code' => Str::random(6),
     ];
 });

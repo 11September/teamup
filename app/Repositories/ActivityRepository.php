@@ -9,6 +9,7 @@
 namespace App\Repositories;
 
 use App\Activity;
+use Illuminate\Support\Facades\Auth;
 
 class ActivityRepository
 {
@@ -28,6 +29,49 @@ class ActivityRepository
     public function all()
     {
         return $this->activity->latest()->get();
+    }
+
+    public function getCoachActivities()
+    {
+        return $this->activity
+            ->orderBy('status', 'asc')
+            ->where('user_id', Auth::id())
+            ->where('status', '!=', 'blank')
+            ->with(array('team' => function ($query) {
+                $query->select('id', 'name');
+            }))
+            ->get();
+    }
+
+    public function getBlankActivities()
+    {
+        return $this->activity
+            ->select('id', 'name')
+            ->where('status', '=', 'blank')
+            ->get();
+    }
+
+    public function indexWithTeam()
+    {
+        return $this->activity
+            ->orderBy('status', 'asc')
+            ->with(array('team' => function ($query) {
+                $query->select('id', 'name');
+            }))
+            ->get();
+    }
+
+    public function whereBlankAll()
+    {
+        return $this->activity->where('status', 'blank')->get();
+    }
+
+    public function whereBlankInIds($ids)
+    {
+        return $this->activity
+            ->whereIn('id', $ids)
+            ->where('status', 'blank')
+            ->get();
     }
 
     public function find($id)

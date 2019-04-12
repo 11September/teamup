@@ -22,9 +22,18 @@
     </div>
 
     <div class="main-content-inner">
-        <form class="needs-validation" method="post" novalidate="" action="{{ action('Admin\UsersController@update', $user->id) }}">
+        <form class="needs-validation" method="post" novalidate=""
+              action="{{ action('Admin\UsersController@update', $user->id) }}">
             @method('PUT')
             {{ csrf_field() }}
+
+            @if(Auth::user()->type == "coach")
+                <input type="text" name="activation" value="full" hidden>
+                <input id="activation_code_hidden" type="text" name="activation_code"
+                       value="@php(print(bin2hex(random_bytes(10))))" hidden>
+                <input id="expiration_date_hidden" type="text" name="expiration_date"
+                       value="{{ \Carbon\Carbon::now() }}" hidden>
+            @endif
 
             <div class="row">
                 <div class="col-lg-6 col-ml-12">
@@ -32,7 +41,7 @@
                         <div class="col-12 mt-5">
                             <div class="card">
                                 <div class="card-body">
-                                    <h4 class="header-title">Create new user</h4>
+                                    <h4 class="header-title">Edit user - {{ $user->getFullnameAttribute() }}</h4>
                                     <div class="form-group">
                                         <label for="first_name" class="col-form-label">First Name*</label>
                                         <input class="form-control{{ $errors->has('first_name') ? ' is-invalid' : '' }}"
@@ -59,11 +68,11 @@
                                         @endif
                                     </div>
 
-                                    <div class="form-group">
+                                    <div class="form-group" style="display:none;">
                                         <label for="email" class="col-form-label">Email*</label>
                                         <input class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}"
                                                type="email" name="email" value="{{ $user->email }}" id="email"
-                                               max="255" required>
+                                               max="255" required disabled>
 
                                         @if ($errors->has('email'))
                                             <span class="invalid-feedback" role="alert">
@@ -101,12 +110,13 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group">
+                                    <div class="form-group" style="display: none">
                                         <label for="number_students" class="col-form-label">Number of Athletes in
                                             the
                                             team*</label>
                                         <input class="form-control" name="number_students" type="number"
-                                               value="{{ $user->number_students }}" id="number_students" required>
+                                               value="{{ $user->number_students }}" id="number_students" required
+                                               disabled>
 
                                         @if ($errors->has('number_students'))
                                             <span class="invalid-feedback" role="alert">
@@ -115,6 +125,11 @@
                                         @endif
 
                                     </div>
+
+                                    <div class="form-group">
+                                        <button class="btn btn-primary" type="submit">Update User</button>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -124,91 +139,108 @@
                 <div class="col-lg-6 col-ml-12">
                     <div class="row">
                         <div class="col-12 mt-5">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h4 class="header-title">Access</h4>
 
-                                    <div class="form-group">
-                                        <label for="type" class="col-form-label">Role*</label>
-                                        <select id="type" name="type"
-                                                class="custom-select{{ $errors->has('type') ? ' is-invalid' : '' }}"
-                                                required>
-                                            <option @if($user->type == 'coach')   selected @endif value="coach">Coach</option>
-                                            <option @if($user->type == 'admin')   selected @endif value="admin">Admin</option>
-                                            <option @if($user->type == 'athlete') selected @endif value="athlete">Athlete
-                                        </select>
+                            @if(Auth::user()->type == "admin")
+                                @if(Auth::user()->type == "admin" && $user->type != 'athlete')
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h4 class="header-title">Access</h4>
 
-                                        @if ($errors->has('type'))
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $errors->first('type') }}</strong>
-                                            </span>
-                                        @endif
+                                            <div class="form-group" style="display: none">
+                                                <label for="type" class="col-form-label">Role*</label>
+                                                <select id="type" name="type"
+                                                        class="custom-select{{ $errors->has('type') ? ' is-invalid' : '' }}"
+                                                        required>
+                                                    <option @if($user->type == 'coach')   selected @endif value="coach">
+                                                        Coach
+                                                    </option>
+                                                    <option @if($user->type == 'admin')   selected @endif value="admin">
+                                                        Admin
+                                                    </option>
+                                                    <option @if($user->type == 'athlete') selected
+                                                            @endif value="athlete">
+                                                        Athlete
+                                                </select>
 
-                                    </div>
+                                                @if ($errors->has('type'))
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong>{{ $errors->first('type') }}</strong>
+                                                    </span>
+                                                @endif
 
-                                    <div class="wrapper-access-block">
-                                        <div class="form-group">
-                                            <label for="activation" class="col-form-label">Activation type*</label>
-                                            <select id="activation" name="activation" required
-                                                    class="custom-select{{ $errors->has('activation') ? ' is-invalid' : '' }}">
-                                                <option @if($user->activation == 'demo') selected @endif value="demo">Demo</option>
-                                                <option @if($user->activation == 'full') selected @endif value="full">Full</option>
-                                            </select>
+                                            </div>
 
-                                            @if ($errors->has('activation'))
-                                                <span class="invalid-feedback" role="alert">
+                                            <div class="wrapper-access-block">
+                                                <div class="form-group">
+                                                    <label for="activation" class="col-form-label">Activation
+                                                        type*</label>
+                                                    <select id="activation" name="activation" required
+                                                            class="custom-select{{ $errors->has('activation') ? ' is-invalid' : '' }}">
+                                                        <option @if($user->activation == 'demo') selected
+                                                                @endif value="demo">Demo
+                                                        </option>
+                                                        <option @if($user->activation == 'full') selected
+                                                                @endif value="full">Full
+                                                        </option>
+                                                    </select>
+
+                                                    @if ($errors->has('activation'))
+                                                        <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $errors->first('activation') }}</strong>
                                                 </span>
-                                            @endif
+                                                    @endif
 
-                                        </div>
+                                                </div>
 
-                                        <div class="wrapper-code" style="display: @if($user->activation == 'demo') none @else block @endif;">
-                                            <div class="form-group">
-                                                <label for="activation_code" class="col-form-label">Code</label>
+                                                <div class="wrapper-code"
+                                                     style="display: @if($user->activation == 'demo') none @else block @endif;">
+                                                    <div class="form-group">
+                                                        <label for="activation_code" class="col-form-label">Code</label>
 
-                                                <div class="input-group mb-3">
-                                                    <div class="input-group-prepend">
+                                                        <div class="input-group mb-3">
+                                                            <div class="input-group-prepend">
                                                         <span class="input-group-text" id="basic-addon1">
                                                             <a id="code_generator" href="#">
                                                                 <i class="fas fa-sync-alt"></i>
                                                             </a>
                                                         </span>
-                                                    </div>
-                                                    <input class="form-control" type="text" name="activation_code"
-                                                           value="{{ $user->activation_code }}" id="activation_code"
-                                                           required min="10">
+                                                            </div>
+                                                            <input class="form-control" type="text"
+                                                                   name="activation_code"
+                                                                   value="{{ $user->activation_code }}"
+                                                                   id="activation_code"
+                                                                   required min="10">
 
-                                                    @if ($errors->has('activation_code'))
-                                                        <span class="invalid-feedback" role="alert">
+                                                            @if ($errors->has('activation_code'))
+                                                                <span class="invalid-feedback" role="alert">
                                                             <strong>{{ $errors->first('activation_code') }}</strong>
                                                         </span>
-                                                    @endif
+                                                            @endif
 
-                                                </div>
-                                            </div>
+                                                        </div>
+                                                    </div>
 
-                                            <div class="form-group">
-                                                <label for="expiration_date" class="col-form-label">Date Expired*</label>
-                                                <input class="form-control" type="date" name="expiration_date"
-                                                       value="{{ $user->expiration_date }}"
-                                                       id="expiration_date" required>
+                                                    <div class="form-group">
+                                                        <label for="expiration_date" class="col-form-label">Date
+                                                            Expired*</label>
+                                                        <input class="form-control" type="date" name="expiration_date"
+                                                               value="{{ $user->expiration_date }}"
+                                                               id="expiration_date" required>
 
-                                                @if ($errors->has('expiration_date'))
-                                                    <span class="invalid-feedback" role="alert">
+                                                        @if ($errors->has('expiration_date'))
+                                                            <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $errors->first('expiration_date') }}</strong>
                                                 </span>
-                                                @endif
+                                                        @endif
 
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+                                @endif
+                            @endif
 
-                                    <div class="form-group">
-                                        <button class="btn btn-primary" type="submit">Update User</button>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -275,25 +307,21 @@
                     $('.wrapper-phone-school-block').fadeOut();
                     $('.wrapper-access-block').fadeOut();
                     $('#activation').val('full');
-                    $('#activation_code').val(generateId(10));
-                    $('#expiration_date').val(generateId(10));
                     setTodayMinValue();
                     setTodayValue();
                 }
-                else if (activation == "athlete") {
+
+                if (activation == "athlete") {
                     $('.wrapper-phone-school-block').fadeIn();
                     $('.wrapper-access-block').fadeOut();
                     $('#activation').val('full');
-                    $('#activation_code').val(generateId(10));
-                    $('#expiration_date').val(generateId(10));
                     setTodayMinValue();
                     setTodayValue();
+
                 }
-                else {
+                if (activation == "coach") {
                     $('.wrapper-phone-school-block').fadeIn();
                     $('.wrapper-access-block').fadeIn();
-                    $('#activation_code').val(generateId(10));
-                    $('#expiration_date').val(generateId(10));
                     setTodayMinValue();
                     setTodayValue();
                 }

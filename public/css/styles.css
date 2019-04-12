@@ -3630,3 +3630,20 @@ blockquote p{
     color: #8e2713;
     font-weight: bold;
 }
+
+.table-cell-heading{
+    color: white !important;
+}
+
+.table-cell{
+    color: #8063f5 !important;
+}
+
+.wrapper-multiselect .ms-container{
+    width: 100%;
+}
+
+.wrapper-multiselect .ms-container .ms-selectable{
+    width: 50%;
+    padding: 0 5px;
+}

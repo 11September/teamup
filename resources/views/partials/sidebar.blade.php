@@ -14,15 +14,18 @@
                         </a>
                     </li>
 
+
+                    <li class="{{ request()->is('admin/users*') ? 'active' : '' }}">
+                        <a href="{{ url('admin/users') }}"><i class="sidebar-menu-icon fa fa-users"></i>
+                            <span>Users</span>
+                        </a>
+                    </li>
+
                     @if(Auth::user()->type == "admin")
-                        <li class="{{ request()->is('admin/users*') ? 'active' : '' }}">
-                            <a href="{{ url('admin/users') }}"><i class="sidebar-menu-icon fa fa-users"></i>
-                                <span>Users</span>
-                            </a>
-                        </li>
 
                         <li class="{{ request()->is('admin/measures*') ? 'active' : '' }}">
-                            <a href="{{ url('admin/measures') }}"><i class="sidebar-menu-icon fas fa-weight-hanging"></i>
+                            <a href="{{ url('admin/measures') }}"><i
+                                    class="sidebar-menu-icon fas fa-weight-hanging"></i>
                                 <span>Measures</span>
                             </a>
                         </li>

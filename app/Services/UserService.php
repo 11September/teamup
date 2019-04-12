@@ -9,35 +9,78 @@
 
 namespace App\Services;
 
+use App\Repositories\TeamRepository;
+use App\Team;
+use App\User;
 use Illuminate\Http\Request;
 use App\Helpers\PasswordHelper;
 use App\Helpers\SubscribeHelper;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Repositories\UserRepository;
 
 class UserService
 {
-    public function __construct(UserRepository $user)
+    public function __construct(UserRepository $user, TeamRepository $team)
     {
         $this->user = $user;
+        $this->team = $team;
     }
 
     public function index()
     {
-        return $this->addStatusFieldUsers($this->user->all());
+        if (Auth::user()->type == "coach") {
+            $teams = $this->team->getTeamsWithUsersAuth();
+
+            $teamUsers = $teams->pluck('users');
+
+            foreach ($teamUsers as $teamUser) {
+                $users = collect($teamUser);
+            }
+
+        }else{
+            $users = $this->user->all();
+        }
+
+        return $this->addStatusFieldUsers($users);
     }
 
     public function create(Request $request)
     {
-        $attributes = $request->all();
+        $attributes = $this->prepareCreateUserData($request);
 
-        if ($request->activation == "demo"){
+        if (Auth::user()->type == "coach") {
+
+        }
+
+        return $this->user->create($attributes);
+    }
+
+    public function prepareCreateUserData(Request $request)
+    {
+        $attributes['first_name'] = $request->first_name;
+        $attributes['last_name'] = $request->last_name;
+        $attributes['email'] = $request->email;
+        $attributes['password'] = PasswordHelper::HashPassword($request->password);
+        $attributes['type'] = $request->type ? $request->type : "athlete";
+        $attributes['number_students'] = $request->number_students ? $request->number_students : 0;
+        $attributes['phone'] = $request->phone;
+        $attributes['school'] = $request->school;
+
+        if ($request->type == "coach" && $request->activation == "demo") {
             $attributes['expiration_date'] = SubscribeHelper::getDateDemoSubscribe();
         }
 
-        $attributes['password'] = PasswordHelper::HashPassword($attributes['password']);
+        if ($request->type == "coach" && $request->activation == "demo") {
+            $attributes['expiration_date'] = SubscribeHelper::getDateDemoSubscribe();
+        }
 
-        return $this->user->create($attributes);
+        if ($request->type == "athlete" && $request->activation == "full") {
+            $attributes['expiration_date'] = SubscribeHelper::getCurrentDate();
+            $attributes['activation_code'] = $request->activation_code ? $request->activation_code : SubscribeHelper::generateActivationCode();
+        }
+
+        return $attributes;
     }
 
     public function read($id)

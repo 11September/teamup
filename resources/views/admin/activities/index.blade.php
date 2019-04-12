@@ -144,9 +144,9 @@
                 loadData: function (filter) {
                     return $.grep(this.activities, function (client) {
                         return (!filter.Name || activity.Name.indexOf(filter.Name) > -1)
+                            && (!filter.Teams || activity.Teams === filter.Teams)
                             && (!filter.Units || activity.Units === filter.Units)
                             && (!filter.Graphtype || activity.Graphtype === filter.Graphtype)
-                            && (!filter.Colors || activity.Colors === filter.Colors)
                             // && (filter.Status === undefined || activity.Status === filter.Status)
                             && (filter.Married === undefined || activity.Married === filter.Married);
                     });
@@ -184,6 +184,13 @@
 
             window.db = db;
 
+            db.teams = [
+                    @foreach($teams as $team)
+                {
+                    Name: "{{ $team->name }}", Id: {{ $team->id }}},
+                @endforeach
+            ];
+
             db.units = [
                     @foreach($measures as $measure)
                 {
@@ -197,36 +204,23 @@
                 {Name: "Reverse", Id: "reverse"}
             ];
 
-            db.colors = [
-                {Name: "red", Id: "red"},
-                {Name: "yellow", Id: "yellow"},
-                {Name: "blue", Id: "blue"},
-                {Name: "violet", Id: "violet"},
-                {Name: "orange", Id: "orange"},
-                {Name: "green", Id: "green"},
-                {Name: "indigo", Id: "indigo"}
+            db.status = [
+                {Name: "Blank", Id: "blank"},
+                {Name: "Default", Id: "default"},
+                {Name: "Custom", Id: "custom"}
             ];
 
             db.activities = [
                     @foreach($activities as $activity)
                 {
-                    "Id": {{ $activity->id }},
+                    "Id" : {{ $activity->id }},
                     "Name": "{{ $activity->name }}",
+                    "Teams": {{ $activity->team_id }},
                     "Units": {{ $activity->measure_id }},
                     "Graphtype": "{{ $activity->graph_type }}",
-                    "Colors": "{{ $activity->graph_color }}",
                     "Status": "{{ $activity->status }}"
                 },
                 @endforeach
-
-                // {
-                //     "Id": 1,
-                //     "Name": "Stuart Wallace",
-                //     "Units": 2,
-                //     "Graphtype": "reverse",
-                //     "Colors": "yellow",
-                //     "Status": "custom"
-                // },
             ];
         }());
 
@@ -248,6 +242,13 @@
                 pageButtonCount: 5,
                 deleteConfirm: "Do you really want to delete the activity?",
                 controller: db,
+                confirmDeleting: true,
+                rowClass: function(item, itemIndex) {
+
+
+
+                    console.log(item, itemIndex)
+                },
 
                 fields: [
                     {
@@ -256,7 +257,7 @@
                     },
 
                     {
-                        name: "Name", textField: "Activity Name", type: "text", width: 150, sorting: true,
+                        name: "Name", textField: "Activity Name", type: "text", width: 150,  sorting: true, headercss: "table-cell-heading", css: "table-cell", insertcss: "table-cell", editcss : "table-cell",
                         validate: [
                             "required",
                             {validator: "minLength", param: 6},
@@ -264,6 +265,16 @@
                                 return item.IsRetired ? value > 6 : true;
                             }
                         ]
+                    },
+
+                    {
+                        name: "Teams",
+                        type: "select",
+                        items: db.teams,
+                        valueField: "Id",
+                        textField: "Name",
+                        sorting: true,
+                        validate: "required"
                     },
 
                     {
@@ -287,18 +298,19 @@
                     },
 
                     {
-                        name: "Colors",
+                        name: "Status",
                         type: "select",
-                        items: db.colors,
+                        items: db.status,
                         valueField: "Id",
                         textField: "Name",
                         sorting: true,
-                        validate: "required"
+                        // validate: "required"
                     },
 
                     // {
-                    //     name: "Status", type: "checkbox", title: "Is Custom", sorting: true, readOnly: true
+                    //     name: "Status", type: "checkbox", title: "Custom", sorting: true, readOnly: false
                     // },
+
                     {type: "control"}
                 ]
             });

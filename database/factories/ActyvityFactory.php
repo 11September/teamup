@@ -1,9 +1,9 @@
 <?php
 
 Use App\User;
+Use App\Team;
 use App\Measure;
 use Faker\Generator as Faker;
-use Illuminate\Support\Facades\DB;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,8 +21,8 @@ $factory->define(App\Activity::class, function (Faker $faker) {
         'name' => $faker->name,
         'measure_id' => factory(Measure::class)->create()->id,
         'graph_type' => $faker->randomElement(['straight', 'reverse']),
-        'graph_color' => $faker->randomElement(['red', 'yellow', 'blue', 'violet', 'orange', 'green', 'indigo']),
-        'status' => $faker->randomElement(['default', 'custom']),
-        'user_id' => User::all()->random()->id
+        'status' => $faker->randomElement(['default', 'custom', 'blank']),
+        'user_id' => User::all()->random()->id,
+        'team_id' => Team::all()->random()->id
     ];
 });

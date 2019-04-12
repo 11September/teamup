@@ -27,12 +27,18 @@ class TeamStore extends FormRequest
         return [
             'name' => 'required|string|min:2',
             'user_id' => 'nullable|int|exists:users,id',
-            'code' => 'required|string|min:10',
+            'code' => 'required|string|min:5|unique:teams',
             'ids' => 'nullable|array',
             "ids.*" => [
                 'required',
                 'int',
                 'exists:users,id',
+            ],
+            'activityIds' => 'nullable|array',
+            "activityIds.*" => [
+                'required',
+                'int',
+                'exists:activities,id',
             ]
         ];
     }

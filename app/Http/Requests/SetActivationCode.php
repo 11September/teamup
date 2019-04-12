@@ -2,10 +2,9 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class TeamUpdate extends FormRequest
+class SetActivationCode extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,15 +24,7 @@ class TeamUpdate extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|min:2',
-            'user_id' => 'nullable|int|exists:users,id',
-            'code' => 'nullable|string|min:10',
-            'ids' => 'nullable|array',
-            "ids.*" => [
-                'required',
-                'int',
-                'exists:users,id',
-            ]
+            'code' => 'required|string|min:10|exists:users,activation_code',
         ];
     }
 }

@@ -149,6 +149,11 @@ class AuthService
         return $teams;
     }
 
+    public function setUserActive()
+    {
+        return $this->user->update_field(Auth::id(), 'status', 'active');
+    }
+
     public function setAvatar(Request $request)
     {
         $user = Auth::user();

@@ -30,6 +30,13 @@ class UserRepository
         return $this->user->latest()->get();
     }
 
+    public function allCoachAthlets()
+    {
+        return $this->user
+            ->where()
+            ->latest()->get();
+    }
+
     public function find($id)
     {
         return $this->user->find($id);
@@ -62,11 +69,17 @@ class UserRepository
 
     public function getAllAvailableCoaches()
     {
-        return $this->user->all();
+        return $this->user
+            ->where('type', 'coach')
+            ->where('status', 'active')
+            ->get();
     }
 
     public function getAllAvailableAthlets()
     {
-        return $this->user->all();
+        return $this->user
+            ->where('type', 'athlete')
+            ->where('status', 'active')
+            ->get();
     }
 }

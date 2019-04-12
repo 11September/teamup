@@ -33,32 +33,32 @@
                                 <div class="card-body">
                                     <h4 class="header-title">Update user password</h4>
 
-                                    <div class="form-group">
-                                        <div class="input-group">
-                                            <label for="password-old" class="col-form-label">Old Password*</label>
+                                    {{--<div class="form-group">--}}
+                                        {{--<div class="input-group">--}}
+                                            {{--<label for="password-old" class="col-form-label">Old Password*</label>--}}
 
-                                            <div class="input-group">
-                                                <input id="password-old" type="password"
-                                                       class="form-control{{ $errors->has('password-old') ? ' is-invalid' : '' }}"
-                                                       name="password-old" value="" placeholder="Password Old" required>
+                                            {{--<div class="input-group">--}}
+                                                {{--<input id="password-old" type="password"--}}
+                                                       {{--class="form-control{{ $errors->has('password-old') ? ' is-invalid' : '' }}"--}}
+                                                       {{--name="password-old" value="" placeholder="Password Old" required>--}}
 
-                                                <div class="input-group-append">
-                                                    <span class="input-group-text" id="basic-addon1">
-                                                        <a class="hide_show_password_old" href="#">
-                                                            <i class="fa-password-old fas fa-eye"></i>
-                                                        </a>
-                                                    </span>
-                                                </div>
+                                                {{--<div class="input-group-append">--}}
+                                                    {{--<span class="input-group-text" id="basic-addon1">--}}
+                                                        {{--<a class="hide_show_password_old" href="#">--}}
+                                                            {{--<i class="fa-password-old fas fa-eye"></i>--}}
+                                                        {{--</a>--}}
+                                                    {{--</span>--}}
+                                                {{--</div>--}}
 
-                                                @if ($errors->has('password-old'))
-                                                    <span class="invalid-feedback" role="alert">
-                                                        <strong>{{ $errors->first('password-old') }}</strong>
-                                                    </span>
-                                                @endif
+                                                {{--@if ($errors->has('password-old'))--}}
+                                                    {{--<span class="invalid-feedback" role="alert">--}}
+                                                        {{--<strong>{{ $errors->first('password-old') }}</strong>--}}
+                                                    {{--</span>--}}
+                                                {{--@endif--}}
 
-                                            </div>
-                                        </div>
-                                    </div>
+                                            {{--</div>--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
 
                                     <div class="form-group">
                                         <div class="input-group">

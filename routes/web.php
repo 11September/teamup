@@ -22,6 +22,12 @@ Route::group(['namespace' => 'Admin'], function () {
 
             Route::get('/', 'AdminController@admin')->name('admin');
 
+            Route::group(['as' => 'user.'], function () {
+                Route::get('/users/reset_password/{user}', 'UsersController@reset_password')->name('reset_user_password');
+                Route::post('/users/update_password/{id}', 'UsersController@update_password')->name('update_user_password');
+                Route::resource('users', 'UsersController');
+            });
+
             Route::middleware(['canAdmin'])->group(function () {
                 Route::group(['as' => 'team.'], function () {
                     Route::resource('teams', 'TeamsController')->except([
@@ -34,22 +40,16 @@ Route::group(['namespace' => 'Admin'], function () {
                         'show'
                     ]);
                 });
-            });
-
-
-            Route::middleware(['admin'])->group(function () {
-                Route::group(['as' => 'user.'], function () {
-                    Route::get('/users/reset_password/{user}', 'UsersController@reset_password')->name('reset_user_password');
-                    Route::post('/users/update_password/{id}', 'UsersController@update_password')->name('update_user_password');
-                    Route::resource('users', 'UsersController');
-                });
 
                 Route::group(['as' => 'activity.'], function () {
                     Route::resource('activities', 'ActivitiesController')->only([
                         'index', 'store', 'update', 'destroy'
                     ]);
                 });
+            });
 
+
+            Route::middleware(['admin'])->group(function () {
                 Route::group(['as' => 'measure.'], function () {
                     Route::resource('measures', 'MeasuresController')->only([
                         'index', 'store', 'destroy'

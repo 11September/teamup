@@ -39,7 +39,7 @@
                         <div class="col-12 mt-5">
                             <div class="card">
                                 <div class="card-body">
-                                    <h4 class="header-title">Create new Team</h4>
+                                    <h4 class="header-title">Edit Team - {{ $team->name }}</h4>
 
                                     <div class="form-group">
                                         <label for="first_name" class="col-form-label">Team Name*</label>
@@ -60,7 +60,7 @@
                                             <label for="type" class="col-form-label">Coach Name*</label>
                                             <select id="type" name="user_id"
                                                     class="custom-select{{ $errors->has('user_id') ? ' is-invalid' : '' }}"
-                                                    required>
+                                                    disabled="disabled" required>
 
                                                 @foreach($coaches as $coach)
                                                     <option
@@ -81,29 +81,29 @@
                                     @endif
 
 
-                                    <div class="form-group">
-                                        <label for="code" class="col-form-label">Code</label>
+                                    {{--<div class="form-group">--}}
+                                        {{--<label for="code" class="col-form-label">Code</label>--}}
 
-                                        <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text" id="basic-addon1">
-                                                    <a id="code_generator" href="#">
-                                                        <i class="fas fa-sync-alt"></i>
-                                                    </a>
-                                                </span>
-                                            </div>
-                                            <input class="form-control" type="text" name="code"
-                                                   value="{{ old('code') ? old('code') : $team->code }}" id="code"
-                                                   required min="10">
+                                        {{--<div class="input-group mb-3">--}}
+                                            {{--<div class="input-group-prepend">--}}
+                                                {{--<span class="input-group-text" id="basic-addon1">--}}
+                                                    {{--<a id="code_generator" href="#">--}}
+                                                        {{--<i class="fas fa-sync-alt"></i>--}}
+                                                    {{--</a>--}}
+                                                {{--</span>--}}
+                                            {{--</div>--}}
+                                            {{--<input disabled="disabled" class="form-control" type="text" name="code"--}}
+                                                   {{--value="{{ old('code') ? old('code') : $team->code }}" id="code"--}}
+                                                   {{--required min="10">--}}
 
-                                            @if ($errors->has('code'))
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $errors->first('code') }}</strong>
-                                                </span>
-                                            @endif
+                                            {{--@if ($errors->has('code'))--}}
+                                                {{--<span class="invalid-feedback" role="alert">--}}
+                                                    {{--<strong>{{ $errors->first('code') }}</strong>--}}
+                                                {{--</span>--}}
+                                            {{--@endif--}}
 
-                                        </div>
-                                    </div>
+                                        {{--</div>--}}
+                                    {{--</div>--}}
                                 </div>
                             </div>
                         </div>

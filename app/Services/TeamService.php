@@ -9,6 +9,7 @@
 
 namespace App\Services;
 
+use App\Repositories\ActivityRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use App\Repositories\TeamRepository;
@@ -16,15 +17,22 @@ use Illuminate\Support\Facades\Auth;
 
 class TeamService
 {
-    public function __construct(TeamRepository $team, UserRepository $user)
+    public function __construct(TeamRepository $team, UserRepository $user, ActivityRepository $activity)
     {
         $this->team = $team;
         $this->user = $user;
+        $this->activity = $activity;
     }
 
     public function index()
     {
-        return $this->team->getAllWithRelationCoach();
+        if (Auth::user()->type == "coach") {
+            $teams = $this->team->getAllCoachesTeamsWithRelation(Auth::id());
+        }else{
+            $teams = $this->team->getAllWithRelationCoach();
+        }
+
+        return $teams;
     }
 
     public function store(Request $request)
@@ -32,8 +40,13 @@ class TeamService
         $attributes = $this->prepareData($request);
 
         if ($this->team->store($attributes)){
+
             $team = $this->team->last();
             $team->users()->sync($request->ids, true);
+
+            if ($request->activityIds){
+                $this->createDefaultActivitiesToTeam($request, $team);
+            }
 
             return true;
         }else{
@@ -58,7 +71,10 @@ class TeamService
     public function prepareData(Request $request)
     {
         $attributes['name'] = $request->name;
-        $attributes['code'] = $request->code;
+
+        if ($request->code){
+            $attributes['code'] = $request->code;
+        }
 
         if ($request->user_id){
             $user = $this->user->find($request->user_id);
@@ -72,9 +88,33 @@ class TeamService
         return $attributes;
     }
 
+    public function createDefaultActivitiesToTeam($request, $team)
+    {
+        $activities = $this->activity->whereBlankInIds($request->activityIds);
+
+        foreach ($activities as $activity) {
+            $attributes = $this->prepareDataCreateNewActivity($activity, $request->user_id, $team->id);
+            $this->activity->create($attributes);
+        }
+    }
+
+    public function prepareDataCreateNewActivity($activity, $user_id, $team_id)
+    {
+        $attributes['name'] = $activity->name;
+        $attributes['measure_id'] = $activity->measure_id;
+        $attributes['graph_type'] = $activity->graph_type;
+        $attributes['status'] = "default";
+        $attributes['user_id'] = $user_id;
+        $attributes['team_id'] = $team_id;
+
+        return $attributes;
+    }
+
     public function delete($id)
     {
         $team = $this->team->find($id);
+
+        $team->users()->detach();
 
         return $this->team->delete($id);
     }

@@ -38,6 +38,7 @@ Route::namespace('App')->group(function () {
             Route::get('details', 'UsersController@details')->name('user_details');
             Route::post('change_password', 'UsersController@ChangePassword')->name('change_pass');
             Route::post('set_code_team', 'UsersController@SetCodeTeam')->name('set_code_team');
+            Route::post('set_activation_code', 'UsersController@SetActivationCode')->name('set_activation_code');
             Route::post('set_avatar', 'UsersController@SetAvatar')->name('set_avatar');
             Route::post('set_player', 'UsersController@SetPlayer')->name('set_user_player_id');
             Route::post('set_push', 'UsersController@SetPush')->name('set_push');

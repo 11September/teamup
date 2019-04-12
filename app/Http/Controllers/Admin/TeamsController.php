@@ -2,22 +2,26 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Team;
+use App\Helpers\UserHelper;
 use App\Services\UserService;
 use App\Services\TeamService;
 use App\Http\Requests\TeamStore;
 use App\Http\Requests\TeamUpdate;
+use App\Services\ActivityService;
 use App\Http\Controllers\Controller;
-use App\Team;
 
 class TeamsController extends Controller
 {
     protected $teamService;
     protected $userService;
+    protected $activityService;
 
-    public function __construct(TeamService $teamService, UserService $userService)
+    public function __construct(TeamService $teamService, UserService $userService, ActivityService $activityService)
     {
         $this->teamService = $teamService;
         $this->userService = $userService;
+        $this->activityService = $activityService;
     }
 
     public function index()
@@ -33,7 +37,9 @@ class TeamsController extends Controller
 
         $athlets = $this->userService->getAllAvailableAthlets();
 
-        return view('admin.teams.create', compact('athlets', 'coaches'));
+        $activities = $this->activityService->blankActivities();
+
+        return view('admin.teams.create', compact('athlets', 'coaches', 'activities'));
     }
 
     public function store(TeamStore $request)
@@ -54,6 +60,8 @@ class TeamsController extends Controller
 
     public function edit(Team $team)
     {
+        UserHelper::checkPermission($team);
+
         $team->load('users');
 
         $coaches = $this->userService->getAllAvailableCoaches();
@@ -79,9 +87,9 @@ class TeamsController extends Controller
             ], 200);
     }
 
-    public function destroy($id)
+    public function destroy(Team $team)
     {
-        $status = $this->teamService->delete($id);
+        $status = $this->teamService->delete($team->id);
 
         return redirect()->action('Admin\TeamsController@index')
             ->with([

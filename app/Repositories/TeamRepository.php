@@ -11,6 +11,7 @@ namespace App\Repositories;
 
 use App\User;
 use App\Team;
+use Illuminate\Support\Facades\Auth;
 
 class TeamRepository
 {
@@ -31,9 +32,28 @@ class TeamRepository
         )->get();
     }
 
+    public function getAllCoachesTeamsWithRelation($coach_id)
+    {
+        return $this->team
+            ->where('user_id', $coach_id)
+            ->with(array(
+                'coach' => function ($query) {
+                    $query->select('id', 'first_name', 'last_name');
+                })
+        )->get();
+    }
+
     public function index()
     {
         return $this->team->all();
+    }
+
+    public function getTeamsWithUsersAuth()
+    {
+        return $this->team
+            ->where('user_id', Auth::id())
+            ->with('users')
+            ->get();
     }
 
     public function first()

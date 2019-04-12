@@ -26,9 +26,11 @@ class ActivitiesController extends Controller
     {
         $activities = $this->activityService->index();
 
+        $teams = $this->activityService->getTeamsList();
+
         $measures = $this->activityService->measures();
 
-        return view('admin.activities.index', compact('activities', 'measures'));
+        return view('admin.activities.index', compact('activities', 'measures', 'teams'));
     }
 
 

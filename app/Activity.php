@@ -8,11 +8,16 @@ class Activity extends Model
 {
     protected $table = 'activities';
 
-    protected $fillable = ['name', 'measure_id', 'user_id', 'graph_type', 'graph_color' ,'status'];
+    protected $fillable = ['name', 'measure_id', 'user_id', 'team_id', 'graph_type' ,'status'];
 
     public function measure()
     {
         return $this->belongsTo(Measure::class);
+    }
+
+    public function team()
+    {
+        return $this->belongsTo(Team::class);
     }
 
     public function records()
