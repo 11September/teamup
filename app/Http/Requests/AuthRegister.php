@@ -34,6 +34,7 @@ class AuthRegister extends FormRequest
                 Rule::in(['athlete', 'coach']),
             ],
             'number_students' => 'nullable|int|min:1',
+            'conditions' => 'accepted'
         ];
     }
 }

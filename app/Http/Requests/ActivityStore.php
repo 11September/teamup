@@ -25,20 +25,21 @@ class ActivityStore extends FormRequest
     public function rules()
     {
         return [
-            'Name' => 'required|string|min:6',
-            'Units' => [
+            'name' => 'required|string|min:3',
+            'measure_id' => [
                 'required',
                 'int',
                 'state' => 'exists:measures,id'
             ],
-            'Graphtype' =>  [
+            'graph_type' =>  [
                 'required',
                 Rule::in(['straight', 'reverse']),
             ],
-            'Colors' =>  [
+            'status' =>  [
                 'required',
-                Rule::in(['red', 'yellow', 'blue', 'violet', 'orange', 'green', 'indigo']),
+                Rule::in(['blank', 'custom']),
             ],
+            'team_id' => 'required|int|exists:teams,id',
         ];
     }
 }

@@ -1,8 +1,12 @@
 @extends('layouts.admin')
 
 @section('css')
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/jsgrid.css') }}"/>
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/theme.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.18/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" type="text/css"
+          href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.bootstrap.min.css">
+    <link rel="stylesheet" type="text/css"
+          href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.jqueryui.min.css">
 @endsection
 
 @section('content')
@@ -28,293 +32,106 @@
         <div class="row">
             <div class="col-12 mt-5">
                 <div class="card">
+
+                    <div class="card-header">
+                        <div class="col-sm-12 flex-pull-right">
+                            <a class="create-link" href="{{ url('/admin/activities/create') }}">Create new Exercise</a>
+                        </div>
+                    </div>
+
                     <div class="card-body">
+                        <h4 class="header-title">Users list</h4>
+                        <div class="data-tables datatable-dark">
+                            <table id="dataTable3" class="text-center">
+                                <thead class="text-capitalize">
+                                <tr>
+                                    <th>№</th>
+                                    <th>Name</th>
+                                    <th>Team</th>
+                                    <th>Units</th>
+                                    <th>Graph Type</th>
+                                    <th>Status</th>
+                                    <td>Actions</td>
+                                </tr>
+                                </thead>
+                                <tbody>
 
-                        <div id="jsGrid"></div>
+                                @foreach($activities as $activity)
+                                    <tr>
+                                        <td>{{ $activity->id }}</td>
+                                        <td>{{ $activity->name }}</td>
+                                        <td>{{ $activity->team->name }}</td>
+                                        <td>{{ $activity->measure->name }}</td>
+                                        <td>{{ $activity->graph_type }}</td>
+                                        <td>{{ $activity->status }}</td>
+                                        <td class="datatable-actions">
 
+                                            @if(Auth::user()->type == "coach" && $activity->user_id == Auth::id() && $activity->status == "custom" || $activity->status == "default")
+                                                <a class="datatable-actions-link"
+                                                   href="{{ url('admin/activities/' . $activity->id . '/edit') }}">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                            @endif
+
+                                            @if(Auth::user()->type == "admin" && $activity->user_id == Auth::id() && $activity->status == "blank")
+                                                <a class="datatable-actions-link"
+                                                   href="{{ url('admin/activities/' . $activity->id . '/edit') }}">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                            @endif
+
+                                            <a class="datatable-actions-link" href="">
+                                                <form method="POST" class="delete-form"
+                                                      action="{{ action('Admin\ActivitiesController@destroy', $activity->id) }}">
+                                                    {{ csrf_field() }}
+                                                    {{ method_field('DELETE') }}
+
+                                                    <button type="submit" class="delete-button"><i
+                                                            class="fas fa-trash-alt"></i></button>
+                                                </form>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
+            <!-- Dark table end -->
         </div>
     </div>
+
 @endsection
 
 @section('scripts')
-    <script src="{{ asset('js/vendor/datatable/jsgrid.core.js') }}"></script>
-    <script src="{{ asset('js/vendor/datatable/jsgrid.load-indicator.js') }}"></script>
-    <script src="{{ asset('js/vendor/datatable/jsgrid.load-strategies.js') }}"></script>
-    <script src="{{ asset('js/vendor/datatable/jsgrid.sort-strategies.js') }}"></script>
-    <script src="{{ asset('js/vendor/datatable/jsgrid.validation.js') }}"></script>
-    <script src="{{ asset('js/vendor/datatable/jsgrid.field.js') }}"></script>
 
-    <script src="{{ asset('js/vendor/datatable/fields/jsgrid.field.text.js') }}"></script>
-    <script src="{{ asset('js/vendor/datatable/fields/jsgrid.field.number.js') }}"></script>
-    <script src="{{ asset('js/vendor/datatable/fields/jsgrid.field.select.js') }}"></script>
-    <script src="{{ asset('js/vendor/datatable/fields/jsgrid.field.checkbox.js') }}"></script>
-    <script src="{{ asset('js/vendor/datatable/fields/jsgrid.field.control.js') }}"></script>
+    <!-- Start datatable js -->
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+    <script src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap.min.js"></script>
+    <!-- others plugins -->
 
     <script>
-        function InsertData(insertData) {
-            var data = insertData;
-            var success = "false";
-
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                }
+        if ($('#dataTable').length) {
+            $('#dataTable').DataTable({
+                responsive: true
             });
-            jQuery.ajax({
-                url: "{{ url('admin/activities') }}",
-                method: 'post',
-                data: data,
-                async: false,
-                success: function (data) {
-                    if (data.success) {
-                        success = "true";
-                    }
-                },
-                error: function (data) {
-                    console.log(data);
-                }
+        }
+        if ($('#dataTable2').length) {
+            $('#dataTable2').DataTable({
+                responsive: true
             });
-
-            return success;
         }
-
-        function UpdateData(updateData) {
-            var data = updateData;
-            var success = "false";
-
-            if (updateData['Id']) {
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                    }
-                });
-                jQuery.ajax({
-                    url: "{{ url('admin/activities/') }}" + "/" + updateData['Id'],
-                    method: 'PATCH',
-                    data: data,
-                    async: false,
-                    success: function (data) {
-                        if (data.success) {
-                            success = "true";
-                        }
-                    },
-                    error: function (data) {
-                        console.log(data);
-                    }
-                });
-            }
-
-            return success;
+        if ($('#dataTable3').length) {
+            $('#dataTable3').DataTable({
+                responsive: true
+            });
         }
-
-
-        function DeleteData(updateData) {
-            var success = "false";
-
-            if (updateData['Id']) {
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                    }
-                });
-                jQuery.ajax({
-                    url: "{{ url('admin/activities/') }}" + "/" + updateData['Id'],
-                    method: 'DELETE',
-                    async: false,
-                    success: function (data) {
-                        if (data.success) {
-                            success = "true";
-                        }
-                    },
-                    error: function (data) {
-                        console.log(data);
-                    }
-                });
-            }
-
-            return success;
-        }
-
-        (function () {
-
-            var db = {
-                loadData: function (filter) {
-                    return $.grep(this.activities, function (client) {
-                        return (!filter.Name || activity.Name.indexOf(filter.Name) > -1)
-                            && (!filter.Teams || activity.Teams === filter.Teams)
-                            && (!filter.Units || activity.Units === filter.Units)
-                            && (!filter.Graphtype || activity.Graphtype === filter.Graphtype)
-                            // && (filter.Status === undefined || activity.Status === filter.Status)
-                            && (filter.Married === undefined || activity.Married === filter.Married);
-                    });
-                },
-
-                insertItem: function (insertingActivity) {
-                    console.log('insert');
-                    console.log(insertingActivity);
-
-                    var status = InsertData(insertingActivity);
-                    if (status) {
-                        this.activities.push(insertingActivity);
-                    }
-                },
-
-                updateItem: function (updatingActivity) {
-                    console.log('update');
-                    console.log(updatingActivity);
-
-                    var status = UpdateData(updatingActivity);
-                },
-
-                deleteItem: function (deletingActivity) {
-                    console.log('delete');
-                    console.log(deletingActivity);
-
-                    var status = DeleteData(deletingActivity);
-
-                    if (status) {
-                        var clientIndex = $.inArray(deletingActivity, this.activities);
-                        this.activities.splice(clientIndex, 1);
-                    }
-                }
-            };
-
-            window.db = db;
-
-            db.teams = [
-                    @foreach($teams as $team)
-                {
-                    Name: "{{ $team->name }}", Id: {{ $team->id }}},
-                @endforeach
-            ];
-
-            db.units = [
-                    @foreach($measures as $measure)
-                {
-                    Name: "{{ $measure->name }}", Id: {{ $measure->id }}
-                },
-                @endforeach
-            ];
-
-            db.graphtype = [
-                {Name: "Straight", Id: "straight"},
-                {Name: "Reverse", Id: "reverse"}
-            ];
-
-            db.status = [
-                {Name: "Blank", Id: "blank"},
-                {Name: "Default", Id: "default"},
-                {Name: "Custom", Id: "custom"}
-            ];
-
-            db.activities = [
-                    @foreach($activities as $activity)
-                {
-                    "Id" : {{ $activity->id }},
-                    "Name": "{{ $activity->name }}",
-                    "Teams": {{ $activity->team_id }},
-                    "Units": {{ $activity->measure_id }},
-                    "Graphtype": "{{ $activity->graph_type }}",
-                    "Status": "{{ $activity->status }}"
-                },
-                @endforeach
-            ];
-        }());
-
     </script>
 
-    <script>
-        $(function () {
-
-            $("#jsGrid").jsGrid({
-                height: "70%",
-                width: "100%",
-                filtering: false,
-                editing: true,
-                inserting: true,
-                sorting: true,
-                paging: true,
-                autoload: true,
-                pageSize: 15,
-                pageButtonCount: 5,
-                deleteConfirm: "Do you really want to delete the activity?",
-                controller: db,
-                confirmDeleting: true,
-                rowClass: function(item, itemIndex) {
-
-
-
-                    console.log(item, itemIndex)
-                },
-
-                fields: [
-                    {
-                        name: "Id", textField: "Activity Name", type: "text", width: 150, sorting: true, visible: false,
-                        validate: "required"
-                    },
-
-                    {
-                        name: "Name", textField: "Activity Name", type: "text", width: 150,  sorting: true, headercss: "table-cell-heading", css: "table-cell", insertcss: "table-cell", editcss : "table-cell",
-                        validate: [
-                            "required",
-                            {validator: "minLength", param: 6},
-                            function (value, item) {
-                                return item.IsRetired ? value > 6 : true;
-                            }
-                        ]
-                    },
-
-                    {
-                        name: "Teams",
-                        type: "select",
-                        items: db.teams,
-                        valueField: "Id",
-                        textField: "Name",
-                        sorting: true,
-                        validate: "required"
-                    },
-
-                    {
-                        name: "Units",
-                        type: "select",
-                        items: db.units,
-                        valueField: "Id",
-                        textField: "Name",
-                        sorting: true,
-                        validate: "required"
-                    },
-
-                    {
-                        name: "Graphtype",
-                        type: "select",
-                        items: db.graphtype,
-                        valueField: "Id",
-                        textField: "Name",
-                        sorting: true,
-                        validate: "required"
-                    },
-
-                    {
-                        name: "Status",
-                        type: "select",
-                        items: db.status,
-                        valueField: "Id",
-                        textField: "Name",
-                        sorting: true,
-                        // validate: "required"
-                    },
-
-                    // {
-                    //     name: "Status", type: "checkbox", title: "Custom", sorting: true, readOnly: false
-                    // },
-
-                    {type: "control"}
-                ]
-            });
-
-        });
-    </script>
 @endsection

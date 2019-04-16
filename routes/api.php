@@ -53,5 +53,17 @@ Route::namespace('App')->group(function () {
             ]);
         });
 
+        Route::group(['prefix' => 'activities'], function () {
+            Route::resource('activities', 'ActivitiesController')->only([
+                'index', 'create' ,'store', 'edit' ,'update'
+            ]);
+        });
+
+        Route::group(['prefix' => 'records'], function () {
+            Route::resource('records', 'RecordsController')->only([
+                'index', 'store', 'update'
+            ]);
+        });
+
     });
 });

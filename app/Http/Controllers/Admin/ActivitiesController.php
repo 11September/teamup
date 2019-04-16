@@ -2,18 +2,23 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Activity;
+use App\Helpers\UserHelper;
 use App\Services\ActivityService;
-use App\Http\Requests\ActivityStore;
+use App\Services\Api\MeasureService;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ActivityStore;
 use App\Http\Requests\ActivityUpdate;
 
 class ActivitiesController extends Controller
 {
     protected $activityService;
+    protected $measureService;
 
-    public function __construct(ActivityService $activityService)
+    public function __construct(ActivityService $activityService, MeasureService $measureService)
     {
         $this->activityService = $activityService;
+        $this->measureService = $measureService;
     }
 
 
@@ -35,6 +40,22 @@ class ActivitiesController extends Controller
 
 
     /**
+     * Create exercise.
+     *
+     * @return ['view']
+     */
+
+    public function create()
+    {
+        $teams = $this->activityService->getTeamsList();
+
+        $measures = $this->activityService->measures();
+
+        return view('admin.activities.create', compact('activities', 'measures', 'teams'));
+    }
+
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -44,16 +65,28 @@ class ActivitiesController extends Controller
     {
         $status = $this->activityService->store($request);
 
-        return response()->json(
-            [
+        return redirect()->action('Admin\ActivitiesController@index')
+            ->with([
                 'success' => $status,
+                'status' => $status
+                    ? "success"
+                    : "danger",
                 'message' => $status
-
-                    ? "Activity is successfully added!"
+                    ? "Exercise successfully added!"
                     : "Whoops, looks like something went wrong! Please try again later."
-            ],
-            200
-        );
+            ], 200);
+    }
+
+
+    public function edit(Activity $activity)
+    {
+        UserHelper::checkPermission($activity);
+
+        $teams = $this->activityService->getTeamsList();
+
+        $measures = $this->measureService->index();
+
+        return view('admin.activities.edit', compact('activity', 'measures', 'teams'));
     }
 
 
@@ -64,20 +97,22 @@ class ActivitiesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ActivityUpdate $request, $id)
+    public function update(ActivityUpdate $request, Activity $activity)
     {
+        UserHelper::checkPermission($activity);
+
         $status = $this->activityService->update($request);
 
-        return response()->json(
-            [
+        return redirect()->action('Admin\ActivitiesController@index')
+            ->with([
                 'success' => $status,
+                'status' => $status
+                    ? "success"
+                    : "danger",
                 'message' => $status
-
-                    ? "Activity is successfully updated!"
+                    ? "Exercise successfully updated!"
                     : "Whoops, looks like something went wrong! Please try again later."
-            ],
-            200
-        );
+            ], 200);
     }
 
 
@@ -87,19 +122,21 @@ class ActivitiesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Activity $activity)
     {
-        $status = $this->activityService->delete($id);
+        UserHelper::checkPermission($activity);
 
-        return response()->json(
-            [
+        $status = $this->activityService->delete($activity->id);
+
+        return redirect()->action('Admin\ActivitiesController@index')
+            ->with([
                 'success' => $status,
+                'status' => $status
+                    ? "success"
+                    : "danger",
                 'message' => $status
-
-                    ? "Activity is successfully deleted!"
-                    : "There were difficulties in removing the review"
-            ],
-            200
-        );
+                    ? "Exercise successfully deleted!"
+                    : "Whoops, looks like something went wrong! Please try again later."
+            ], 200);
     }
 }

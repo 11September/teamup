@@ -9,8 +9,8 @@
 
 namespace App\Services;
 
-use App\Measure;
 use App\Team;
+use App\Measure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\ActivityRepository;
@@ -26,6 +26,9 @@ class ActivityService
     {
         if (auth::user()->type == "coach"){
             return $this->activityRepository->getCoachActivities();
+        }elseif(auth::user()->type == "admin")
+        {
+            return $this->activityRepository->getAdminActivities();
         }
 
         return $this->activityRepository->indexWithTeam();
@@ -57,9 +60,8 @@ class ActivityService
     {
         $attributes = $this->prepareData($request);
 
-        return $this->activityRepository->update($request->Id, $attributes);
+        return $this->activityRepository->update($request->id, $attributes);
     }
-
 
     public function delete($id)
     {
@@ -68,10 +70,19 @@ class ActivityService
 
     public function prepareData(Request $request)
     {
-        $attributes['name'] = $request->Name;
-        $attributes['measure_id'] = $request->Units;
-        $attributes['graph_type'] = $request->Graphtype;
-        $attributes['graph_color'] = $request->Colors;
+        $attributes['name'] = $request->name;
+        $attributes['team_id'] = $request->team_id;
+        $attributes['measure_id'] = $request->measure_id;
+        $attributes['graph_type'] = $request->graph_type;
+
+        if (Auth::user()->type == "admin"){
+            $attributes['status'] = "blank";
+        }
+
+        if (Auth::user()->type == "coach"){
+            $attributes['status'] = "custom";
+        }
+
         $attributes['user_id'] = Auth::id();
 
         return $attributes;

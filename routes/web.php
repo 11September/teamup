@@ -42,8 +42,8 @@ Route::group(['namespace' => 'Admin'], function () {
                 });
 
                 Route::group(['as' => 'activity.'], function () {
-                    Route::resource('activities', 'ActivitiesController')->only([
-                        'index', 'store', 'update', 'destroy'
+                    Route::resource('activities', 'ActivitiesController')->except([
+                        'show'
                     ]);
                 });
             });

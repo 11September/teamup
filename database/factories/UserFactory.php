@@ -71,3 +71,21 @@ DB::table('users')->insert([
     'push_chat' => $faker->randomElement(['true', 'false']),
     'status' => "active",
 ]);
+
+DB::table('users')->insert([
+    'first_name' => "Тренер",
+    'last_name' => "Тренерович",
+    'email' => "coach2@admin.com",
+    'email_verified_at' => now(),
+    'password' => '$2y$10$GlmMdEEq9DXG3lGnj2PrU.TeRy88/TXl7ZQFUcaF0hYpgJJwxwiS2', // secret
+    'remember_token' => str_random(10),
+    'type' => "coach",
+    'avatar' => "/avatars/owl-mascot.png",
+    'number_students' => $faker->numberBetween(1, 200),
+    'activation_code' => $faker->bothify('********************'),
+    'expiration_date' => $faker->dateTimeBetween('now', '+1 month'),
+    'push' => $faker->randomElement(['enabled', 'disabled']),
+    'player_id' => null,
+    'push_chat' => $faker->randomElement(['true', 'false']),
+    'status' => "active",
+]);

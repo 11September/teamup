@@ -9,7 +9,6 @@
 
 namespace App\Services;
 
-use App\Repositories\TeamRepository;
 use App\Team;
 use App\User;
 use Illuminate\Http\Request;
@@ -17,6 +16,7 @@ use App\Helpers\PasswordHelper;
 use App\Helpers\SubscribeHelper;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Repositories\TeamRepository;
 use App\Repositories\UserRepository;
 
 class UserService
@@ -33,6 +33,7 @@ class UserService
             $teams = $this->team->getTeamsWithUsersAuth();
 
             $teamUsers = $teams->pluck('users');
+            $users = array();
 
             foreach ($teamUsers as $teamUser) {
                 $users = collect($teamUser);
@@ -49,9 +50,9 @@ class UserService
     {
         $attributes = $this->prepareCreateUserData($request);
 
-        if (Auth::user()->type == "coach") {
-
-        }
+//        if (Auth::user()->type == "coach") {
+//
+//        }
 
         return $this->user->create($attributes);
     }
@@ -68,11 +69,15 @@ class UserService
         $attributes['school'] = $request->school;
 
         if ($request->type == "coach" && $request->activation == "demo") {
+            $attributes['activation'] = "demo";
+            $attributes['activation_code'] = SubscribeHelper::generateActivationCode();
             $attributes['expiration_date'] = SubscribeHelper::getDateDemoSubscribe();
         }
 
-        if ($request->type == "coach" && $request->activation == "demo") {
-            $attributes['expiration_date'] = SubscribeHelper::getDateDemoSubscribe();
+        if ($request->type == "coach" && $request->activation == "full") {
+            $attributes['activation'] = "full";
+            $attributes['activation_code'] = $request->activation_code;
+            $attributes['expiration_date'] = $request->expiration_date;
         }
 
         if ($request->type == "athlete" && $request->activation == "full") {

@@ -23,7 +23,7 @@ class MeasureRepository
 
     public function index()
     {
-        return $this->measure->all();
+        return $this->measure->select('id', 'name')->get();
     }
 
     public function findByAttr($attribute, $value)

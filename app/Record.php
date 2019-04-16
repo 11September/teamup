@@ -8,7 +8,7 @@ class Record extends Model
 {
     protected $table = "records";
 
-    protected $fillable = ['activity_id', 'user_id', 'value', 'notice'];
+    protected $fillable = ['activity_id', 'user_id', 'value', 'date', 'notice'];
 
     public function activities()
     {

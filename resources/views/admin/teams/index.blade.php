@@ -58,7 +58,7 @@
 
                                 @foreach($teams as $team)
                                     <tr>
-                                        <td>{{ $team->id }}</td>
+                                        <td>{{ $loop->iteration }}</td>
                                         <td>{{ $team->name }}</td>
                                         <td>{{ $team->code }}</td>
                                         <td>{{ $team->coach->getFullnameAttribute() }}</td>

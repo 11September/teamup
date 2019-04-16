@@ -18,6 +18,7 @@ class CreateRecordsTable extends Migration
             $table->integer('activity_id')->unsigned();
             $table->integer('user_id')->unsigned();
             $table->float('value', 8, 2);
+            $table->date('date');
             $table->text('notice', 500)->nullable();
 
             $table->timestamps();

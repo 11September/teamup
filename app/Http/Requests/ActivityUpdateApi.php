@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class ActivityUpdate extends FormRequest
+class ActivityUpdateApi extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,22 +25,16 @@ class ActivityUpdate extends FormRequest
     public function rules()
     {
         return [
-            "id" => 'required|int|exists:activities,id',
-            'name' => 'required|string|min:3',
-            'measure_id' => [
+            'name' => 'required|string|min:6',
+            'unit_id' => [
                 'required',
                 'int',
                 'state' => 'exists:measures,id'
             ],
-            'graph_type' =>  [
+            'graphtype' =>  [
                 'required',
                 Rule::in(['straight', 'reverse']),
             ],
-            'status' =>  [
-                'required',
-                Rule::in(['blank', 'custom']),
-            ],
-            'team_id' => 'required|int|exists:teams,id',
         ];
     }
 }

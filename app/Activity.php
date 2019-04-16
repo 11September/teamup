@@ -29,4 +29,13 @@ class Activity extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function scopeFilter($query, $params)
+    {
+        if ($id = array_get($params, 'id')) {
+            $query = $query->where('id', '=', $id);
+        }
+
+        return $query;
+    }
 }

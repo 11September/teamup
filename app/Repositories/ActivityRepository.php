@@ -21,6 +21,16 @@ class ActivityRepository
         $this->activity = $activity;
     }
 
+    public function filter($attributes)
+    {
+        return $this->activity->filter($attributes)->get();
+    }
+
+    public function filterWithUsers($attributes)
+    {
+        return $this->activity->filter($attributes)->get();
+    }
+
     public function create($attributes)
     {
         return $this->activity->create($attributes);
@@ -38,6 +48,24 @@ class ActivityRepository
             ->where('user_id', Auth::id())
             ->where('status', '!=', 'blank')
             ->with(array('team' => function ($query) {
+                $query->select('id', 'name');
+            }))
+            ->with(array('measure' => function ($query) {
+                $query->select('id', 'name');
+            }))
+            ->get();
+    }
+
+    public function getAdminActivities()
+    {
+        return $this->activity
+            ->orderBy('status', 'asc')
+            ->where('user_id', Auth::id())
+            ->where('status', '=', 'blank')
+            ->with(array('team' => function ($query) {
+                $query->select('id', 'name');
+            }))
+            ->with(array('measure' => function ($query) {
                 $query->select('id', 'name');
             }))
             ->get();
@@ -77,6 +105,25 @@ class ActivityRepository
     public function find($id)
     {
         return $this->activity->find($id);
+    }
+
+    public function findByAttr($attribute, $value)
+    {
+        return $this->activity->where($attribute, $value)->first();
+    }
+
+    public function findByAttrAndUserId($attribute, $value, $user_id)
+    {
+        return $this->activity
+            ->where($attribute, $value)
+            ->where('user_id', $user_id)
+            ->with(array('team' => function($query){
+                $query->select('id', 'name');
+            }))
+            ->with(array('measure' => function($query){
+                $query->select('id', 'name');
+            }))
+            ->first();
     }
 
     public function update($id, array $attributes)
