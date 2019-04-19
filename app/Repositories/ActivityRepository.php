@@ -125,12 +125,17 @@ class ActivityRepository
         return $this->activity->find($id);
     }
 
-    public function findWithMeasure($id)
+    public function findWithMeasureAndGoal($id)
     {
         return $this->activity
             ->select('id', 'name', 'measure_id', 'graph_type')
             ->where('id', $id)
-            ->with('measure')
+            ->with(array('measure' => function($query){
+                $query->select('id', 'name');
+            }))
+            ->with(array('goal' => function($query){
+                $query->select('id', 'activity_id', 'goal');
+            }))
             ->first($id);
     }
 

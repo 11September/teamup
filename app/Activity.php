@@ -35,6 +35,11 @@ class Activity extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function goal()
+    {
+        return $this->hasOne(ActivityGoal::class);
+    }
+
     public function scopeFilter($query, $params)
     {
         if ($id = array_get($params, 'id')) {

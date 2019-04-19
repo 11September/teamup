@@ -41,7 +41,7 @@ class ReportsController extends Controller
 
         $report->load('user');
 
-        $activity = $this->activityService->find($report->activity_id) ;
+        $activity = $this->activityService->findWithMeasureAndGoal($report->activity_id);
 
         $measure = $this->activityService->getMeasureByActivityId($report->activity_id);
 

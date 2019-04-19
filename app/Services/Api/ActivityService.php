@@ -31,7 +31,7 @@ class ActivityService
 
     public function getActivityWithMeasure($id)
     {
-        return $this->activityRepository->findWithMeasure($id);
+        return $this->activityRepository->findWithMeasureAndGoal($id);
     }
 
     public function store(Request $request)

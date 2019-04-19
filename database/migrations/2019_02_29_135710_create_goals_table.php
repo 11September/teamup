@@ -13,10 +13,10 @@ class CreateGoalsTable extends Migration
      */
     public function up()
     {
-        Schema::create('goals', function (Blueprint $table) {
+        Schema::create('activity_user_goals', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id')->unsigned();
             $table->integer('activity_id')->unsigned();
+            $table->integer('user_id')->unsigned();
             $table->float('goal', 8, 2);
 
             $table->timestamps();
@@ -33,6 +33,6 @@ class CreateGoalsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('goals');
+        Schema::dropIfExists('activity_user_goals');
     }
 }

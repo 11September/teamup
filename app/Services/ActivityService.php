@@ -38,6 +38,11 @@ class ActivityService
         return $this->activityRepository->find($id);
     }
 
+    public function findWithMeasureAndGoal($id)
+    {
+        return $this->activityRepository->findWithMeasureAndGoal($id);
+    }
+
     public function activityTeam(Request $request)
     {
         return $this->activityRepository->filter($request->all());

@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Goal extends Model
+class ActivityGoal extends Model
 {
-    protected $table = 'goals';
+    protected $table = 'activity_user_goals';
 
     protected $fillable = ['user_id', 'activity_id', 'goal'];
 
