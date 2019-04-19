@@ -10,8 +10,10 @@
 namespace App\Repositories;
 
 use App\Report;
+use Illuminate\Support\Facades\Auth;
 
-class ReportsRepository{
+class ReportsRepository
+{
 
     protected $report;
 
@@ -25,13 +27,39 @@ class ReportsRepository{
         return $this->report->first();
     }
 
+    public function indexOwner()
+    {
+        return $this->report
+            ->with(array(
+                'user' => function ($query) {
+                    $query->select('id', 'first_name', 'last_name');
+                }, 'team' => function ($query) {
+                    $query->select('id', 'name');
+                },
+                'activity' => function ($query) {
+                    $query->select('id', 'name');
+                }))
+            ->where('owner_id', '=', Auth::id())
+            ->get();
+    }
+
     public function first()
     {
         return $this->report->first();
     }
 
+    public function last()
+    {
+        return $this->report->latest()->first();
+    }
+
     public function find($id)
     {
         return $this->report->find($id);
+    }
+
+    public function store($attributes)
+    {
+        return $this->report->create($attributes);
     }
 }

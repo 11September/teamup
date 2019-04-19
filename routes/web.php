@@ -35,15 +35,20 @@ Route::group(['namespace' => 'Admin'], function () {
                     ]);
                 });
 
+                Route::get('/reports/download/{link}', 'ReportsController@download')->name('download_pdf');
                 Route::group(['as' => 'reports.'], function () {
-                    Route::resource('reports', 'ReportsController')->except([
-                        'show'
-                    ]);
+                    Route::resource('reports', 'ReportsController');
                 });
 
                 Route::group(['as' => 'activity.'], function () {
                     Route::resource('activities', 'ActivitiesController')->except([
                         'show'
+                    ]);
+                });
+
+                Route::group(['as' => 'records.'], function () {
+                    Route::resource('records', 'RecordsController')->only([
+                        'index', 'store'
                     ]);
                 });
             });

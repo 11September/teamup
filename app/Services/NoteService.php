@@ -11,7 +11,6 @@ namespace App\Services;
 
 use App\Helpers\UserHelper;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use App\Repositories\NoteRepository;
 
 class NoteService

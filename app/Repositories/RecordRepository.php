@@ -9,6 +9,9 @@
 namespace App\Repositories;
 
 use App\Record;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class RecordRepository
 {
@@ -20,6 +23,48 @@ class RecordRepository
         $this->record = $record;
     }
 
+    public function getUsersRecords($user_id)
+    {
+        return $this->record
+            ->select('id', 'activity_id', 'user_id')
+            ->where('user_id', $user_id)
+            ->distinct()
+            ->get(['activity_id']);
+    }
+
+    public function getUsersRecordsToReport($user_id, $activity_id, $sort, $format = "M")
+    {
+        $now = Carbon::now();
+        $from = $now->subYear();
+        $to = Carbon::now();
+
+        return $this->record
+            ->where('user_id', $user_id)
+            ->where('activity_id', $activity_id)
+            ->whereBetween('date', [$from, $to])
+            ->orderBy('date')
+            ->orderBy('value', $sort)
+            ->orderBy('date', 'asc')
+            ->get()
+            ->groupBy(function ($val) use ($format) {
+                return Carbon::parse($val->date)->format($format);
+            });
+    }
+
+    public function getUsersRecordsToReportApi(Request $request)
+    {
+        $format_group = $request->format_group ? $request->format_group : "M";
+
+        return $this->record
+            ->where('user_id', Auth::id())
+            ->where('activity_id', $request->activity_id)
+            ->filter($request)
+            ->get()
+            ->groupBy(function ($val) use ($format_group) {
+                return Carbon::parse($val->date)->format($format_group);
+            });
+    }
+
     public function create($attributes)
     {
         return $this->record->create($attributes);
@@ -28,21 +73,6 @@ class RecordRepository
     public function all()
     {
         return $this->record->latest()->get();
-    }
-
-    public function find($id)
-    {
-        return $this->record->find($id);
-    }
-
-    public function findEmail($email)
-    {
-        return $this->record->where('email', $email)->first();
-    }
-
-    public function findByAttr($attribute, $value)
-    {
-        return $this->record->where($attribute, $value)->first();
     }
 
     public function update($id, array $attributes)

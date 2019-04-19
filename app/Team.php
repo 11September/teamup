@@ -19,4 +19,14 @@ class Team extends Model
     {
         return $this->belongsToMany(User::class, 'team_user')->withTimestamps();
     }
+
+    public function activities()
+    {
+        return $this->hasMany(Activity::class);
+    }
+
+    public function reports()
+    {
+        return $this->hasMany(Report::class);
+    }
 }

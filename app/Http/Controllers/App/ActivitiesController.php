@@ -5,6 +5,7 @@ namespace App\Http\Controllers\App;
 use App\Activity;
 use App\Helpers\UserHelper;
 use Illuminate\Http\Request;
+use App\Services\TeamService;
 use App\Helpers\SettingsHelper;
 use App\Http\Controllers\Controller;
 use App\Services\Api\MeasureService;
@@ -16,11 +17,13 @@ class ActivitiesController extends Controller
 {
     protected $activityService;
     protected $measureService;
+    protected $teamService;
 
-    public function __construct(ActivityService $activityService, MeasureService $measureService)
+    public function __construct(ActivityService $activityService, MeasureService $measureService, TeamService $teamService)
     {
         $this->activityService = $activityService;
         $this->measureService = $measureService;
+        $this->teamService = $teamService;
     }
 
 

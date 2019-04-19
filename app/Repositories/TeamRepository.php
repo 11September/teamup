@@ -23,6 +23,18 @@ class TeamRepository
         $this->team = $team;
     }
 
+    public function index()
+    {
+        return $this->team->all();
+    }
+
+    public function getAllCoachTeams()
+    {
+        return $this->team
+            ->where('user_id', Auth::id())
+            ->get();
+    }
+
     public function getAllWithRelationCoach()
     {
         return $this->team->with(array(
@@ -32,33 +44,23 @@ class TeamRepository
         )->get();
     }
 
+    public function getFirstTeamByUserId($id)
+    {
+        return $this->team
+            ->whereHas('users', function ($query) use ($id) {
+                $query->where('user_id', $id);
+            })->first();
+    }
+
     public function getAllCoachesTeamsWithRelation($coach_id)
     {
         return $this->team
             ->where('user_id', $coach_id)
             ->with(array(
-                'coach' => function ($query) {
-                    $query->select('id', 'first_name', 'last_name');
-                })
-        )->get();
-    }
-
-    public function index()
-    {
-        return $this->team->all();
-    }
-
-    public function getTeamsWithUsersAuth()
-    {
-        return $this->team
-            ->where('user_id', Auth::id())
-            ->with('users')
-            ->get();
-    }
-
-    public function first()
-    {
-        return $this->team->first();
+                    'coach' => function ($query) {
+                        $query->select('id', 'first_name', 'last_name');
+                    })
+            )->get();
     }
 
     public function find($id)

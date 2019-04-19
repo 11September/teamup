@@ -2,11 +2,10 @@
 
 namespace App\Providers;
 
-use App\Activity;
-use App\User;
 use App\Team;
 use App\Feedback;
 use App\Helpers\AvatarsHelper;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
 
 class ViewServiceProvider extends ServiceProvider
@@ -35,11 +34,15 @@ class ViewServiceProvider extends ServiceProvider
 
         view()->composer('partials.report_filter', function ($view) {
 
-            $teams = Team::all();
-            $athlets = User::all();
-            $activities = Activity::all();
+            if (Auth::user()->type == "coach") {
+                $teams = Team::where('user_id', Auth::id())->get();
+            }else {
+                $teams = Team::all();
+            }
 
-            $view->with(['teams' => $teams, 'athlets' => $athlets, 'activities' => $activities]);
+            $teams->first()->load('users');
+
+            $view->with(['teams' => $teams]);
         });
     }
 

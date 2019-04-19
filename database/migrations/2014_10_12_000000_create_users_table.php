@@ -25,7 +25,6 @@ class CreateUsersTable extends Migration
 
             $table->string('avatar')->nullable();
             $table->smallInteger('number_students')->nullable();
-            $table->smallInteger('number_students_current')->nullable()->default(0);
             $table->string('activation_code', 50)->nullable();
             $table->date('expiration_date', 50)->nullable();
             $table->enum('activation', ['full', 'demo', 'expired'])->default('demo');

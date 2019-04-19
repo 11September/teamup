@@ -9,11 +9,11 @@
 
 namespace App\Services;
 
-use App\Repositories\ActivityRepository;
-use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
-use App\Repositories\TeamRepository;
 use Illuminate\Support\Facades\Auth;
+use App\Repositories\UserRepository;
+use App\Repositories\TeamRepository;
+use App\Repositories\ActivityRepository;
 
 class TeamService
 {
@@ -31,6 +31,19 @@ class TeamService
         }else{
             $teams = $this->team->getAllWithRelationCoach();
         }
+
+        return $teams;
+    }
+
+    public function reportIndex()
+    {
+        if (Auth::user()->type == "coach") {
+            $teams = $this->team->getAllCoachTeams();
+        }else {
+            $teams = $this->team->index();
+        }
+
+        $teams->first()->load('users');
 
         return $teams;
     }

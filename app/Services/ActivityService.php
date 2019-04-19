@@ -24,19 +24,35 @@ class ActivityService
 
     public function index()
     {
-        if (auth::user()->type == "coach"){
+        if (auth::user()->type == "coach") {
             return $this->activityRepository->getCoachActivities();
-        }elseif(auth::user()->type == "admin")
-        {
+        } elseif (auth::user()->type == "admin") {
             return $this->activityRepository->getAdminActivities();
         }
 
         return $this->activityRepository->indexWithTeam();
     }
 
+    public function find($id)
+    {
+        return $this->activityRepository->find($id);
+    }
+
+    public function activityTeam(Request $request)
+    {
+        return $this->activityRepository->filter($request->all());
+    }
+
     public function blankActivities()
     {
         return $this->activityRepository->getBlankActivities();
+    }
+
+    public function getMeasureByActivityId($id)
+    {
+        $activity = $this->activityRepository->getMeasureByActivityId($id);
+
+        return $activity->measure;
     }
 
     public function getTeamsList()
@@ -75,11 +91,11 @@ class ActivityService
         $attributes['measure_id'] = $request->measure_id;
         $attributes['graph_type'] = $request->graph_type;
 
-        if (Auth::user()->type == "admin"){
+        if (Auth::user()->type == "admin") {
             $attributes['status'] = "blank";
         }
 
-        if (Auth::user()->type == "coach"){
+        if (Auth::user()->type == "coach") {
             $attributes['status'] = "custom";
         }
 

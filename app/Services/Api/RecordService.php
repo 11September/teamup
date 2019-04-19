@@ -9,17 +9,45 @@
 
 namespace App\Services\Api;
 
-
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App\Repositories\RecordRepository;
+use App\Repositories\ActivityRepository;
 
 class RecordService
 {
-    public function __construct(RecordRepository $recordRepository)
+    public function __construct(RecordRepository $recordRepository, ActivityRepository $activityRepository)
     {
         $this->recordRepo = $recordRepository;
+        $this->activityRepo = $activityRepository;
+    }
+
+    public function getUserRecords(Request $request)
+    {
+        $user_id = $request->user_id;
+
+        $records = $this->recordRepo->getUsersRecords($user_id);
+
+        $ids = array();
+        $i = 0;
+        foreach ($records as $record) {
+            $ids[$i] = $record->id;
+            $i++;
+        }
+
+        return $this->activityRepo->getActivitiesIds($ids);
+    }
+
+    public function index()
+    {
+        return $this->recordRepo->all();
+    }
+
+    public function getRecordsByReportId(Request $request)
+    {
+        $request = $this->checkValidDataFilter($request);
+
+        return $this->recordRepo->getUsersRecordsToReportApi($request);
     }
 
     public function store(Request $request)
@@ -45,5 +73,33 @@ class RecordService
         $attributes['notice'] = $request->notice;
 
         return $attributes;
+    }
+
+    public function checkValidDataFilter(Request $request)
+    {
+        $now = Carbon::now();
+        $to = Carbon::now();
+        $subYear = $to->subYear();
+
+        if ($request->date_from && $request->date_to) {
+            if (!$request->date_from instanceof Carbon) {
+                $date_from = Carbon::createFromFormat('Y-m-d', $request->date_from);
+            } else {
+                $date_from = $request->date_from;
+            }
+
+            if (!$request->date_to instanceof Carbon) {
+                $date_to = Carbon::createFromFormat('Y-m-d', $request->date_to);
+            } else {
+                $date_to = $request->date_to;
+            }
+
+            if ($date_from > $date_to || $date_to < $date_from) {
+                $request->merge(['date_from' => $subYear]);
+                $request->merge(['date_to' => $now]);
+            }
+        }
+
+        return $request;
     }
 }

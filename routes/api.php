@@ -65,5 +65,11 @@ Route::namespace('App')->group(function () {
             ]);
         });
 
+        Route::group(['prefix' => 'reports'], function () {
+            Route::resource('records', 'RecordsController')->only([
+                'index', 'show', 'store'
+            ]);
+        });
+
     });
 });

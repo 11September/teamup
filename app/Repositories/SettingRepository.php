@@ -31,11 +31,6 @@ class SettingRepository{
         return $this->setting->first();
     }
 
-    public function find($id)
-    {
-        return $this->setting->find($id);
-    }
-
     public function updateOrCreate($id, array $attributes)
     {
         return DB::table('settings')->updateOrInsert(['id' => $id], $attributes);

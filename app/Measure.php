@@ -8,7 +8,12 @@ class Measure extends Model
 {
     protected $table = "measures";
 
+    protected $fillable = ['name'];
+
     public $timestamps = true;
 
-    protected $fillable = ['name'];
+    public function activities()
+    {
+        return $this->hasMany(Activity::class);
+    }
 }

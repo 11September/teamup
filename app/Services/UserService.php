@@ -9,8 +9,7 @@
 
 namespace App\Services;
 
-use App\Team;
-use App\User;
+use App\UserCoach;
 use Illuminate\Http\Request;
 use App\Helpers\PasswordHelper;
 use App\Helpers\SubscribeHelper;
@@ -27,34 +26,48 @@ class UserService
         $this->team = $team;
     }
 
+    protected $status = false;
+
     public function index()
     {
         if (Auth::user()->type == "coach") {
-            $teams = $this->team->getTeamsWithUsersAuth();
-
-            $teamUsers = $teams->pluck('users');
-            $users = array();
-
-            foreach ($teamUsers as $teamUser) {
-                $users = collect($teamUser);
-            }
-
-        }else{
+            $users = $this->user->belongsToCoach();
+        } else {
             $users = $this->user->all();
         }
 
         return $this->addStatusFieldUsers($users);
     }
 
+    public function getUsersInTeam(Request $request)
+    {
+        $team_id = $request->team_id;
+
+        return $this->user->getAllUsersInTeam($team_id);
+    }
+
+    public function getCountCoachAthlets()
+    {
+        return count($this->user->belongsToCoach());
+    }
+
     public function create(Request $request)
     {
         $attributes = $this->prepareCreateUserData($request);
 
-//        if (Auth::user()->type == "coach") {
-//
-//        }
+        $this->status = $this->user->create($attributes);
 
-        return $this->user->create($attributes);
+        if ($this->status && Auth::user()->type == "coach") {
+
+            $user = $this->user->last();
+
+            $userCoach = new UserCoach();
+            $userCoach->user_id = $user->id;
+            $userCoach->coach_id = Auth::id();
+            $userCoach->save();
+        }
+
+        return $this->status;
     }
 
     public function prepareCreateUserData(Request $request)
@@ -109,6 +122,13 @@ class UserService
 
     public function delete($id)
     {
+        if (Auth::user()->type == "coach") {
+            $team = $this->team->getFirstTeamByUserId($id);
+            $team->users()->detach($id);
+
+            UserCoach::where('user_id', $id)->where('coach_id', Auth::id())->delete();
+        }
+
         return $this->user->delete($id);
     }
 

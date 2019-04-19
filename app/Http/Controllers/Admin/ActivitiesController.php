@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Activity;
 use App\Helpers\UserHelper;
+use Illuminate\Http\Request;
 use App\Services\ActivityService;
 use App\Services\Api\MeasureService;
 use App\Http\Controllers\Controller;
@@ -27,8 +28,14 @@ class ActivitiesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        if($request->ajax()){
+            $activities = $this->activityService->activityTeam($request);
+
+            return response()->json([ 'data'=> $activities, 'success' => true]);
+        }
+
         $activities = $this->activityService->index();
 
         $teams = $this->activityService->getTeamsList();

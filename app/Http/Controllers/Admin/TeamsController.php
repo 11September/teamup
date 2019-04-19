@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Team;
 use App\Helpers\UserHelper;
+use Illuminate\Http\Request;
 use App\Services\UserService;
 use App\Services\TeamService;
 use App\Http\Requests\TeamStore;
@@ -24,8 +25,14 @@ class TeamsController extends Controller
         $this->activityService = $activityService;
     }
 
-    public function index()
+    public function index(Request $request)
     {
+        if($request->ajax()){
+            $users = $this->userService->getUsersInTeam($request);
+
+            return response()->json(['data'=> $users, 'success' => true]);
+        }
+
         $teams = $this->teamService->index();
 
         return view('admin.teams.index', compact('teams'));

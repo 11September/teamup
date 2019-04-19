@@ -3647,3 +3647,34 @@ blockquote p{
     width: 50%;
     padding: 0 5px;
 }
+
+.wrapper-all-user-records-show-graph .report-item-holder{
+    padding: 5px 10px 5px 10px;
+}
+
+.report-item-holder{
+    position: relative;
+    border: 1px solid #303641;
+    padding: 5px 40px 5px 10px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+}
+
+.report-item-holder:hover{
+    border: 1px solid #8063f5;
+}
+
+.report-item-pdf-icon{
+    position: absolute;
+    top: 15px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+}
+
+.report-item-pdf-icon i{
+    font-size: 30px;
+    color: red;
+}
+
+

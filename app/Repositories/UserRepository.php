@@ -9,10 +9,10 @@
 namespace App\Repositories;
 
 use App\User;
+use Illuminate\Support\Facades\Auth;
 
 class UserRepository
 {
-
     protected $user;
 
     public function __construct(User $user)
@@ -25,16 +25,24 @@ class UserRepository
         return $this->user->create($attributes);
     }
 
+    public function getAllUsersInTeam($team_id)
+    {
+        return $this->user
+            ->select('id', 'first_name', 'last_name')
+            ->whereHas('teams', function ($query) use ($team_id) {
+                $query->where('team_id', $team_id);
+            })
+            ->get();
+    }
+
     public function all()
     {
         return $this->user->latest()->get();
     }
 
-    public function allCoachAthlets()
+    public function last()
     {
-        return $this->user
-            ->where()
-            ->latest()->get();
+        return $this->user->latest()->first();
     }
 
     public function find($id)
@@ -81,5 +89,13 @@ class UserRepository
             ->where('type', 'athlete')
             ->where('status', 'active')
             ->get();
+    }
+
+    public function belongsToCoach()
+    {
+        return $this->user
+            ->whereHas('belongsToCoach', function ($query) {
+                $query->where('coach_id', Auth::id());
+            })->get();
     }
 }

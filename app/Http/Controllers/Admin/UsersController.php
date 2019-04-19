@@ -7,16 +7,19 @@ use App\Helpers\UserHelper;
 use Illuminate\Http\Request;
 use App\Services\UserService;
 use App\Http\Requests\UserStore;
+use App\Services\Api\RecordService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserUpdatePassword;
 
 class UsersController extends Controller
 {
     protected $userservice;
+    protected $recordService;
 
-    public function __construct(UserService $userservice)
+    public function __construct(UserService $userservice, RecordService $recordService)
     {
         $this->userservice = $userservice;
+        $this->recordService = $recordService;
     }
 
 
@@ -25,8 +28,14 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        if($request->ajax()){
+            $users = $this->recordService->getUserRecords($request);
+
+            return response()->json(['data'=> $users, 'success' => true]);
+        }
+
         $users = $this->userservice->index();
 
         return view('admin.users.index', compact('users'));
@@ -40,7 +49,15 @@ class UsersController extends Controller
      */
     public function create()
     {
-        return view('admin.users.create');
+        if (UserHelper::CanCoachCreateNewAthlete()){
+            return view('admin.users.create');
+        }else{
+            return redirect()->back()->with([
+                'success' => true,
+                'status' => "danger",
+                'message' => "You have too many athletes attached. You can not create a new athlete!"
+            ], 200);
+        }
     }
 
 

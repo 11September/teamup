@@ -10,8 +10,6 @@
 namespace App\Services;
 
 use Illuminate\Http\Request;
-use App\Helpers\UserHelper;
-use Illuminate\Support\Facades\Log;
 use App\Repositories\FeedbackRepository;
 
 class FeedbackService

@@ -25,6 +25,11 @@ class Activity extends Model
         return $this->hasMany(Record::class);
     }
 
+    public function reports()
+    {
+        return $this->hasMany(Report::class);
+    }
+
     public function coach()
     {
         return $this->belongsTo(User::class);
@@ -34,6 +39,10 @@ class Activity extends Model
     {
         if ($id = array_get($params, 'id')) {
             $query = $query->where('id', '=', $id);
+        }
+
+        if ($id = array_get($params, 'team_id')) {
+            $query = $query->where('team_id', '=', $params['team_id']);
         }
 
         return $query;

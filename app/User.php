@@ -58,12 +58,10 @@ class User extends Authenticatable
         return $this->first_name . ' '. $this->last_name;
     }
 
-    use Relations\HasOne\Goal;
-
-//    public function goal()
-//    {
-//        return $this->hasOne(Goal::class);
-//    }
+    public function goal()
+    {
+        return $this->hasOne(Goal::class);
+    }
 
     public function notes()
     {
@@ -75,9 +73,19 @@ class User extends Authenticatable
         return $this->hasMany(Record::class);
     }
 
+    public function reports()
+    {
+        return $this->hasMany(Report::class);
+    }
+
     public function teams()
     {
         return $this->belongsToMany(Team::class);
+    }
+
+    public function belongsToCoach()
+    {
+        return $this->belongsTo(UserCoach::class, 'id', 'user_id');
     }
 
     public static function selectAll()

@@ -9,12 +9,29 @@
 
 namespace App\Helpers;
 
+use App\User;
 use Carbon\Carbon;
+use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Auth;
-use PhpParser\Node\Expr\Cast\Object_;
 
 class UserHelper
 {
+    public static function CanCoachCreateNewAthlete()
+    {
+        if (Auth::user()->type == "coach") {
+            $userRepo = new UserRepository(new User());
+            $count = count($userRepo->belongsToCoach());
+
+            if ($count < Auth::user()->number_students){
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            return true;
+        }
+    }
+
     public static function isActive($user)
     {
         if ($user->status != "active"){
@@ -40,6 +57,19 @@ class UserHelper
             return true;
         }else{
             if (isset($entity->user_id) && $entity->user_id == Auth::id()){
+                return true;
+            }
+        }
+
+        abort(403, 'Forbidden');
+    }
+
+    public static function checkPermissionOwnerReport($entity)
+    {
+        if (Auth::user()->type == "admin"){
+            return true;
+        }else{
+            if (isset($entity->owner_id) && $entity->owner_id == Auth::id()){
                 return true;
             }
         }

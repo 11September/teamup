@@ -7,7 +7,7 @@
  * Time: 16:31
  */
 
-namespace App\Services;
+namespace App\Services\Api;
 
 use Carbon\Carbon;
 use App\Helpers\GrapHelper;
@@ -24,16 +24,6 @@ class ReportsService
         $this->record = $recordRepository;
     }
 
-    public function index()
-    {
-        return true;
-    }
-
-    public function getOwnerReports()
-    {
-        return $this->report->indexOwner();
-    }
-
     public function getRecordsByReportId($user_id, $activity_id, $type_graph)
     {
         $type_graph = GrapHelper::convertActivityTypeToQuery($type_graph);
@@ -46,11 +36,6 @@ class ReportsService
         $attributes = $this->prepareData($request);
 
         return $this->report->store($attributes);
-    }
-
-    public function show()
-    {
-        return $this->report->last();
     }
 
     public function prepareData(Request $request)

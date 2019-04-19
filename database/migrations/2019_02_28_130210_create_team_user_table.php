@@ -21,7 +21,7 @@ class CreateTeamUserTable extends Migration
 
             $table->timestamps();
 
-            $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
+            $table->foreign('team_id')->references('id')->on('teams');
             $table->foreign('user_id')->references('id')->on('users');
         });
     }

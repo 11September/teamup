@@ -9,15 +9,14 @@
 
 namespace App\Services;
 
+use App\Team;
 use App\Helpers\UserHelper;
 use App\Mail\ResetPassword;
-use App\Team;
 use Illuminate\Http\Request;
 use App\Helpers\AvatarsHelper;
 use App\Helpers\PasswordHelper;
 use App\Mail\ResetPasswordCode;
 use App\Helpers\SubscribeHelper;
-use Illuminate\Support\Facades\Log;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Auth;
 

@@ -20,6 +20,10 @@ class DatabaseSeeder extends Seeder
             MeasuresSeeder::class,
             TeamSeeder::class,
             ActivitySeeder::class,
+
+            TeamUserSeeder::class,
+
+            RecordsSeeder::class,
             ReportsSeeder::class,
         ]);
 
