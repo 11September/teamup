@@ -28,8 +28,8 @@ $factory->define(App\Record::class, function (Faker $faker) {
     return [
         'activity_id' => Activity::all()->random()->id,
 //        'user_id' => User::all()->random()->id,
-        'user_id' => 2,
-        'value' => $faker->randomDigit,
+        'user_id' => 4,
+        'value' => $faker->randomFloat(null, 0.1, 20),
         'date' => $date->format('Y-m-d'),
         'notice' => $faker->sentence(),
     ];

@@ -60,7 +60,7 @@ class User extends Authenticatable
 
     public function goal()
     {
-        return $this->hasOne(Goal::class);
+        return $this->hasMany(ActivityGoal::class, 'user_id', 'id');
     }
 
     public function notes()

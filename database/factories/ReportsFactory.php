@@ -22,7 +22,7 @@ $factory->define(Report::class, function (Faker $faker) {
         'team_id' => $user_id = Team::all()->random()->id,
         'user_id' => User::all()->random()->id,
         'activity_id' => Activity::all()->random()->id,
-        'range' => $faker->monthName,
+        'range' => $faker->randomElement(['week', 'month', 'year']),
         'date' => $faker->date(),
         'link' => "app/public/reports/1.pdf",
         'owner_id' => $user_id,

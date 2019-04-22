@@ -9,8 +9,10 @@
 
 namespace App\Services;
 
+use App\Report;
+use App\Activity;
 use Carbon\Carbon;
-use App\Helpers\GrapHelper;
+use App\Helpers\GraphHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\RecordRepository;
@@ -34,11 +36,22 @@ class ReportsService
         return $this->report->indexOwner();
     }
 
-    public function getRecordsByReportId($user_id, $activity_id, $type_graph)
+    public function getRecordsByReportId(Report $report, Activity $activity)
     {
-        $type_graph = GrapHelper::convertActivityTypeToQuery($type_graph);
+        $user_id = $report->user->id;
+        $activity_id = $report->activity_id;
+        $type_graph = $activity->graph_type;
+        $range = $report->range;
 
-        return $this->record->getUsersRecordsToReport($user_id, $activity_id, $type_graph);
+//        $type_graph = GraphHelper::convertActivityTypeToQuery($type_graph);
+        $graph_format = GraphHelper::convertActivityRangeToFormat($range);
+
+        $period_start = GraphHelper::detectStartDate($range);
+//        $period_end = GraphHelper::detectEndDate($range);
+
+        $records = $this->record->getUsersRecordsToReport($user_id, $activity_id, $graph_format, $period_start);
+
+        return $records;
     }
 
     public function store(Request $request)
@@ -64,6 +77,24 @@ class ReportsService
         $attributes['owner_id'] = Auth::id();
 
         return $attributes;
+    }
+
+    public function prepareDataAfter($range, $records)
+    {
+        if ($range == "month"){
+            foreach ($records as $key => $value) {
+
+//                dd($key, $value->first()->date);
+
+                $date = Carbon::createFromFormat('d-m-Y', $value->first()->date)->isoFormat('MMM DD');
+
+                $records[ucfirst($key)] = $value;
+                unset($records[$key]);
+            }
+        }
+
+
+        return $records;
     }
 }
 

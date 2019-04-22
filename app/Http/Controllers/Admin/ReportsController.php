@@ -45,9 +45,13 @@ class ReportsController extends Controller
 
         $measure = $this->activityService->getMeasureByActivityId($report->activity_id);
 
-        $records = $this->reportsService->getRecordsByReportId($report->user->id, $report->activity_id, $activity->graph_type);
+        $records = $this->reportsService->getRecordsByReportId($report, $activity);
 
-        return view('admin.reports.show', compact('reports', 'report', 'records', 'measure'));
+//        dd($activity);
+
+//        dd($records);/
+
+        return view('admin.reports.show', compact('reports', 'report', 'records', 'measure', 'activity'));
     }
 
     public function store(ReportStore $request)

@@ -18,7 +18,7 @@ class CreateReportsTable extends Migration
             $table->integer('team_id')->nullable()->unsigned();
             $table->integer('user_id')->nullable()->unsigned();
             $table->integer('activity_id')->nullable()->unsigned();
-            $table->string('range');
+            $table->enum('range', ['week', 'month', 'year']);
             $table->date('date');
             $table->string('link');
             $table->integer('owner_id')->unsigned();

@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             TeamSeeder::class,
             ActivitySeeder::class,
 
+            ActivityGoalSeeder::class,
             TeamUserSeeder::class,
 
             RecordsSeeder::class,
@@ -64,7 +65,5 @@ class DatabaseSeeder extends Seeder
             'client_id' => 3,
             'created_at' => \Carbon\Carbon::now()
         ]);
-
-
     }
 }

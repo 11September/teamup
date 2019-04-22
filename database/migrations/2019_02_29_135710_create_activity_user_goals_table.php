@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateGoalsTable extends Migration
+class CreateActivityUserGoalsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -21,8 +21,8 @@ class CreateGoalsTable extends Migration
 
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('activity_id')->references('id')->on('activities');
+//            $table->foreign('activity_id')->references('id')->on('activities');
+//            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 

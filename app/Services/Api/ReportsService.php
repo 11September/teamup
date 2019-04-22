@@ -10,7 +10,7 @@
 namespace App\Services\Api;
 
 use Carbon\Carbon;
-use App\Helpers\GrapHelper;
+use App\Helpers\GraphHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\RecordRepository;
@@ -26,9 +26,9 @@ class ReportsService
 
     public function getRecordsByReportId($user_id, $activity_id, $type_graph)
     {
-        $type_graph = GrapHelper::convertActivityTypeToQuery($type_graph);
+        $type_graph = GraphHelper::convertActivityTypeToQuery($type_graph);
 
-        return $this->record->getUsersRecordsToReport($user_id, $activity_id, $type_graph);
+        return $this->record->getUsersRecordsToReportApi($user_id, $activity_id, $type_graph);
     }
 
     public function store(Request $request)

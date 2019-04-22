@@ -3677,4 +3677,51 @@ blockquote p{
     color: red;
 }
 
+.wrapper-accordion .card .card-body .card-body-record{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
 
+.card-body-record span{
+    font-size: larger;
+    font-weight: bolder;
+}
+
+.wrapper-activity-info{
+    margin: 0 0 40px 0;
+}
+
+
+.wrapper-activity-info .prc-head h4{
+    padding: 15px 0;
+}
+
+.wrapper-activity-info .prc-list{
+    font-size: 16px;
+    padding: 10px 0;
+    border: 1px solid #805ff5;
+}
+
+.wrapper-activity-info .prc-list li p{
+    margin: 10px 0;
+    display: block;
+    font-size: 16px;
+    letter-spacing: 0;
+    color: #6d6969;
+}
+
+.wrapper-activity-info .prc-list li p span{
+    color: #3e3b3b;
+    font-size: 18px;
+    font-weight: bolder;
+}
+
+span.attention{
+    color: #dc3545 !important;
+}
+
+span.warning{
+    color: #856404 !important;
+}

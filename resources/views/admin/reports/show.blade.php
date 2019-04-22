@@ -38,8 +38,6 @@
                 <div class="card">
 
                     <div class="card-body">
-                        <h4 class="header-title">Teams list</h4>
-
                         <div class="row">
                             <div class="col-md-3">
                                 <h4 class="header-title">Generate new report</h4>
@@ -48,72 +46,55 @@
                             </div>
 
                             <div class="col-md-3">
-                                <h4 class="header-title">All records {{ $report->user->getFullNameAttribute() }}</h4>
+                                <h4 class="header-title">All records - {{ $report->user->getFullNameAttribute() }}</h4>
 
-                                <a data-toggle="collapse" href="#collapse">Show all records</a>
+                                @if($records && count($records) > 0)
+                                    <div class="wrapper-accordion">
 
-                                <div id="collapse" class="wrapper-all-user-records-show-graph panel-collapse collapse">
-                                    @if($records && count($records) > 0)
-                                        @foreach($records as $record)
-                                            <div class="wrapper-one-report-item">
-                                                <div class="report-item-holder">
-                                                    {{--                                                    <p>{{ $loop->iteration .") " . " " . $measure->name }}</p>--}}
-                                                    {{--<p>{{ $record->notice }}</p>--}}
-                                                </div>
-                                            </div>
-                                        @endforeach
-                                    @endif
-                                </div>
+                                        @include('partials.allRecords')
 
-                                <div id="accordion4" class="according accordion-s3 gradiant-bg">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <a class="card-link" data-toggle="collapse" href="#accordion41">Collapsible
-                                                Group
-                                                Item #1</a>
-                                        </div>
-                                        <div id="accordion41" class="collapse show" data-parent="#accordion4">
-                                            <div class="card-body">
-                                                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nemo eaque
-                                                porro alias assumenda accusamus incidunt odio molestiae maxime quo atque
-                                                in et quaerat, vel unde aliquam aperiam quidem consectetur omnis dicta
-                                                officiis? Dolorum, error dolorem!
-                                            </div>
-                                        </div>
                                     </div>
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <a class="collapsed card-link" data-toggle="collapse" href="#accordion42">Collapsible
-                                                Group Item #2</a>
-                                        </div>
-                                        <div id="accordion42" class="collapse" data-parent="#accordion4">
-                                            <div class="card-body">
-                                                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nemo eaque
-                                                porro alias assumenda accusamus incidunt odio molestiae maxime quo atque
-                                                in et quaerat, vel unde aliquam aperiam quidem consectetur omnis dicta
-                                                officiis? Dolorum, error dolorem!
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <a class="collapsed card-link" data-toggle="collapse" href="#accordion43">Collapsible
-                                                Group Item #3</a>
-                                        </div>
-                                        <div id="accordion43" class="collapse" data-parent="#accordion4">
-                                            <div class="card-body">
-                                                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nemo eaque
-                                                porro alias assumenda accusamus incidunt odio molestiae maxime quo atque
-                                                in et quaerat, vel unde aliquam aperiam quidem consectetur omnis dicta
-                                                officiis? Dolorum, error dolorem!
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                @endif
 
                             </div>
 
                             <div class="col-md-6">
+                                <div class="wrapper-activity-info">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="card">
+                                                <div class="pricing-list">
+                                                    <div class="prc-head">
+                                                        <h4>Info:</h4>
+                                                    </div>
+                                                    <div class="prc-list">
+                                                        <ul>
+                                                            <li><p>Activity - <span>{{ $activity->name }}</span></p>
+                                                            </li>
+                                                            <li>
+                                                                <p>{{ $report->user->getFullNameAttribute() }}
+                                                                    <span class="warning">
+                                                                    goal
+                                                                    </span>
+                                                                    - <span class="attention">
+                                                                        @if(isset($activity->goal->goal) && !empty($activity->goal->goal))
+                                                                            {{ $activity->goal->goal }}
+                                                                        @else
+                                                                            not set
+                                                                        @endif
+                                                                    </span>
+                                                                    <span>{{ $measure->name }}</span>
+                                                                </p>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
                                 <h4 class="header-title">Graph</h4>
 
                                 <div id="ambarchart2"></div>
@@ -157,7 +138,7 @@
                     "adjustBorderColor": false,
                     "horizontalPadding": 10,
                     "verticalPadding": 8,
-                    "color": "#ffffff"
+                    "color": "#ffffff",
                 },
 
                 "dataProvider": [
@@ -168,20 +149,24 @@
                         "year": "{{ $key }}",
 
                         @php
-                        $maxResult = 0;
-                        foreach($value as $record){
-                            if ($record->value > $maxResult){
-                            $maxResult = $record->value;
+                            $maxResult = 0;
+                            foreach($value as $record){
+                                if ($record->value > $maxResult){
+                                $maxResult = $record->value;
+                                }
                             }
-                        }
                         @endphp
 
                         "income": {{ $maxResult }},
-                        // "expenses": 15,
-                        "color": "#7474f0"
+                        "expenses": @if($loop->first || $loop->last && isset($activity->goal->goal) && !empty($activity->goal->goal))
+                            {{ $activity->goal->goal }}
+                            @else
+                            null
+                        @endif,
+                        "color": "#805ff5"
                     },
-                        @endforeach
-                        @endif
+                    @endforeach
+                    @endif
 
                     // {
                     //     "year": 2013,
@@ -217,7 +202,7 @@
                     //     "alpha": 0.2,
                     //     "additional": "(projection)"
                     // }
-                    ],
+                ],
                 "valueAxes": [{
                     "axisAlpha": 0,
                     "position": "left"
@@ -225,16 +210,16 @@
                 "startDuration": 1,
                 "graphs": [{
                     "alphaField": "alpha",
-                    "balloonText": "<span style='font-size:12px;'>[[title]] in [[category]]:<br><span style='font-size:20px;'>[[value]]</span> [[additional]]</span>",
+                    "balloonText": "<span style='font-size:12px;'>[[title]] in [[year]]:<br><span style='font-size:20px;'>[[value]]</span> [[additional]]</span>",
                     "fillAlphas": 1,
                     "fillColorsField": "color",
-                    "title": "Income",
+                    "title": "Record",
                     "type": "column",
                     "valueField": "income",
                     "dashLengthField": "dashLengthColumn"
                 }, {
                     "id": "graph2",
-                    "balloonText": "<span style='font-size:12px;'>[[title]] in [[category]]:<br><span style='font-size:20px;'>[[value]]</span> [[additional]]</span>",
+                    "balloonText": "<span style='font-size:12px;'>[[title]] in [[year]]:<br><span style='font-size:20px;'>[[value]]</span> [[additional]]</span>",
                     "bullet": "round",
                     "lineThickness": 3,
                     "bulletSize": 7,
@@ -245,7 +230,7 @@
                     "bulletBorderThickness": 3,
                     "fillAlphas": 0,
                     "lineAlpha": 1,
-                    "title": "Expenses",
+                    "title": "Goal",
                     "valueField": "expenses",
                     "dashLengthField": "dashLengthLine"
                 }],
