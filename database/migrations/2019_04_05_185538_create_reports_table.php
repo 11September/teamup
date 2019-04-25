@@ -16,13 +16,13 @@ class CreateReportsTable extends Migration
         Schema::create('reports', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('team_id')->nullable()->unsigned();
-            $table->integer('user_id')->nullable()->unsigned();
-            $table->integer('activity_id')->nullable()->unsigned();
+            $table->integer('user_id')->unsigned();
+            $table->integer('activity_id')->unsigned();
             $table->enum('range', ['week', 'month', 'year']);
             $table->date('date');
-            $table->string('link');
+            $table->string('image_graph', 191)->nullable();
+            $table->string('pdf_link', 191)->nullable();
             $table->integer('owner_id')->unsigned();
-
 
             $table->timestamps();
         });

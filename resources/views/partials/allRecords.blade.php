@@ -14,10 +14,12 @@
                         @php
                             $maxResult = 0;
                             $date = null;
+                            $notice = null;
                             foreach($value as $record){
                                 if ($record->value > $maxResult){
                                 $maxResult = $record->value;
                                 $date = $record->date;
+                                $notice = $record->notice;
                                 }
                             }
                         @endphp
@@ -25,10 +27,11 @@
 
                         <div class="card-body-record">
                             <p><span>{{ $maxResult }}</span>
-                                - {{ $measure->name }}
+                                - {{ $activity->measure->name }}
                             </p>
                             <p>{{ $date ? $date : '' }}</p>
                         </div>
+                        @if($notice) <p class="card-body-record-notice">{{ $notice }}</p> @endif
 
                     @endforeach
                 </div>
@@ -51,10 +54,12 @@
                         @php
                             $maxResult = 0;
                             $date = null;
+                            $notice = null;
                             foreach($value as $record){
                                 if ($record->value > $maxResult){
                                 $maxResult = $record->value;
                                 $date = $record->date;
+                                $notice = $record->notice;
                                 }
                             }
                         @endphp
@@ -62,10 +67,11 @@
 
                         <div class="card-body-record">
                             <p><span>{{ $maxResult }}</span>
-                                - {{ $measure->name }}
+                                - {{ $activity->measure->name }}
                             </p>
                             <p>{{ $date ? $date : '' }}</p>
                         </div>
+                        @if($notice) <p class="card-body-record-notice">{{ $notice }}</p> @endif
 
                     @endforeach
                 </div>
@@ -89,20 +95,23 @@
                         @php
                             $maxResult = 0;
                             $date = null;
+                            $notice = null;
                             foreach($value as $record){
                                 if ($record->value > $maxResult){
                                 $maxResult = $record->value;
                                 $date = $record->date;
+                                $notice = $record->notice;
                                 }
                             }
                         @endphp
 
                         <div class="card-body-record">
                             <p><span>{{ $maxResult }}</span>
-                                - {{ $measure->name }}
+                                - {{ $activity->measure->name }}
                             </p>
                             <p>{{ $date ? $date : '' }}</p>
                         </div>
+                        @if($notice) <p class="card-body-record-notice">{{ $notice }}</p> @endif
                     </div>
                 </div>
             </div>

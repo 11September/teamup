@@ -24,7 +24,6 @@ $factory->define(Report::class, function (Faker $faker) {
         'activity_id' => Activity::all()->random()->id,
         'range' => $faker->randomElement(['week', 'month', 'year']),
         'date' => $faker->date(),
-        'link' => "app/public/reports/1.pdf",
         'owner_id' => $user_id,
     ];
 });

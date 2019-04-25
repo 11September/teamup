@@ -71,5 +71,18 @@ Route::namespace('App')->group(function () {
             ]);
         });
 
+        Route::get('/reports/download/{report}', 'ReportsController@download')->name('download_pdf');
+        Route::group(['as' => 'reports.'], function () {
+            Route::resource('reports', 'ReportsController')->only([
+                'show', 'store'
+            ]);
+        });
+
+        Route::group(['as' => 'graph.'], function () {
+            Route::resource('graphs', 'GraphController')->only([
+                'show'
+            ]);
+        });
+
     });
 });

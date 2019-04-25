@@ -62,4 +62,9 @@ class ReportsRepository
     {
         return $this->report->create($attributes);
     }
+
+    public function update($id, array $attributes)
+    {
+        return $this->report->find($id)->update($attributes);
+    }
 }

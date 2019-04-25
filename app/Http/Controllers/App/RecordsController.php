@@ -38,7 +38,7 @@ class RecordsController extends Controller
 
     public function index(GenerateReportApi $request)
     {
-        $activity = $this->activityService->getActivityWithMeasure($request->activity_id);
+        $activity = $this->activityService->findWithMeasureAndGoal($request->activity_id);
 
         $records = $this->recordService->getRecordsByReportId($request);
 

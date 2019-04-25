@@ -46,7 +46,6 @@
                             </div>
 
                             <div class="col-md-3">
-                                <h4 class="header-title">All records - {{ $report->user->getFullNameAttribute() }}</h4>
 
                                 @if($records && count($records) > 0)
                                     <div class="wrapper-accordion">
@@ -65,28 +64,45 @@
                                             <div class="card">
                                                 <div class="pricing-list">
                                                     <div class="prc-head">
-                                                        <h4>Info:</h4>
+                                                        <h4>Info about all records by {{ $report->range }} :</h4>
                                                     </div>
                                                     <div class="prc-list">
-                                                        <ul>
-                                                            <li><p>Activity - <span>{{ $activity->name }}</span></p>
-                                                            </li>
-                                                            <li>
-                                                                <p>{{ $report->user->getFullNameAttribute() }}
-                                                                    <span class="warning">
+                                                        <div class="wrapper-activity-info-content">
+                                                            <ul>
+                                                                <li>
+                                                                    <p>Activity - <span
+                                                                            class="attention">{{ $activity->name }}</span>
+                                                                    </p>
+                                                                </li>
+                                                                <li>
+                                                                    <p>
+                                                                    <span class="primary">
+                                                                        {{ $report->user->getFullNameAttribute() }}
+                                                                    </span>
+                                                                        <span class="warning">
                                                                     goal
                                                                     </span>
-                                                                    - <span class="attention">
+                                                                        - <span class="attention">
                                                                         @if(isset($activity->goal->goal) && !empty($activity->goal->goal))
-                                                                            {{ $activity->goal->goal }}
-                                                                        @else
-                                                                            not set
-                                                                        @endif
+                                                                                {{ $activity->goal->goal }}
+                                                                            @else
+                                                                                not set
+                                                                            @endif
                                                                     </span>
-                                                                    <span>{{ $measure->name }}</span>
-                                                                </p>
-                                                            </li>
-                                                        </ul>
+                                                                        <span>{{ $activity->measure->name }}</span>
+                                                                    </p>
+                                                                </li>
+                                                            </ul>
+
+
+                                                            @if($report->image_graph && $report->pdf_link)
+                                                                <div class="report-item-pdf-icon">
+                                                                    <a href="{{ action('Admin\ReportsController@download', $report->id ) }}">
+                                                                        <i class="far fa-file-pdf"></i>
+                                                                    </a>
+                                                                </div>
+                                                            @endif
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -142,12 +158,9 @@
                 },
 
                 "dataProvider": [
-
                         @if(isset($records) && count($records) > 0)
                         @foreach($records as $key => $value)
                     {
-                        "year": "{{ $key }}",
-
                         @php
                             $maxResult = 0;
                             foreach($value as $record){
@@ -157,69 +170,36 @@
                             }
                         @endphp
 
-                        "income": {{ $maxResult }},
-                        "expenses": @if($loop->first || $loop->last && isset($activity->goal->goal) && !empty($activity->goal->goal))
-                            {{ $activity->goal->goal }}
-                            @else
-                            null
-                        @endif,
-                        "color": "#805ff5"
+                        "year": "{{ $key }}",
+                        "record": {{ number_format(floatval($maxResult), 2) }},
+                        "color": "@if(isset($activity->goal->goal) && !empty($activity->goal->goal) && $maxResult >= $activity->goal->goal) {{ "#19bd36" }} @else {{ "#bd4123" }} @endif ",
+                        "goal": @if($loop->first || $loop->last && isset($activity->goal->goal) && !empty($activity->goal->goal))
+                            {{  number_format(floatval($activity->goal->goal), 2) }}
+                            @else null @endif ,
+                        @if($loop->last)"alpha": 0.2, "additional": "(projection)",@endif
                     },
                     @endforeach
                     @endif
-
-                    // {
-                    //     "year": 2013,
-                    //     "income": 23.5,
-                    //     // "expenses": 15,
-                    //     "color": "#7474f0"
-                    // }, {
-                    //     "year": 2014,
-                    //     "income": 26.2,
-                    //     // "expenses": 30.5,
-                    //     "color": "#7474f0"
-                    // }, {
-                    //     "year": 2015,
-                    //     "income": 30.1,
-                    //     // "expenses": 34.9,
-                    //     "color": "#7474f0"
-                    // }, {
-                    //     "year": 2016,
-                    //     "income": 29.5,
-                    //     // "expenses": 31.1,
-                    //     "color": "#7474f0"
-                    // }, {
-                    //     "year": 2017,
-                    //     "income": 30.6,
-                    //     // "expenses": 28.2,
-                    //     "dashLengthLine": 5,
-                    //     "color": "#7474f0"
-                    // }, {
-                    //     "year": 2018,
-                    //     "income": 34.1,
-                    //     // "expenses": 32.9,
-                    //     "dashLengthColumn": 5,
-                    //     "alpha": 0.2,
-                    //     "additional": "(projection)"
-                    // }
                 ],
                 "valueAxes": [{
+                    "inversed": true,
                     "axisAlpha": 0,
-                    "position": "left"
+                    "position": "left",
+                    {{--@if($activity->graph_type == "reverse") "inversed" : true, @endif--}}
                 }],
                 "startDuration": 1,
                 "graphs": [{
                     "alphaField": "alpha",
-                    "balloonText": "<span style='font-size:12px;'>[[title]] in [[year]]:<br><span style='font-size:20px;'>[[value]]</span> [[additional]]</span>",
+                    "balloonText": "<span style='font-size:12px;'>[[title]] in [[category]]:<br><span style='font-size:20px;'>[[value]]</span> [[additional]]</span>",
                     "fillAlphas": 1,
                     "fillColorsField": "color",
                     "title": "Record",
                     "type": "column",
-                    "valueField": "income",
+                    "valueField": "record",
                     "dashLengthField": "dashLengthColumn"
                 }, {
                     "id": "graph2",
-                    "balloonText": "<span style='font-size:12px;'>[[title]] in [[year]]:<br><span style='font-size:20px;'>[[value]]</span> [[additional]]</span>",
+                    "balloonText": "<span style='font-size:12px;'>[[title]] in [[category]]:<br><span style='font-size:20px;'>[[value]]</span> [[additional]]</span>",
                     "bullet": "round",
                     "lineThickness": 3,
                     "bulletSize": 7,
@@ -231,7 +211,7 @@
                     "fillAlphas": 0,
                     "lineAlpha": 1,
                     "title": "Goal",
-                    "valueField": "expenses",
+                    "valueField": "goal",
                     "dashLengthField": "dashLengthLine"
                 }],
                 "categoryField": "year",
@@ -241,7 +221,24 @@
                     "tickLength": 0
                 },
                 "export": {
-                    "enabled": false
+                    "enabled": false,
+                    // "class": "export-main",
+                    // "menu": [ {
+                    //     "label": "JPG",
+                    //     "class": "export-main",
+                    //     "click": function() {
+                    //         this.capture( {}, function() {
+                    //             this.toJPG( {}, function( data ) {
+                    //                 jQuery.post( "save.php", {
+                    //                         imageData: encodeURIComponent( data )
+                    //                     },
+                    //                     function( msg ) {
+                    //                         alert( "image saved" );
+                    //                     } );
+                    //             } );
+                    //         } );
+                    //     }
+                    // } ]
                 }
             });
         }

@@ -3684,6 +3684,15 @@ blockquote p{
     justify-content: space-between;
 }
 
+.card-body-record-notice{
+    display: block;
+    width: 100%;
+    font-style: italic;
+    font-size: 13px;
+    color: #856404;
+    text-align: left;
+}
+
 .card-body-record span{
     font-size: larger;
     font-weight: bolder;
@@ -3713,9 +3722,7 @@ blockquote p{
 }
 
 .wrapper-activity-info .prc-list li p span{
-    color: #3e3b3b;
-    font-size: 18px;
-    font-weight: bolder;
+    font-size: 17px;
 }
 
 span.attention{
@@ -3724,4 +3731,17 @@ span.attention{
 
 span.warning{
     color: #856404 !important;
+}
+
+span.primary{
+    color: #805ff5;
+    font-size: 18px;
+}
+
+.main-content-inner .mt-5{
+    margin-top: 2rem!important;
+}
+
+.wrapper-activity-info-content{
+    position: relative;
 }

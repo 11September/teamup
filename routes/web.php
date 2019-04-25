@@ -34,8 +34,12 @@ Route::group(['namespace' => 'Admin'], function () {
                         'show'
                     ]);
                 });
+                
+                Route::get('/reports/download/{report}', 'ReportsController@download')->name('download_pdf');
 
-                Route::get('/reports/download/{link}', 'ReportsController@download')->name('download_pdf');
+                Route::get('/reports/downloadv/{report}', 'ReportsController@downloadv')->name('download_pdf');
+                Route::get('/reports/downloadpdf/{report}', 'ReportsController@downloadpdf')->name('download_pdf');
+
                 Route::group(['as' => 'reports.'], function () {
                     Route::resource('reports', 'ReportsController');
                 });

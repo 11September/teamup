@@ -42,14 +42,17 @@
                                                     <a href="{{ action('Admin\ReportsController@show', $report->id) }}">
                                                         <p class="report-item-team-activity">{{ $report->team->name }}
                                                             - {{ $report->activity->name }}</p>
-                                                        <p class="report-item-team-user">{{ $report->user->getFullNameAttribute() }}</p>
+                                                        <p class="report-item-team-user">{{ $report->user->getFullNameAttribute() }}
+                                                            - {{ $report->range }}</p>
                                                     </a>
 
-                                                    <div class="report-item-pdf-icon">
-                                                        <a href="{{ $report->link }}">
-                                                            <i class="far fa-file-pdf"></i>
-                                                        </a>
-                                                    </div>
+                                                    @if($report->image_graph && $report->pdf_link)
+                                                        <div class="report-item-pdf-icon">
+                                                            <a href="{{ action('Admin\ReportsController@download', $report->id ) }}">
+                                                                <i class="far fa-file-pdf"></i>
+                                                            </a>
+                                                        </div>
+                                                    @endif
                                                 </div>
                                             </div>
                                         @endforeach

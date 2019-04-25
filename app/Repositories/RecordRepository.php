@@ -35,13 +35,11 @@ class RecordRepository
     public function getUsersRecordsToReport($user_id, $activity_id, $format, $from_date)
     {
 //        dd($format, $from_date);
-
-        $now = Carbon::now();
-        $from = $now->subYear();
         $to = Carbon::now();
         $sort = "asc";
 
         return $this->record
+            ->select('id', 'activity_id', 'user_id', 'value', 'date', 'notice')
             ->where('user_id', $user_id)
             ->where('activity_id', $activity_id)
             ->whereBetween('date', [$from_date, $to])

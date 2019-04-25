@@ -24,11 +24,28 @@ class ReportsService
         $this->record = $recordRepository;
     }
 
-    public function getRecordsByReportId($user_id, $activity_id, $type_graph)
+    public function getRecordsByReportId($user_id, $activity_id, $range, $type_graph = null)
     {
-        $type_graph = GraphHelper::convertActivityTypeToQuery($type_graph);
+//        $type_graph = $activity->graph_type;
+//        $type_graph = GraphHelper::convertActivityTypeToQuery($type_graph);
 
-        return $this->record->getUsersRecordsToReportApi($user_id, $activity_id, $type_graph);
+        $graph_format = GraphHelper::convertActivityRangeToFormat($range);
+
+        $period_start = GraphHelper::detectStartDate($range);
+//        $period_end = GraphHelper::detectEndDate($range);
+
+        $records = $this->record->getUsersRecordsToReport($user_id, $activity_id, $graph_format, $period_start);
+
+        return $records;
+    }
+
+    public function generateGraphActivityImage($activity, $records)
+    {
+        $base64 = GraphHelper::generateGraphImageBase64($activity, $records);
+
+        $path = GraphHelper::saveBase64GraphImage($base64);
+
+        return $path;
     }
 
     public function store(Request $request)
@@ -36,6 +53,13 @@ class ReportsService
         $attributes = $this->prepareData($request);
 
         return $this->report->store($attributes);
+    }
+
+    public function updateImagePath($id, $path)
+    {
+        $attributes['image_graph'] = $path;
+
+        return $this->report->update($id, $attributes);
     }
 
     public function prepareData(Request $request)

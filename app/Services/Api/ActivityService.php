@@ -29,9 +29,16 @@ class ActivityService
         return $this->activityRepository->filterWithUsers($attributes);
     }
 
-    public function getActivityWithMeasure($id)
+    public function findWithMeasureAndGoal($id)
     {
         return $this->activityRepository->findWithMeasureAndGoal($id);
+    }
+
+    public function getMeasureByActivityId($id)
+    {
+        $activity = $this->activityRepository->getMeasureByActivityId($id);
+
+        return $activity->measure;
     }
 
     public function store(Request $request)

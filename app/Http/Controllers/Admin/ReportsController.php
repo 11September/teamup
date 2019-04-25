@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Report;
 use App\Helpers\UserHelper;
+use Illuminate\Foundation\Auth\User;
+use Illuminate\Http\Request;
 use App\Services\TeamService;
 use App\Services\ReportsService;
 use App\Services\ActivityService;
@@ -23,9 +25,37 @@ class ReportsController extends Controller
         $this->teamService = $teamService;
     }
 
-    public function download()
+    public function downloadv(Report $report, Request $request)
     {
-        return true;
+        UserHelper::checkPermissionOwnerReport($report);
+
+        $report = $this->reportsService->loadRelationActivityWithMeasuresAndGoal($report);
+
+        $records = $this->reportsService->getRecordsByReportId($report->user->id, $report->activity_id, $report->range);
+
+        $this->reportsService->generateGraphActivityImage($request, $report->activity, $records);
+    }
+
+    public function downloadpdf(Report $report, Request $request)
+    {
+        $report = $this->reportsService->loadRelationActivityWithMeasuresAndGoal($report);
+
+        $activity = $report->activity;
+
+        $records = $this->reportsService->getRecordsByReportId($report->user->id, $report->activity_id, $report->range);
+
+        return view('admin.reports.report2', compact('report', 'records', 'activity'));
+    }
+
+    public function download(Report $report, Request $request)
+    {
+        UserHelper::checkPermissionOwnerReport($report);
+
+        $pathToDownload = $this->reportsService->download($request, $report);
+
+        $fileName = $this->reportsService->generatePdfNameFile($report);
+
+        return response()->download(storage_path('app/public/' . $pathToDownload), $fileName);
     }
 
     public function index()
@@ -39,23 +69,27 @@ class ReportsController extends Controller
     {
         UserHelper::checkPermissionOwnerReport($report);
 
-        $report->load('user');
+        $report = $this->reportsService->loadRelationActivityWithMeasuresAndGoal($report);
 
-        $activity = $this->activityService->findWithMeasureAndGoal($report->activity_id);
+        $activity = $report->activity;
 
-        $measure = $this->activityService->getMeasureByActivityId($report->activity_id);
+        $records = $this->reportsService->getRecordsByReportId($report->user->id, $report->activity_id, $report->range);
 
-        $records = $this->reportsService->getRecordsByReportId($report, $activity);
-
-//        dd($activity);
-
-//        dd($records);/
-
-        return view('admin.reports.show', compact('reports', 'report', 'records', 'measure', 'activity'));
+        return view('admin.reports.show', compact('report', 'records', 'activity'));
     }
 
     public function store(ReportStore $request)
     {
+        $activity = $this->activityService->findWithMeasureAndGoal($request->activity_id);
+
+        $user = User::find($request->user_id);
+
+        $records = $this->reportsService->getRecordsByReportId($request->user_id, $request->activity_id, $request->range);
+
+        $this->reportsService->generateGraphActivityImage($request, $activity, $records);
+
+        $this->reportsService->generatePdfWithData($request, $activity, $records, $request->range, $user);
+
         $report = $this->reportsService->store($request);
 
         return redirect()->action('Admin\ReportsController@show', $report->id)
