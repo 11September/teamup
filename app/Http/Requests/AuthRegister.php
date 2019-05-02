@@ -28,7 +28,8 @@ class AuthRegister extends FormRequest
             'first_name' => 'required|string|min:3',
             'last_name' => 'required|string|min:3',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6|max:255|confirmed',
+            'password' => 'required|string|min:1|max:8|confirmed',
+            'password_confirmation' => 'required|string|min:1|max:8|same:password',
             'type' =>  [
                 'required',
                 Rule::in(['athlete', 'coach']),
