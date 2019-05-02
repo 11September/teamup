@@ -6,12 +6,18 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{{ $user->first_name . " " . $user->last_name . " - " . $activity->name }}</title>
+    <title>
+        @if (isset($report->user))
+            {{ $report->user->first_name . " " . $report->user->last_name }}
+        @else
+            {{ $user->first_name . " " . $user->last_name }}
+        @endif
+    </title>
 </head>
 <body>
 
 <style>
-    table{
+    table {
         margin-bottom: 50px;
     }
 
@@ -42,7 +48,13 @@
     </tr>
     <tr>
         <th colspan="2">{{ $activity->name }}</th>
-        <th colspan="2">{{ $user->first_name }}</th>
+        <th colspan="2">
+            @if (isset($report->user))
+                {{ $report->user->first_name . " " . $report->user->last_name }}
+            @else
+                {{ $user->first_name . " " . $user->last_name }}
+            @endif
+        </th>
         <th colspan="2">{{ $activity->goal->goal }}</th>
     </tr>
     </thead>

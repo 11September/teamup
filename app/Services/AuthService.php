@@ -190,7 +190,12 @@ class AuthService
         Auth::user()->number_students_busy = 0;
 
         $user = Auth::user();
+
         $user->load('teams');
+
+        $user->load(['goal' => function ($query) {
+            $query->select('goal', 'activity_id', 'user_id');
+        }]);
 
         return $this->prepareDetailsData($user);
     }
@@ -203,7 +208,6 @@ class AuthService
                 'updated_at',
                 'email_verified_at',
                 'status',
-                'type',
                 'player_id'
             ]
         );

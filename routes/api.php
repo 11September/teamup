@@ -77,12 +77,5 @@ Route::namespace('App')->group(function () {
                 'show', 'store'
             ]);
         });
-
-        Route::group(['as' => 'graph.'], function () {
-            Route::resource('graphs', 'GraphController')->only([
-                'show'
-            ]);
-        });
-
     });
 });

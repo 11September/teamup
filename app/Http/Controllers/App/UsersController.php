@@ -8,8 +8,8 @@ use App\Http\Requests\SetAvatar;
 use App\Http\Requests\SetPlayer;
 use App\Http\Requests\SetPushChat;
 use App\Http\Requests\ChangePassword;
-use App\Http\Requests\SetInvitationCode;
 use App\Http\Requests\SetActivationCode;
+use App\Http\Requests\SetInvitationCode;
 
 class UsersController
 {
