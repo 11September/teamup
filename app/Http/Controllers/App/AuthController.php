@@ -34,16 +34,8 @@ class AuthController
     {
         $user = $this->authService->findUser($request->email);
 
-        if (!$user) {
-            return response()->json(
-                [
-                    'message' => 'User does not exist!',
-                ],
-                401);
-        }
-
-        if (!$this->authService->loginAttempt($request)) {
-            return response()->json(['message' => 'The user does not have or the login / password is not suitable!'], 401);
+        if (!$user || !$this->authService->loginAttempt($request)) {
+            return response()->json(['message' => 'User does not exist or the login / password is not suitable!'], 401);
         }
 
         $responce = $this->authService->loginIsActive($user);

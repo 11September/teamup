@@ -50,7 +50,10 @@ class ReportsService
         $period_start = GraphHelper::detectStartDate($range);
 //        $period_end = GraphHelper::detectEndDate($range);
 
+
         $records = $this->record->getUsersRecordsToReport($user_id, $activity_id, $graph_format, $period_start);
+
+        dd($records);
 
         return $records;
     }
