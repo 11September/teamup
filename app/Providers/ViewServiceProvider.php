@@ -40,7 +40,9 @@ class ViewServiceProvider extends ServiceProvider
                 $teams = Team::all();
             }
 
-            $teams->first()->load('users');
+            if (isset($teams) && !empty($teams) && count($teams) > 0){
+                $teams->first()->load('users');
+            }
 
             $view->with(['teams' => $teams]);
         });

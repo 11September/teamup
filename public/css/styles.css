@@ -3677,6 +3677,18 @@ blockquote p{
     color: red;
 }
 
+.report-item-pdf-icon:hover{
+    cursor: alias;
+}
+
+.report-item-pdf-icon:hover a{
+    cursor: alias;
+}
+
+.report-item-pdf-icon:hover i{
+    color: #bb0000;
+}
+
 .wrapper-accordion .card .card-body .card-body-record{
     width: 100%;
     display: flex;

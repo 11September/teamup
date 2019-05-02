@@ -26,10 +26,9 @@
                         <li class="{{ request()->is('admin/measures*') ? 'active' : '' }}">
                             <a href="{{ url('admin/measures') }}"><i
                                     class="sidebar-menu-icon fas fa-weight-hanging"></i>
-                                <span>Measures</span>
+                                <span>Measurements</span>
                             </a>
                         </li>
-
 
 
                         <li class="{{ request()->is('admin/feedbacks*') ? 'active' : '' }}">

@@ -101,15 +101,41 @@
                 clicked.prop('disabled', true);
 
                 var previousBox = clicked.closest('.measures-container').find('.wrapper-measures-item:last');
+                var previousBoxCount = parseInt($('.wrapper-measures-item').length);
                 var previousInput = previousBox.find('input');
                 var previousInputValue = previousInput.val();
-                if (!previousInputValue) {
+
+                if (!previousInputValue && previousBoxCount > 0) {
                     previousInput.css('border-bottom', '2px solid red');
 
                     setTimeout(function () {
                         previousInput.css('border-bottom', '1px solid grey');
                     }, 3000);
-                }else{
+                }
+                else if (!previousInputValue && previousBoxCount == 0) {
+                    clicked.closest('.measures-container').find('.wrapper-measures').append(
+                        '<div class="wrapper-measures-item">' +
+                        '<div class="row">' +
+                        '<div class="col-md-4">' +
+                        '<div class="wrapper-input-buttons">' +
+                        '<div class="wrapper-measure-input">' +
+                        '<input class="form-control custom-form-control-measures" value="" data-id="" type="text" name="name">' +
+                        '</div>' +
+                        '<div class="wrapper-measures-delete-block">' +
+                        '<a class="measures-button-block measures-button-block-save" href="#">' +
+                        '<i class="fas fa-save"></i>' +
+                        '</a>' +
+                        '<a class="measures-button-block measures-button-block-delete" href="#">' +
+                        '<i class="fas fa-trash-alt"></i>' +
+                        '</a>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>'
+                    ).hide().fadeIn();
+                }
+                else{
                     clicked.closest('.measures-container').find('.wrapper-measures').append(
                         '<div class="wrapper-measures-item">' +
                         '<div class="row">' +

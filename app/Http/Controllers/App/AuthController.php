@@ -85,6 +85,7 @@ class AuthController
      * @param  [string] password_confirmation
      * @param  [string] type
      * @param  [int|nullable] number_students
+     * @param  [accepted] conditions
      *
      * @return [string] message
      */

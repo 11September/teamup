@@ -26,6 +26,7 @@ class User extends Authenticatable
         'number_students_current',
         'activation_code',
         'expiration_date',
+        'activation',
         'password_reset_code',
         'player_id',
         'push',

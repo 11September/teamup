@@ -58,6 +58,8 @@ class AuthService
     {
         $this->generateAndSetNewPassword($request);
 
+        $this->generateAndSetUserExpiredPeriodStatusExpirationDate($request);
+
         $user = $this->user->create($request->all());
 
         $token = $this->token($user);
@@ -201,5 +203,22 @@ class AuthService
         $request->merge([
             'password' => $password,
         ]);
+    }
+
+    public function generateAndSetUserExpiredPeriodStatusExpirationDate(Request $request)
+    {
+        if ($request->type == "coach"){
+            $request->merge([
+                'activation' => "demo",
+                'expiration_date' => SubscribeHelper::getDateDemoSubscribe(),
+                'status' => "active",
+            ]);
+        }else{
+            $request->merge([
+                'activation' => "full",
+                'expiration_date' => null,
+                'status' => "active",
+            ]);
+        }
     }
 }

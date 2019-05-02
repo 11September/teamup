@@ -34,9 +34,10 @@ class RecordRepository
 
     public function getUsersRecordsToReport($user_id, $activity_id, $format, $from_date)
     {
-//        dd($format, $from_date);
         $to = Carbon::now();
-        $sort = "asc";
+//        $sort = "asc";
+
+//        dd($from_date, $to);
 
         return $this->record
             ->select('id', 'activity_id', 'user_id', 'value', 'date', 'notice')
@@ -48,7 +49,7 @@ class RecordRepository
             ->orderBy('date', 'asc')
             ->get()
             ->groupBy(function ($val) use ($format) {
-                return Carbon::parse($val->date)->format($format);
+                return Carbon::parse($val->date)->setTimezone('America/Vancouver')->format($format);
             });
     }
 

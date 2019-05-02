@@ -193,7 +193,7 @@
                                                 </div>
 
                                                 <div class="wrapper-code"
-                                                     style="display: @if($user->activation == 'demo') none @else block @endif;">
+                                                     style="@if($user->activation == 'full') display:block @else display:none @endif;">
                                                     <div class="form-group">
                                                         <label for="activation_code" class="col-form-label">Code</label>
 
@@ -229,8 +229,8 @@
 
                                                         @if ($errors->has('expiration_date'))
                                                             <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $errors->first('expiration_date') }}</strong>
-                                                </span>
+                                                                <strong>{{ $errors->first('expiration_date') }}</strong>
+                                                            </span>
                                                         @endif
 
                                                     </div>

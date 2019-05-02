@@ -53,8 +53,6 @@ class ReportsService
 
         $records = $this->record->getUsersRecordsToReport($user_id, $activity_id, $graph_format, $period_start);
 
-        dd($records);
-
         return $records;
     }
 
