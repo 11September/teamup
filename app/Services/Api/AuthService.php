@@ -26,10 +26,15 @@ class AuthService
         $this->user = $user;
     }
 
-    public function loginIsActive(Request $request)
+    public function findUser($email)
     {
-        $user = $this->user->findEmail($request->email);
+        $user = $this->user->findEmail($email);
 
+        return $user;
+    }
+
+    public function loginIsActive($user)
+    {
         $isActive = UserHelper::isActive($user);
 
         return ['status' => (bool)$isActive, 'user' => $this->prepareDetailsLoginData($user)];
