@@ -191,7 +191,9 @@ class AuthService
 
         $user = Auth::user();
 
-        $user->load('teams');
+        $user->load(['teams' => function ($query) {
+            $query->select('team_id', 'name');
+        }]);
 
         $user->load(['goal' => function ($query) {
             $query->select('goal', 'activity_id', 'user_id');
