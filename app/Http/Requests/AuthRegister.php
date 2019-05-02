@@ -28,7 +28,7 @@ class AuthRegister extends FormRequest
             'first_name' => 'required|string|min:3',
             'last_name' => 'required|string|min:3',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:1|max:8|confirmed',
+            'password' => 'required|string|min:1|max:8',
             'password_confirmation' => 'required|string|min:1|max:8|same:password',
             'type' =>  [
                 'required',
