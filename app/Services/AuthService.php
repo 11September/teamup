@@ -19,6 +19,7 @@ use App\Mail\ResetPasswordCode;
 use App\Helpers\SubscribeHelper;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 
 class AuthService
 {
@@ -199,7 +200,10 @@ class AuthService
             $query->select('goal', 'activity_id', 'user_id');
         }]);
 
-        return $this->prepareDetailsData($user);
+        $user = $this->prepareDetailsData($user);
+        $user = $this->prepareDetailsAvatar($user);
+
+        return $user;
     }
 
     public function prepareDetailsData($user)
@@ -226,6 +230,17 @@ class AuthService
                 'last_name',
             ]
         );
+
+        return $user;
+    }
+
+    public function prepareDetailsAvatar($user)
+    {
+        if ($user->avatar && file_exists(storage_path("app/public") . $user->avatar)) {
+            $user->avatar = Config::get('app.storageurl') . $user->avatar;
+        }else{
+            $user->avatar = null;
+        }
 
         return $user;
     }
