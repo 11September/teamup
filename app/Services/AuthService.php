@@ -205,8 +205,6 @@ class AuthService
 
     public function prepareDetailsData($user)
     {
-        dd(file_exists(storage_path("app/public") . $user->avatar));
-
         if ($user->avatar && file_exists(storage_path("app/public") . $user->avatar)) {
             $user->avatar = Config::get('app.storageurl') . $user->avatar;
         }else{

@@ -54,6 +54,8 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
+    'storageurl' => env('APP_STORAGEURL', 'http://localhost:8000/storage'),
+
     'asset_url' => env('ASSET_URL', null),
 
     /*
