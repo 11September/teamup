@@ -32,6 +32,10 @@ class TeamService
             $teams = $this->team->getAllWithRelationCoach();
         }
 
+        $teams = $this->team->loadUsersToTeams($teams);
+
+        $teams = $this->addBusyAthlets($teams);
+
         return $teams;
     }
 
@@ -109,6 +113,19 @@ class TeamService
             $attributes = $this->prepareDataCreateNewActivity($activity, $request->user_id, $team->id);
             $this->activity->create($attributes);
         }
+    }
+
+    public function addBusyAthlets($teams)
+    {
+        foreach ($teams as $team) {
+            if ($team->users){
+                $team->count_busy = $team->users->count();
+            }else{
+                $team->count_busy = 0;
+            }
+        }
+
+        return $teams;
     }
 
     public function prepareDataCreateNewActivity($activity, $user_id, $team_id)

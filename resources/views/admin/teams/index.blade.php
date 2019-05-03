@@ -50,7 +50,8 @@
                                     <th>Team Name</th>
                                     <th>Code</th>
                                     <th>Coach Name</th>
-                                    <th>Count Athlets</th>
+                                    <th>Count available Athlets</th>
+                                    <th>Count busy Athlets</th>
                                     <td>Actions</td>
                                 </tr>
                                 </thead>
@@ -63,6 +64,7 @@
                                         <td>{{ $team->code }}</td>
                                         <td>{{ $team->coach->getFullnameAttribute() }}</td>
                                         <td>{{ $team->count }}</td>
+                                        <td>{{ $team->count_busy }}</td>
                                         <td class="datatable-actions">
                                             <a class="datatable-actions-link"
                                                href="{{ url('admin/teams/' . $team->id . '/edit') }}">

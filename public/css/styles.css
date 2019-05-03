@@ -3644,8 +3644,7 @@ blockquote p{
 }
 
 .wrapper-multiselect .ms-container .ms-selectable{
-    width: 50%;
-    padding: 0 5px;
+    padding: 0;
 }
 
 .wrapper-all-user-records-show-graph .report-item-holder{
@@ -3756,4 +3755,17 @@ span.primary{
 
 .wrapper-activity-info-content{
     position: relative;
+}
+
+.search-input{
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    border-radius: 2px;
+    outline: none;
+    border: 1px solid rgba(170, 170, 170, .3);
+    height: 30px;
+    padding: 0 10px;
 }

@@ -33,7 +33,7 @@
             {{ csrf_field() }}
 
             <div class="row">
-                <div class="col-lg-4 col-ml-12">
+                <div class="col-lg-3 col-ml-12">
                     <div class="row">
                         <div class="col-12 mt-5">
                             <div class="card">
@@ -61,8 +61,10 @@
                                                     required>
 
                                                 @foreach($coaches as $coach)
-                                                    <option selected="selected" name="user_id"
-                                                            value="{{ $coach->id }}">{{ $coach->getFullnameAttribute() }}</option>
+                                                    <option value="{{ $coach->id }}"
+                                                            @if(old('user_id') == $coach->id) selected="selected" @endif>
+                                                        {{ $coach->getFullnameAttribute() }}
+                                                    </option>
                                                 @endforeach
                                             </select>
 
@@ -75,6 +77,9 @@
                                         </div>
                                     @endif
 
+                                    @if(Auth::user()->type == "coach")
+                                        <input name="user_id" type="hidden" value="{{ \Illuminate\Support\Facades\Auth::id() }}">
+                                    @endif
 
                                     <div class="form-group">
                                         <label for="code" class="col-form-label">Code</label>
@@ -109,12 +114,12 @@
                         <!-- Textual inputs end -->
                     </div>
                 </div>
-                <div class="col-lg-8 col-ml-12">
+
+                <div class="col-lg-9 col-ml-12">
                     <div class="row">
                         <div class="col-12 mt-5">
                             <div class="card">
                                 <div class="card-body">
-
 
                                     <div class="row">
                                         <div class="col-md-6">
@@ -128,11 +133,24 @@
                                                     <select name="ids[]" class="thisMultiselect" id="ids" multiple>
 
                                                         @foreach($athlets as $athlet)
-                                                            <option
-                                                                value='{{ $athlet->id }}'>{{ $athlet->getFullnameAttribute() }}</option>
+                                                            <option value="{{ $athlet->id }}"
+                                                                    @if(Session::has('SelectedAthletsIds'))
+                                                                    @foreach(Session::get('SelectedAthletsIds') as $key => $value)
+                                                                    @if($athlet->id == $value) selected="selected" @endif
+                                                                @endforeach
+                                                                @endif>
+                                                                {{ $athlet->getFullnameAttribute() }}
+                                                            </option>
                                                         @endforeach
 
                                                     </select>
+
+                                                    @if(Session::has('SelectedAthletsIdsError'))
+                                                        <span class="invalid-feedback" role="alert" style="display: block">
+                                                            <strong>{{ Session::get('SelectedAthletsIdsError') }}</strong>
+                                                        </span>
+                                                    @endif
+
                                                 </div>
                                             </div>
                                         </div>
@@ -148,7 +166,12 @@
                                                             id="activityIds" multiple>
 
                                                         @foreach($activities as $activity)
-                                                            <option value='{{ $activity->id }}' selected>
+                                                            <option value='{{ $activity->id }}'
+                                                                    @if(Session::has('SelectedActivitiesIds'))
+                                                                    @foreach(Session::get('SelectedActivitiesIds') as $key => $value)
+                                                                    @if($activity->id == $value) selected="selected" @endif
+                                                                @endforeach
+                                                                @endif>
                                                                 {{ $activity->name }}
                                                             </option>
                                                         @endforeach
@@ -170,11 +193,48 @@
 @endsection
 
 @section('scripts')
+    <script src="{{ asset('js/jquery.quicksearch.js') }}"></script>
     <script src="{{ asset('js/jquery.multi-select.js') }}"></script>
 
     <script type="text/javascript">
-        $('#ids').multiSelect();
-        $('#activityIds').multiSelect();
+        // $('#ids').multiSelect();
+        // $('#activityIds').multiSelect();
+
+        $('#ids, #activityIds').multiSelect({
+            selectableHeader: "<input type='text' class='search-input' autocomplete='off' placeholder='search ...'>",
+            selectionHeader: "<input type='text' class='search-input' autocomplete='off' placeholder='search ...'>",
+            afterInit: function(ms){
+                var that = this,
+                    $selectableSearch = that.$selectableUl.prev(),
+                    $selectionSearch = that.$selectionUl.prev(),
+                    selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
+                    selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
+
+                that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+                    .on('keydown', function(e){
+                        if (e.which === 40){
+                            that.$selectableUl.focus();
+                            return false;
+                        }
+                    });
+
+                that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+                    .on('keydown', function(e){
+                        if (e.which == 40){
+                            that.$selectionUl.focus();
+                            return false;
+                        }
+                    });
+            },
+            afterSelect: function(){
+                this.qs1.cache();
+                this.qs2.cache();
+            },
+            afterDeselect: function(){
+                this.qs1.cache();
+                this.qs2.cache();
+            }
+        });
     </script>
 
     <script>

@@ -34,11 +34,12 @@
             {{ csrf_field() }}
 
             <div class="row">
-                <div class="col-lg-6 col-ml-12">
+                <div class="col-lg-3 col-ml-12">
                     <div class="row">
                         <div class="col-12 mt-5">
                             <div class="card">
                                 <div class="card-body">
+
                                     <h4 class="header-title">Edit Team - {{ $team->name }}</h4>
 
                                     <div class="form-group">
@@ -60,14 +61,12 @@
                                             <label for="type" class="col-form-label">Coach Name*</label>
                                             <select id="type" name="user_id"
                                                     class="custom-select{{ $errors->has('user_id') ? ' is-invalid' : '' }}"
-                                                    disabled="disabled" required>
+                                                    readonly="" required>
 
                                                 @foreach($coaches as $coach)
-                                                    <option
-                                                        @if($team->user_id == $coach->id) selected="selected" @endif
-                                                    name="user_id"
-                                                        value="{{ $coach->id }}">{{ $coach->getFullnameAttribute() }}
-                                                    </option>
+                                                    <option value="{{ $coach->id }}"
+                                                            @if($team->user_id == $coach->id) selected
+                                                            @else disabled @endif>{{ $coach->getFullnameAttribute() }}</option>
                                                 @endforeach
                                             </select>
 
@@ -80,71 +79,60 @@
                                         </div>
                                     @endif
 
-
-                                    {{--<div class="form-group">--}}
-                                        {{--<label for="code" class="col-form-label">Code</label>--}}
-
-                                        {{--<div class="input-group mb-3">--}}
-                                            {{--<div class="input-group-prepend">--}}
-                                                {{--<span class="input-group-text" id="basic-addon1">--}}
-                                                    {{--<a id="code_generator" href="#">--}}
-                                                        {{--<i class="fas fa-sync-alt"></i>--}}
-                                                    {{--</a>--}}
-                                                {{--</span>--}}
-                                            {{--</div>--}}
-                                            {{--<input disabled="disabled" class="form-control" type="text" name="code"--}}
-                                                   {{--value="{{ old('code') ? old('code') : $team->code }}" id="code"--}}
-                                                   {{--required min="10">--}}
-
-                                            {{--@if ($errors->has('code'))--}}
-                                                {{--<span class="invalid-feedback" role="alert">--}}
-                                                    {{--<strong>{{ $errors->first('code') }}</strong>--}}
-                                                {{--</span>--}}
-                                            {{--@endif--}}
-
-                                        {{--</div>--}}
-                                    {{--</div>--}}
                                 </div>
                             </div>
                         </div>
                         <!-- Textual inputs end -->
                     </div>
                 </div>
-                <div class="col-lg-6 col-ml-12">
+
+                <div class="col-lg-9 col-ml-12">
                     <div class="row">
                         <div class="col-12 mt-5">
                             <div class="card">
                                 <div class="card-body">
-                                    <h4 class="header-title">Access</h4>
 
-                                    <div class="form-group">
-                                        <label for="ids" class="col-form-label">Athlets in team</label>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h4 class="header-title">Team Members</h4>
 
-                                        <select name="ids[]" id="ids" multiple>
+                                            <div class="wrapper-multiselect">
+                                                <div class="form-group">
+                                                    <label for="ids" class="col-form-label">Choose athlets in your
+                                                        team</label>
 
-                                            @foreach($athlets as $athlet)
+                                                    <select name="ids[]" id="ids" multiple>
+                                                        @foreach($athlets as $athlet)
+                                                            <option
+                                                                @foreach($team->users as $user)
+                                                                @if($user->id == $athlet->id)
+                                                                selected="selected"
+                                                                @endif
+                                                                @endforeach
 
-                                                @php($selected = "")
+                                                                @if(Session::has('SelectedAthletsIds'))
+                                                                @foreach(Session::get('SelectedAthletsIds') as $key => $value)
+                                                                @if($athlet->id == $value)
+                                                                selected="selected"
+                                                                @endif
+                                                                @endforeach
+                                                                @endif
 
-                                                @foreach($team->users as $user)
+                                                                value='{{ $athlet->id }}'>{{ $athlet->getFullnameAttribute() }}</option>
+                                                        @endforeach
+                                                    </select>
 
-                                                    @if($user->id == $athlet->id)
-                                                        @php($selected = "selected='selected'")
+                                                    @if(Session::has('SelectedAthletsIdsError'))
+                                                        <span class="invalid-feedback" role="alert"
+                                                              style="display: block">
+                                                <strong>{{ Session::get('SelectedAthletsIdsError') }}</strong>
+                                            </span>
                                                     @endif
 
-                                                @endforeach
-
-                                                <option {{ $selected }} value='{{ $athlet->id }}'>{{ $athlet->getFullnameAttribute() }}</option>
-
-                                            @endforeach
-
-                                        </select>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-
-                                    <div class="form-group">
-                                        <button class="btn btn-primary" type="submit">Update Team</button>
-                                    </div>
-
                                 </div>
                             </div>
                         </div>
@@ -157,10 +145,47 @@
 @endsection
 
 @section('scripts')
+    <script src="{{ asset('js/jquery.quicksearch.js') }}"></script>
     <script src="{{ asset('js/jquery.multi-select.js') }}"></script>
 
     <script type="text/javascript">
-        $('#ids').multiSelect();
+        // $('#ids').multiSelect();
+
+        $('#ids').multiSelect({
+            selectableHeader: "<input type='text' class='search-input' autocomplete='off' placeholder='search ...'>",
+            selectionHeader: "<input type='text' class='search-input' autocomplete='off' placeholder='search ...'>",
+            afterInit: function (ms) {
+                var that = this,
+                    $selectableSearch = that.$selectableUl.prev(),
+                    $selectionSearch = that.$selectionUl.prev(),
+                    selectableSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selectable:not(.ms-selected)',
+                    selectionSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selection.ms-selected';
+
+                that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+                    .on('keydown', function (e) {
+                        if (e.which === 40) {
+                            that.$selectableUl.focus();
+                            return false;
+                        }
+                    });
+
+                that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+                    .on('keydown', function (e) {
+                        if (e.which == 40) {
+                            that.$selectionUl.focus();
+                            return false;
+                        }
+                    });
+            },
+            afterSelect: function () {
+                this.qs1.cache();
+                this.qs2.cache();
+            },
+            afterDeselect: function () {
+                this.qs1.cache();
+                this.qs2.cache();
+            }
+        });
     </script>
 
     <script>

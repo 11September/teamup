@@ -50,6 +50,7 @@
                                     <th>Full Name</th>
                                     <th>Phone</th>
                                     <th>E-mail</th>
+                                    <th>Count Athlets</th>
                                     <th>Expired Date</th>
                                     <th>Role</th>
                                     <th>Status</th>
@@ -64,6 +65,7 @@
                                         <td>{{ $user->getFullnameAttribute() }}</td>
                                         <td>{{ $user->phone }}</td>
                                         <td>{{ $user->email }}</td>
+                                        <td>{{ $user->number_students }}</td>
                                         <td>
                                             @if($user->type == "athlete")
 

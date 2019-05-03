@@ -51,6 +51,28 @@ class TeamsController extends Controller
 
     public function store(TeamStore $request)
     {
+        $status = UserHelper::CanCoachAddNewAthletesToTeam($request->user_id, $request->ids);
+
+        if (!$status['status']){
+            $number_students = $status['number_students'];
+            $busy_students = $status['busy_students'];
+            $available_students = $status['available_students'];
+            $want_add_students = $status['want_add_students'];
+            $returnSelectedAthletsIds = $request->ids;
+            $returnSelectedActivitiesIds = $request->activityIds;
+
+            return redirect()->back()
+                ->with([
+                    'success' => $status['status'],
+                    'status' => 'danger',
+                    'SelectedAthletsIds' => $returnSelectedAthletsIds,
+                    'SelectedAthletsIdsError' => "Please reduce the number of selected athletes.",
+                    'SelectedActivitiesIds' => $returnSelectedActivitiesIds,
+                    'message' => "Exceeded the limit of free athletes. You cannot tie too many athletes to this user. 
+                    The number of possible athletes - $number_students, available - $available_students, busy - $busy_students and you want to add - $want_add_students"
+                ], 200);
+        }
+
         $status = $this->teamService->store($request);
 
         return redirect()->action('Admin\TeamsController@index')
@@ -80,6 +102,28 @@ class TeamsController extends Controller
 
     public function update(TeamUpdate $request, Team $team)
     {
+        $status = UserHelper::CanCoachAddNewAthletesToTeam($request->user_id, $request->ids);
+
+        if (!$status['status']){
+            $number_students = $status['number_students'];
+            $busy_students = $status['busy_students'];
+            $available_students = $status['available_students'];
+            $want_add_students = $status['want_add_students'];
+            $returnSelectedAthletsIds = $request->ids;
+            $returnSelectedActivitiesIds = $request->activityIds;
+
+            return redirect()->back()
+                ->with([
+                    'success' => $status['status'],
+                    'status' => 'danger',
+                    'SelectedAthletsIds' => $returnSelectedAthletsIds,
+                    'SelectedAthletsIdsError' => "Please reduce the number of selected athletes.",
+                    'SelectedActivitiesIds' => $returnSelectedActivitiesIds,
+                    'message' => "Exceeded the limit of free athletes. You cannot tie too many athletes to this user. 
+                    The number of possible athletes - $number_students, available - $available_students, busy - $busy_students and you want to add - $want_add_students"
+                ], 200);
+        }
+
         $status = $this->teamService->update($request, $team->id);
 
         return redirect()->action('Admin\TeamsController@edit', $team)

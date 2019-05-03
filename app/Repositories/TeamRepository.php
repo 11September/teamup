@@ -44,6 +44,15 @@ class TeamRepository
         )->get();
     }
 
+    public function loadUsersToTeams($team)
+    {
+        $team->load(['users' => function ($query) {
+            $query->select('first_name', 'last_name');
+        }]);
+
+        return $team;
+    }
+
     public function getFirstTeamByUserId($id)
     {
         return $this->team
@@ -56,11 +65,10 @@ class TeamRepository
     {
         return $this->team
             ->where('user_id', $coach_id)
-            ->with(array(
-                    'coach' => function ($query) {
-                        $query->select('id', 'first_name', 'last_name');
-                    })
-            )->get();
+            ->with(['coach' => function ($query) {
+                $query->select('id', 'first_name', 'last_name');
+            }])
+            ->get();
     }
 
     public function find($id)

@@ -148,7 +148,13 @@ class UserService
 
     public function getAllAvailableAthlets()
     {
-        return $this->user->getAllAvailableAthlets();
+        if (Auth::user()->type == "coach") {
+            $athlets = $this->user->belongsToCoach();
+        }else{
+            $athlets = $this->user->getAllAvailableAthlets();
+        }
+
+        return $athlets;
     }
 }
 
