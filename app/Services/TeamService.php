@@ -56,11 +56,12 @@ class TeamService
     {
         $attributes = $this->prepareData($request);
 
-        if ($this->team->store($attributes)){
+        $array[0] = $request->user_id;
+        $result = array_merge($array, $request->ids);
 
+        if ($this->team->store($attributes)){
             $team = $this->team->last();
-            $team->users()->sync($request->user_id, true);
-            $team->users()->sync($request->ids, true);
+            $team->users()->sync($result, true);
 
             if ($request->activityIds){
                 $this->createDefaultActivitiesToTeam($request, $team);
