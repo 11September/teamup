@@ -79,6 +79,10 @@
                                         </div>
                                     @endif
 
+                                    <div class="form-group">
+                                        <button class="btn btn-primary" type="submit">Update Team</button>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -125,8 +129,8 @@
                                                     @if(Session::has('SelectedAthletsIdsError'))
                                                         <span class="invalid-feedback" role="alert"
                                                               style="display: block">
-                                                <strong>{{ Session::get('SelectedAthletsIdsError') }}</strong>
-                                            </span>
+                                                            <strong>{{ Session::get('SelectedAthletsIdsError') }}</strong>
+                                                        </span>
                                                     @endif
 
                                                 </div>
