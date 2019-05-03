@@ -200,14 +200,19 @@ class AuthService
             $query->select('goal', 'activity_id', 'user_id');
         }]);
 
-        $user = $this->prepareDetailsData($user);
-        $user = $this->prepareDetailsAvatar($user);
-
-        return $user;
+        return $this->prepareDetailsData($user);
     }
 
     public function prepareDetailsData($user)
     {
+        dd(file_exists(storage_path("app/public") . $user->avatar));
+
+        if ($user->avatar && file_exists(storage_path("app/public") . $user->avatar)) {
+            $user->avatar = Config::get('app.storageurl') . $user->avatar;
+        }else{
+            $user->avatar = null;
+        }
+
         $user = collect($user)->except(
             [
                 'created_at',
@@ -230,17 +235,6 @@ class AuthService
                 'last_name',
             ]
         );
-
-        return $user;
-    }
-
-    public function prepareDetailsAvatar($user)
-    {
-        if ($user->avatar && file_exists(storage_path("app/public") . $user->avatar)) {
-            $user->avatar = Config::get('app.storageurl') . $user->avatar;
-        }else{
-            $user->avatar = null;
-        }
 
         return $user;
     }
