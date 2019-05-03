@@ -25,10 +25,10 @@ class SettingsStore extends FormRequest
     public function rules()
     {
         return [
-            'type_graph_straight' => 'nullable|string|required_without_all:type_graph_reverse,privacy_policy,default_units',
-            'type_graph_reverse' => 'nullable|string|required_without_all:type_graph_straight,privacy_policy,default_units',
-            'privacy_policy' => 'nullable|string|required_without_all:type_graph_straight,type_graph_reverse,default_units',
-            'default_units' => 'nullable|string|required_without_all:type_graph_straight,type_graph_reverse,privacy_policy',
+            'type_graph_straight' => 'required_without_all:type_graph_reverse,privacy_policy,default_units',
+            'type_graph_reverse' => 'required_without_all:type_graph_straight,privacy_policy,default_units',
+            'privacy_policy' => 'required_without_all:type_graph_straight,type_graph_reverse,default_units',
+            'default_units' => 'required_without_all:type_graph_straight,type_graph_reverse,privacy_policy',
         ];
     }
 }

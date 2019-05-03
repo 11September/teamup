@@ -50,10 +50,10 @@
                                                             </div>
 
                                                             <div class="wrapper-measures-delete-block">
-                                                                <a class="measures-button-block measures-button-block-save"
-                                                                   href="#">
-                                                                    <i class="fas fa-save"></i>
-                                                                </a>
+                                                                {{--<a class="measures-button-block measures-button-block-save"--}}
+                                                                   {{--href="#">--}}
+                                                                    {{--<i class="fas fa-save"></i>--}}
+                                                                {{--</a>--}}
                                                                 <a class="measures-button-block measures-button-block-delete"
                                                                    href="#">
                                                                     <i class="fas fa-trash-alt"></i>
@@ -122,9 +122,9 @@
                         '<input class="form-control custom-form-control-measures" value="" data-id="" type="text" name="name">' +
                         '</div>' +
                         '<div class="wrapper-measures-delete-block">' +
-                        '<a class="measures-button-block measures-button-block-save" href="#">' +
-                        '<i class="fas fa-save"></i>' +
-                        '</a>' +
+                        // '<a class="measures-button-block measures-button-block-save" href="#">' +
+                        // '<i class="fas fa-save"></i>' +
+                        // '</a>' +
                         '<a class="measures-button-block measures-button-block-delete" href="#">' +
                         '<i class="fas fa-trash-alt"></i>' +
                         '</a>' +
@@ -145,9 +145,9 @@
                         '<input class="form-control custom-form-control-measures" value="" data-id="" type="text" name="name">' +
                         '</div>' +
                         '<div class="wrapper-measures-delete-block">' +
-                        '<a class="measures-button-block measures-button-block-save" href="#">' +
-                        '<i class="fas fa-save"></i>' +
-                        '</a>' +
+                        // '<a class="measures-button-block measures-button-block-save" href="#">' +
+                        // '<i class="fas fa-save"></i>' +
+                        // '</a>' +
                         '<a class="measures-button-block measures-button-block-delete" href="#">' +
                         '<i class="fas fa-trash-alt"></i>' +
                         '</a>' +
@@ -204,13 +204,11 @@
                 clicked.prop('disabled', false);
             });
 
-
-            // save measure
-            $(".wrapper-measures").on("click", '.measures-button-block-save', function (e) {
+            jQuery('body').on('change keyup paste','input.custom-form-control-measures',function(e){
                 e.preventDefault();
 
-                var clicked = $(e.target);
-                clicked.prop('disabled', true);
+                // var clicked = $(e.target);
+                // clicked.prop('disabled', true);
                 var input = $(this).closest('.wrapper-input-buttons').find('input');
                 var name = input.val();
                 var id = input.attr("data-id");
@@ -257,6 +255,60 @@
 
                 clicked.prop('disabled', false);
             });
+
+
+            // save measure
+            {{--$(".wrapper-measures").on("click", '.measures-button-block-save', function (e) {--}}
+                {{--e.preventDefault();--}}
+
+                {{--var clicked = $(e.target);--}}
+                {{--clicked.prop('disabled', true);--}}
+                {{--var input = $(this).closest('.wrapper-input-buttons').find('input');--}}
+                {{--var name = input.val();--}}
+                {{--var id = input.attr("data-id");--}}
+
+                {{--if (name) {--}}
+                    {{--$.ajax({--}}
+                        {{--headers: {--}}
+                            {{--'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')--}}
+                        {{--},--}}
+
+                        {{--type: 'POST',--}}
+                        {{--url: '{{ url('admin/measures')}}',--}}
+                        {{--dataType: 'json',--}}
+                        {{--data: {id: id, name: name},--}}
+                        {{--success: function (data) {--}}
+                            {{--if (data.success) {--}}
+                                {{--if (!id && data.id){--}}
+                                    {{--input.attr( "data-id", data.id );--}}
+                                {{--}--}}
+
+                                {{--toastr.success(data.message, {timeOut: 3000});--}}
+                            {{--}else{--}}
+                                {{--toastr.error(data.message, {timeOut: 3000});--}}
+                            {{--}--}}
+                        {{--}, error: function (data) {--}}
+                            {{--console.log(data);--}}
+
+                            {{--var errors = $.parseJSON(data.responseText);--}}
+
+                            {{--console.log(errors);--}}
+
+                            {{--$.each(errors.errors, function (key, value) {--}}
+                                {{--toastr.error(value, {timeOut: 2000});--}}
+                            {{--});--}}
+                        {{--}--}}
+                    {{--});--}}
+                {{--} else {--}}
+                    {{--input.css('border-bottom', '2px solid red');--}}
+
+                    {{--setTimeout(function () {--}}
+                        {{--input.css('border-bottom', '1px solid grey');--}}
+                    {{--}, 3000);--}}
+                {{--}--}}
+
+                {{--clicked.prop('disabled', false);--}}
+            {{--});--}}
 
         });
     </script>

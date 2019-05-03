@@ -7,6 +7,7 @@ use App\Helpers\UserHelper;
 use Illuminate\Http\Request;
 use App\Services\UserService;
 use App\Http\Requests\UserStore;
+use App\Http\Requests\UserUpdate;
 use App\Services\Api\RecordService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserUpdatePassword;
@@ -115,7 +116,7 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(UserUpdate $request, User $user)
     {
         $status = $this->userservice->update($request, $user->id);
 

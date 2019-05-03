@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UserStore extends FormRequest
+class UserUpdate extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,12 +27,6 @@ class UserStore extends FormRequest
         return [
             'first_name' => 'required|string|min:2',
             'last_name' => 'required|string|min:3',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:1|max:8|confirmed',
-            'type' =>  [
-                'required',
-                Rule::in(['athlete', 'coach', 'admin']),
-            ],
             'activation' =>  [
                 'required',
                 Rule::in(['demo', 'full']),
