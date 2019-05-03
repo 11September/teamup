@@ -59,6 +59,7 @@ class TeamService
         if ($this->team->store($attributes)){
 
             $team = $this->team->last();
+            $team->users()->sync($request->user_id, true);
             $team->users()->sync($request->ids, true);
 
             if ($request->activityIds){

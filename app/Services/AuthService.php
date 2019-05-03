@@ -188,8 +188,6 @@ class AuthService
     {
         Auth::user()->dayLeft = SubscribeHelper::calculateDaysLeft(Auth::user()->expiration_date);
 
-        Auth::user()->number_students_busy = 0;
-
         $user = Auth::user();
 
         $user->load(['teams' => function ($query) {
