@@ -37,7 +37,6 @@
                                     <div class="wrapper-measures">
 
                                         @foreach($measures as $measure)
-
                                             <div class="wrapper-measures-item">
                                                 <div class="row">
                                                     <div class="col-md-4">
@@ -50,10 +49,6 @@
                                                             </div>
 
                                                             <div class="wrapper-measures-delete-block">
-                                                                {{--<a class="measures-button-block measures-button-block-save"--}}
-                                                                   {{--href="#">--}}
-                                                                    {{--<i class="fas fa-save"></i>--}}
-                                                                {{--</a>--}}
                                                                 <a class="measures-button-block measures-button-block-delete"
                                                                    href="#">
                                                                     <i class="fas fa-trash-alt"></i>
@@ -63,11 +58,9 @@
                                                     </div>
                                                 </div>
                                             </div>
-
                                         @endforeach
 
                                     </div>
-
 
                                     <div class="add-new-measure">
                                         <div class="circle">
@@ -92,6 +85,68 @@
 
     <script>
         $(document).ready(function () {
+            $('.measures-container').on('click', '.custom-form-control-measures', function (e) {
+                previous = String(this.value);
+            })
+                .change(function (e) {
+                    var current = String($(e.target).val());
+
+                    var input = $(this).closest('.wrapper-input-buttons').find('input');
+                    var id = $(this).closest('.wrapper-input-buttons').find('input').attr("data-id");
+
+                    if (!previous) {
+                        var previousText = "";
+                        var previousTextLength = 0;
+                    } else {
+                        var previousText = previous.trim().toString();
+                        var previousTextLength = previousText.length;
+                    }
+
+                    var currentText = current.trim().toString();
+                    var currentTextLength = currentText.length;
+
+                    if (previousText !== currentText && previousTextLength !== currentTextLength) {
+                        $.ajax({
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+
+                            type: 'POST',
+                            url: '{{ url('admin/measures')}}',
+                            dataType: 'json',
+                            data: {id: id, name: currentText},
+                            success: function (data) {
+                                if (data.success) {
+                                    if (!id && data.id) {
+                                        input.attr("data-id", data.id);
+                                    }
+
+                                    toastr.success(data.message, {timeOut: 3000});
+                                } else {
+                                    toastr.error(data.message, {timeOut: 3000});
+                                }
+                            }, error: function (data) {
+                                console.log(data);
+
+                                var errors = $.parseJSON(data.responseText);
+
+                                console.log(errors);
+
+                                $.each(errors.errors, function (key, value) {
+                                    toastr.error(value, {timeOut: 2000});
+                                });
+                            }
+                        });
+                    } else {
+                        input.css('border-bottom', '2px solid red');
+
+                        setTimeout(function () {
+                            input.css('border-bottom', '1px solid grey');
+                        }, 3000);
+                    }
+
+                });
+
 
             // new measure
             $(".measures-container").on("click", '.add-new-measure-link', function (e) {
@@ -111,8 +166,7 @@
                     setTimeout(function () {
                         previousInput.css('border-bottom', '1px solid grey');
                     }, 3000);
-                }
-                else if (!previousInputValue && previousBoxCount == 0) {
+                } else if (!previousInputValue && previousBoxCount == 0) {
                     clicked.closest('.measures-container').find('.wrapper-measures').append(
                         '<div class="wrapper-measures-item">' +
                         '<div class="row">' +
@@ -122,9 +176,6 @@
                         '<input class="form-control custom-form-control-measures" value="" data-id="" type="text" name="name">' +
                         '</div>' +
                         '<div class="wrapper-measures-delete-block">' +
-                        // '<a class="measures-button-block measures-button-block-save" href="#">' +
-                        // '<i class="fas fa-save"></i>' +
-                        // '</a>' +
                         '<a class="measures-button-block measures-button-block-delete" href="#">' +
                         '<i class="fas fa-trash-alt"></i>' +
                         '</a>' +
@@ -134,8 +185,7 @@
                         '</div>' +
                         '</div>'
                     ).hide().fadeIn();
-                }
-                else{
+                } else {
                     clicked.closest('.measures-container').find('.wrapper-measures').append(
                         '<div class="wrapper-measures-item">' +
                         '<div class="row">' +
@@ -145,9 +195,6 @@
                         '<input class="form-control custom-form-control-measures" value="" data-id="" type="text" name="name">' +
                         '</div>' +
                         '<div class="wrapper-measures-delete-block">' +
-                        // '<a class="measures-button-block measures-button-block-save" href="#">' +
-                        // '<i class="fas fa-save"></i>' +
-                        // '</a>' +
                         '<a class="measures-button-block measures-button-block-delete" href="#">' +
                         '<i class="fas fa-trash-alt"></i>' +
                         '</a>' +
@@ -179,7 +226,7 @@
                         },
 
                         type: 'delete',
-                        url: '{{ url('admin/measures')}}'  + '/' + id,
+                        url: '{{ url('admin/measures')}}' + '/' + id,
                         dataType: 'json',
                         success: function (data) {
                             if (data.success) {
@@ -188,7 +235,7 @@
                                 });
 
                                 toastr.success(data.message, {timeOut: 3000});
-                            }else{
+                            } else {
                                 toastr.error(data.message, {timeOut: 3000});
                             }
                         }, error: function (data) {
@@ -203,113 +250,6 @@
 
                 clicked.prop('disabled', false);
             });
-
-            jQuery('body').on('change keyup paste','input.custom-form-control-measures',function(e){
-                e.preventDefault();
-
-                // var clicked = $(e.target);
-                // clicked.prop('disabled', true);
-                var input = $(this).closest('.wrapper-input-buttons').find('input');
-                var name = input.val();
-                var id = input.attr("data-id");
-
-                if (name) {
-                    $.ajax({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-
-                        type: 'POST',
-                        url: '{{ url('admin/measures')}}',
-                        dataType: 'json',
-                        data: {id: id, name: name},
-                        success: function (data) {
-                            if (data.success) {
-                                if (!id && data.id){
-                                    input.attr( "data-id", data.id );
-                                }
-
-                                toastr.success(data.message, {timeOut: 3000});
-                            }else{
-                                toastr.error(data.message, {timeOut: 3000});
-                            }
-                        }, error: function (data) {
-                            console.log(data);
-
-                            var errors = $.parseJSON(data.responseText);
-
-                            console.log(errors);
-
-                            $.each(errors.errors, function (key, value) {
-                                toastr.error(value, {timeOut: 2000});
-                            });
-                        }
-                    });
-                } else {
-                    input.css('border-bottom', '2px solid red');
-
-                    setTimeout(function () {
-                        input.css('border-bottom', '1px solid grey');
-                    }, 3000);
-                }
-
-                clicked.prop('disabled', false);
-            });
-
-
-            // save measure
-            {{--$(".wrapper-measures").on("click", '.measures-button-block-save', function (e) {--}}
-                {{--e.preventDefault();--}}
-
-                {{--var clicked = $(e.target);--}}
-                {{--clicked.prop('disabled', true);--}}
-                {{--var input = $(this).closest('.wrapper-input-buttons').find('input');--}}
-                {{--var name = input.val();--}}
-                {{--var id = input.attr("data-id");--}}
-
-                {{--if (name) {--}}
-                    {{--$.ajax({--}}
-                        {{--headers: {--}}
-                            {{--'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')--}}
-                        {{--},--}}
-
-                        {{--type: 'POST',--}}
-                        {{--url: '{{ url('admin/measures')}}',--}}
-                        {{--dataType: 'json',--}}
-                        {{--data: {id: id, name: name},--}}
-                        {{--success: function (data) {--}}
-                            {{--if (data.success) {--}}
-                                {{--if (!id && data.id){--}}
-                                    {{--input.attr( "data-id", data.id );--}}
-                                {{--}--}}
-
-                                {{--toastr.success(data.message, {timeOut: 3000});--}}
-                            {{--}else{--}}
-                                {{--toastr.error(data.message, {timeOut: 3000});--}}
-                            {{--}--}}
-                        {{--}, error: function (data) {--}}
-                            {{--console.log(data);--}}
-
-                            {{--var errors = $.parseJSON(data.responseText);--}}
-
-                            {{--console.log(errors);--}}
-
-                            {{--$.each(errors.errors, function (key, value) {--}}
-                                {{--toastr.error(value, {timeOut: 2000});--}}
-                            {{--});--}}
-                        {{--}--}}
-                    {{--});--}}
-                {{--} else {--}}
-                    {{--input.css('border-bottom', '2px solid red');--}}
-
-                    {{--setTimeout(function () {--}}
-                        {{--input.css('border-bottom', '1px solid grey');--}}
-                    {{--}, 3000);--}}
-                {{--}--}}
-
-                {{--clicked.prop('disabled', false);--}}
-            {{--});--}}
-
         });
     </script>
 @endsection

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -39,7 +40,15 @@ class ActivityStore extends FormRequest
                 'required',
                 Rule::in(['blank', 'custom']),
             ],
-            'team_id' => 'required|int|exists:teams,id',
+//            'team_id' => 'nullable|int|exists:teams,id',
+            'team_id' =>  [
+                Rule::requiredIf(function () {
+                    return Auth::user()->type == 'admin';
+                }),
+//                'nullable',
+//                'int',
+//                'exists:teams,id'
+            ]
         ];
     }
 }

@@ -19,13 +19,17 @@ use App\Mail\ResetPasswordCode;
 use App\Helpers\SubscribeHelper;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Auth;
+use App\Repositories\TeamRepository;
 use Illuminate\Support\Facades\Config;
+use App\Repositories\UserCoachRepository;
 
 class AuthService
 {
-    public function __construct(UserRepository $user)
+    public function __construct(UserRepository $user, TeamRepository $team, UserCoachRepository $userCoach)
     {
         $this->user = $user;
+        $this->team = $team;
+        $this->userCoach = $userCoach;
     }
 
     public function loginIsActive(Request $request)
@@ -139,12 +143,9 @@ class AuthService
 
         $team->users()->sync(Auth::id(), false);
 
-        $user_id = Auth::id();
+        $this->userCoach->bindUser($team->user_id);
 
-        $teams = Team::select('id', 'name')
-            ->whereHas('users', function ($query) use ($user_id) {
-                $query->where('user_id', $user_id);
-            })->get();
+        $teams = $this->team->getListUserTeams();
 
         return $teams;
     }
@@ -205,7 +206,7 @@ class AuthService
     {
         if ($user->avatar && file_exists(storage_path("app/public") . $user->avatar)) {
             $user->avatar = Config::get('app.storageurl') . $user->avatar;
-        }else{
+        } else {
             $user->avatar = null;
         }
 

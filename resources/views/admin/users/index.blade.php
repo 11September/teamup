@@ -51,6 +51,7 @@
                                     <th>Phone</th>
                                     <th>E-mail</th>
                                     <th>Count Athlets</th>
+                                    <th>Type</th>
                                     <th>Expired Date</th>
                                     <th>Role</th>
                                     <th>Status</th>
@@ -61,11 +62,12 @@
 
                                 @foreach($users as $user)
                                     <tr>
-                                        <td>{{ $user->id }}</td>
+                                        <td>{{ $loop->iteration }}</td>
                                         <td>{{ $user->getFullnameAttribute() }}</td>
                                         <td>{{ $user->phone }}</td>
                                         <td>{{ $user->email }}</td>
-                                        <td>{{ $user->number_students }}</td>
+                                        <td>@if($user->number_students || $user->number_students != 0) {{ $user->number_students }} @else @endif</td>
+                                        <td>{{ $user->activation }}</td>
                                         <td>
                                             @if($user->type == "athlete")
 
@@ -73,7 +75,7 @@
                                                 {{ $user->expiration_date }}
                                             @endif
                                         </td>
-                                        <td>{{ $user->type }}</td>
+                                        <td><span class="font-weight-bolder">{{ $user->type }}</span></td>
                                         <td>
                                             @if($user->IsActive)
                                                 <span class="success">Active</span>

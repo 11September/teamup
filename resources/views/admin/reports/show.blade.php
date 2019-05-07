@@ -138,8 +138,10 @@
     <script src="https://www.amcharts.com/lib/3/serial.js"></script>
     <script src="https://www.amcharts.com/lib/3/plugins/export/export.min.js"></script>
     <script src="https://www.amcharts.com/lib/3/themes/light.js"></script>
-    <script>
 
+    @yield('filter')
+
+    <script>
         if ($('#ambarchart2').length) {
             var chart = AmCharts.makeChart("ambarchart2", {
                 "type": "serial",
@@ -172,10 +174,8 @@
 
                         "year": "{{ $key }}",
                         "record": {{ number_format(floatval($maxResult), 2) }},
-                        "color": "@if(isset($activity->goal->goal) && !empty($activity->goal->goal) && $maxResult >= $activity->goal->goal) {{ "#19bd36" }} @else {{ "#bd4123" }} @endif ",
-                        "goal": @if($loop->first || $loop->last && isset($activity->goal->goal) && !empty($activity->goal->goal))
-                            {{  number_format(floatval($activity->goal->goal), 2) }}
-                            @else null @endif ,
+                        "color": "@if(isset($activity->goal) && !empty($activity->goal) && $maxResult >= $activity->goal->goal){{ "#19bd36" }}@else{{ "#bd4123" }}@endif ",
+                        "goal": @if(($loop->first || $loop->last) && isset($activity->goal->goal) && !empty($activity->goal->goal)){{  number_format(floatval($activity->goal->goal), 2) }}@else null @endif,
                         @if($loop->last)"alpha": 0.2, "additional": "(projection)",@endif
                     },
                     @endforeach
@@ -242,127 +242,5 @@
                 }
             });
         }
-
-
-        $(document).ready(function () {
-            var global_team_id;
-            var global_user_id;
-            var global_activity_id;
-
-            $('.wrapper-filter #team_id').on('change', function () {
-                global_team_id = $(this).val();
-
-                if (global_team_id) {
-                    $.ajax({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        type: 'GET',
-                        url: '{{ url('admin/teams') }}',
-                        dataType: 'json',
-                        data: {team_id: global_team_id},
-                        success: function (data) {
-                            if (data.success) {
-
-                                var content = $('#user_id').empty();
-
-                                content.append(
-                                    '<option value="">Select Athlete</option>'
-                                );
-
-                                $.each(data.data, function (index, item) {
-                                    content.append(
-                                        '<option value="' + item.id + '">' + item.first_name + " " + item.last_name + '</option>'
-                                    );
-                                });
-
-                                $('#activity_id').empty().attr('disabled', false);
-                                $('#range').attr('disabled', false);
-
-                            }
-                        }, error: function () {
-                            console.log(data);
-                        }
-                    });
-                } else {
-                    toastr.error('Something went wrong!', {timeOut: 3000});
-                }
-            });
-
-            $('.wrapper-filter #user_id').on('change', function () {
-                global_user_id = $(this).val();
-
-                if (global_user_id) {
-                    $.ajax({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        type: 'GET',
-                        url: '{{ url('admin/records') }}',
-                        dataType: 'json',
-                        data: {user_id: global_user_id},
-                        success: function (data) {
-                            if (data.success) {
-
-                                var content = $('#activity_id').empty();
-
-                                content.append(
-                                    '<option value="">Select Activity</option>'
-                                );
-
-                                $.each(data.data, function (index, item) {
-                                    content.append(
-                                        '<option value="' + item.id + '">' + item.name + '</option>'
-                                    );
-                                });
-
-                                $('#range').attr('disabled', false);
-
-                            }
-                        }, error: function () {
-                            console.log(data);
-                        }
-                    });
-                } else {
-                    toastr.error('Something went wrong!', {timeOut: 3000});
-                }
-            });
-
-            $('.wrapper-filter #activity_id').on('change', function () {
-                global_activity_id = $(this).val();
-
-                if (global_activity_id) {
-                    $.ajax({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        type: 'GET',
-                        url: '{{ url('admin/records') }}',
-                        dataType: 'json',
-                        data: {user_id: global_user_id},
-                        success: function (data) {
-                            if (data.success) {
-
-                                var content = $('#activity_id');
-
-                                content.empty();
-                                $('#type').attr('disabled', false);
-
-                                $.each(data.data, function (index, item) {
-                                    content.append(
-                                        '<option value="' + item.id + '">' + item.name + '</option>'
-                                    );
-                                });
-
-                            }
-                        }, error: function () {
-                            console.log(data);
-                        }
-                    });
-                } else {
-                    toastr.error('Something went wrong!', {timeOut: 3000});
-                }
-            });
-        });
     </script>
 @endsection

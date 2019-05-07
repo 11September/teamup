@@ -55,7 +55,9 @@
                 {{ $user->first_name . " " . $user->last_name }}
             @endif
         </th>
-        <th colspan="2">{{ $activity->goal->goal }}</th>
+        @if($activity->goal)
+            <th colspan="2">{{ $activity->goal->goal }}</th>
+        @endif
     </tr>
     </thead>
 

@@ -31,9 +31,9 @@ class UserUpdate extends FormRequest
                 'required',
                 Rule::in(['demo', 'full']),
             ],
-            'activation_code' => 'required|string|min:10',
-            'expiration_date' => 'required|date',
-            'number_students' => 'nullable|int|min:1',
+            'activation_code' => 'nullable|string|min:10',
+            'expiration_date' => 'nullable|date',
+            'number_students' => 'nullable|int|min:0',
             'phone' => 'nullable|numeric|digits_between:10,15|unique:users,phone',
             'school' => 'nullable|string|min:6',
         ];

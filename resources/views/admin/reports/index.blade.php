@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('css')
-
+    <link rel="stylesheet" href="{{ asset('css/toastr.min.css') }}">
 @endsection
 
 @section('content')
@@ -82,126 +82,7 @@
 @endsection
 
 @section('scripts')
-    <script>
-        $(document).ready(function () {
-            var global_team_id;
-            var global_user_id;
-            var global_activity_id;
+    <script src="{{ asset('js/toastr.min.js') }}"></script>
 
-            $('.wrapper-filter #team_id').on('change', function () {
-                global_team_id = $(this).val();
-
-                if (global_team_id) {
-                    $.ajax({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        type: 'GET',
-                        url: '{{ url('admin/teams') }}',
-                        dataType: 'json',
-                        data: {team_id: global_team_id},
-                        success: function (data) {
-                            if (data.success) {
-
-                                var content = $('#user_id').empty();
-
-                                content.append(
-                                    '<option value="">Select Athlete</option>'
-                                );
-
-                                $.each(data.data, function (index, item) {
-                                    content.append(
-                                        '<option value="' + item.id + '">' + item.first_name + " " + item.last_name + '</option>'
-                                    );
-                                });
-
-                                $('#activity_id').empty().attr('disabled', false);
-                                $('#range').attr('disabled', false);
-
-                            }
-                        }, error: function () {
-                            console.log(data);
-                        }
-                    });
-                } else {
-                    toastr.error('Something went wrong!', {timeOut: 3000});
-                }
-            });
-
-            $('.wrapper-filter #user_id').on('change', function () {
-                global_user_id = $(this).val();
-
-                if (global_user_id) {
-                    $.ajax({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        type: 'GET',
-                        url: '{{ url('admin/records') }}',
-                        dataType: 'json',
-                        data: {user_id: global_user_id},
-                        success: function (data) {
-                            if (data.success) {
-
-                                var content = $('#activity_id').empty();
-
-                                content.append(
-                                    '<option value="">Select Activity</option>'
-                                );
-
-                                $.each(data.data, function (index, item) {
-                                    content.append(
-                                        '<option value="' + item.id + '">' + item.name + '</option>'
-                                    );
-                                });
-
-                                $('#range').attr('disabled', false);
-
-                            }
-                        }, error: function () {
-                            console.log(data);
-                        }
-                    });
-                } else {
-                    toastr.error('Something went wrong!', {timeOut: 3000});
-                }
-            });
-
-            $('.wrapper-filter #activity_id').on('change', function () {
-                global_activity_id = $(this).val();
-
-                if (global_activity_id) {
-                    $.ajax({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        type: 'GET',
-                        url: '{{ url('admin/records') }}',
-                        dataType: 'json',
-                        data: {user_id: global_user_id},
-                        success: function (data) {
-                            if (data.success) {
-
-                                var content = $('#activity_id');
-
-                                content.empty();
-                                $('#type').attr('disabled', false);
-
-                                $.each(data.data, function (index, item) {
-                                    content.append(
-                                        '<option value="' + item.id + '">' + item.name + '</option>'
-                                    );
-                                });
-
-                            }
-                        }, error: function () {
-                            console.log(data);
-                        }
-                    });
-                } else {
-                    toastr.error('Something went wrong!', {timeOut: 3000});
-                }
-            });
-        });
-    </script>
+    @yield('filter')
 @endsection

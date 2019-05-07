@@ -25,17 +25,14 @@ class RecordService
     public function getUserRecords(Request $request)
     {
         $user_id = $request->user_id;
-
         $records = $this->recordRepo->getUsersRecords($user_id);
 
-        $ids = array();
-        $i = 0;
+        $RecordsIds = array();
         foreach ($records as $record) {
-            $ids[$i] = $record->id;
-            $i++;
+            $RecordsIds[] = $record->activity_id;
         }
 
-        return $this->activityRepo->getActivitiesIds($ids);
+        return $this->activityRepo->getActivitiesIds($RecordsIds);
     }
 
     public function index()

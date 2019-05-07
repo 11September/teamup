@@ -3769,3 +3769,32 @@ span.primary{
     height: 30px;
     padding: 0 10px;
 }
+
+.font-weight-bolder{
+    font-weight: bolder;
+}
+
+.spanTooltip{
+    display: flex;
+}
+
+.tooltip-has{
+    width: 30px;
+    height: 20px;
+    display: flex;
+    justify-content: flex-start;
+    margin-left: 5px;
+    padding-top: 0;
+    padding-right: 10px;
+}
+
+.tooltip-has i{
+    font-size: 18px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+
+.invalid-feedback{
+    display: block!important;
+}

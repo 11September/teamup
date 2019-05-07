@@ -135,6 +135,10 @@
                                         <select id="team_id" name="team_id" required
                                                 class="custom-select{{ $errors->has('status') ? ' is-invalid' : '' }}">
 
+                                            @if(Auth::user()->type == "admin")
+                                                <option value="null" selected="selected">Not selected</option>
+                                            @endif
+
                                             @foreach($teams as $team)
                                                 <option value="{{ $team->id }}">{{ $team->name }}</option>
                                             @endforeach

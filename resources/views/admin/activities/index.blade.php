@@ -58,9 +58,9 @@
 
                                 @foreach($activities as $activity)
                                     <tr>
-                                        <td>{{ $activity->id }}</td>
+                                        <td>{{ $loop->iteration }}</td>
                                         <td>{{ $activity->name }}</td>
-                                        <td>{{ $activity->team->name }}</td>
+                                        <td>@if($activity->team) {{ $activity->team->name }} @endif</td>
                                         <td>{{ $activity->measure->name }}</td>
                                         <td>{{ $activity->graph_type }}</td>
                                         <td>{{ $activity->status }}</td>

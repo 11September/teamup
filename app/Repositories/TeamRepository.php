@@ -71,6 +71,14 @@ class TeamRepository
             ->get();
     }
 
+    public function getListUserTeams()
+    {
+        return $this->team->select('id', 'name')
+            ->whereHas('users', function ($query){
+                $query->where('user_id', Auth::id());
+            })->get();
+    }
+
     public function find($id)
     {
         return $this->team->find($id);

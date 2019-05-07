@@ -9,6 +9,14 @@
 
 namespace App\Services;
 
+use App\Note;
+use App\Team;
+use App\User;
+use App\Record;
+use App\Report;
+use App\Measure;
+use App\Activity;
+use App\Feedback;
 use App\UserCoach;
 use Illuminate\Http\Request;
 use App\Helpers\PasswordHelper;
@@ -17,16 +25,37 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Repositories\TeamRepository;
 use App\Repositories\UserRepository;
+use App\Repositories\UserCoachRepository;
 
 class UserService
 {
-    public function __construct(UserRepository $user, TeamRepository $team)
+    public function __construct(UserRepository $user, TeamRepository $team, UserCoachRepository $userCoach)
     {
         $this->user = $user;
         $this->team = $team;
+        $this->userCoach = $userCoach;
     }
 
     protected $status = false;
+
+    public function dashboard()
+    {
+        if (Auth::user()->type == "admin"){
+            $tabs['users'] = User::where('type', 'athlete')->count();
+            $tabs['measures'] = Measure::count();
+            $tabs['teams'] = Team::count();
+            $tabs['reports'] = Report::count();
+            $tabs['actives'] = Activity::where('status', 'custom')->count();
+            $tabs['feedbacks'] = Feedback::count();
+        }else{
+            $tabs['teams'] = Team::where('user_id', Auth::id())->count();
+            $tabs['students'] = UserCoach::where('coach_id', Auth::id())->count();
+            $tabs['notes'] = Note::where('user_id', Auth::id())->count();
+            $tabs['actives'] = Activity::where('user_id', Auth::id())->count();
+        }
+
+        return $tabs;
+    }
 
     public function index()
     {
@@ -58,13 +87,7 @@ class UserService
         $this->status = $this->user->create($attributes);
 
         if ($this->status && Auth::user()->type == "coach") {
-
-            $user = $this->user->last();
-
-            $userCoach = new UserCoach();
-            $userCoach->user_id = $user->id;
-            $userCoach->coach_id = Auth::id();
-            $userCoach->save();
+            $this->status = $this->createNewRelationUserCoachByEmail($request->email);
         }
 
         return $this->status;
@@ -98,7 +121,22 @@ class UserService
             $attributes['activation_code'] = $request->activation_code ? $request->activation_code : SubscribeHelper::generateActivationCode();
         }
 
+        if ($request->type == "admin") {
+            $attributes['expiration_date'] = SubscribeHelper::getCurrentDate();
+            $attributes['activation_code'] = $request->activation_code ? $request->activation_code : SubscribeHelper::generateActivationCode();
+        }
+
         return $attributes;
+    }
+
+    public function createNewRelationUserCoachByEmail($email)
+    {
+        $user = $this->user->findByAttr('email', $email);
+
+        $userCoach = new UserCoach();
+        $userCoach->user_id = $user->id;
+        $userCoach->coach_id = Auth::id();
+        return $userCoach->save();
     }
 
     public function read($id)
@@ -122,14 +160,42 @@ class UserService
 
     public function delete($id)
     {
-        if (Auth::user()->type == "coach") {
-            $team = $this->team->getFirstTeamByUserId($id);
-            $team->users()->detach($id);
+        $user = $this->user->find($id);
 
-            UserCoach::where('user_id', $id)->where('coach_id', Auth::id())->delete();
-        }
+        $this->deleteRelationsUser($user);
+
+        $user->teams()->detach();
+
+        $this->userCoach->unbindUser($id);
 
         return $this->user->delete($id);
+    }
+
+    public function deleteRelationsUser($user)
+    {
+        if (Auth::user()->type == "admin"){
+            $teams = $user->teams()->get();
+            $teamsIds = $teams->pluck('id')->toArray();
+        }else{
+            $teamsIds = array();
+            $teams = $user->teams()->get();
+            foreach ($teams as $team) {
+                if ($team->user_id == Auth::id()){
+                    $teamsIds[] = $team->id;
+                }
+            }
+        }
+
+        $activities = Activity::select('id')->whereIn('team_id', $teamsIds)->get();
+        $activitiesIds = $activities->pluck('id')->toArray();
+
+        Record::where('user_id', $user->id)->whereIn('activity_id', $activitiesIds)->delete();
+        Report::where('user_id', $user->id)->delete();
+
+        $user->goal()->delete();
+
+        Feedback::where('user_id', $user->id)->delete();
+        Note::where('user_id', $user->id)->delete();
     }
 
     public function addStatusFieldUsers($users)
@@ -150,7 +216,7 @@ class UserService
     {
         if (Auth::user()->type == "coach") {
             $athlets = $this->user->belongsToCoach();
-        }else{
+        } else {
             $athlets = $this->user->getAllAvailableAthlets();
         }
 

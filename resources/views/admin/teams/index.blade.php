@@ -62,7 +62,7 @@
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $team->name }}</td>
                                         <td>{{ $team->code }}</td>
-                                        <td>{{ $team->coach->getFullnameAttribute() }}</td>
+                                        <td>@if($team->coach) {{ $team->coach->getFullnameAttribute() }} @endif</td>
                                         <td>{{ $team->count }}</td>
                                         <td>{{ $team->count_busy }}</td>
                                         <td class="datatable-actions">

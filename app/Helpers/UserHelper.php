@@ -12,7 +12,6 @@ namespace App\Helpers;
 use App\User;
 use App\UserCoach;
 use Carbon\Carbon;
-use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Auth;
 
 class UserHelper
@@ -20,8 +19,8 @@ class UserHelper
     public static function CanCoachCreateNewAthlete()
     {
         if (Auth::user()->type == "coach") {
-            $userRepo = new UserRepository(new User());
-            $count = count($userRepo->belongsToCoach());
+            $userCoach = new UserCoach();
+            $count = $userCoach->where('coach_id', Auth::id())->count();
 
             if ($count < Auth::user()->number_students) {
                 return true;

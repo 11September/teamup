@@ -56,8 +56,7 @@ class TeamService
     {
         $attributes = $this->prepareData($request);
 
-        $array[0] = $request->user_id;
-        $result = array_merge($array, $request->ids);
+        $result = $this->mergeCoachIdAndAthlets($request);
 
         if ($this->team->store($attributes)){
             $team = $this->team->last();
@@ -140,6 +139,20 @@ class TeamService
         $attributes['team_id'] = $team_id;
 
         return $attributes;
+    }
+
+    public function mergeCoachIdAndAthlets(Request $request)
+    {
+        $array = array();
+        $array[0] = $request->user_id;
+
+        if ($request->ids){
+            $result = array_merge($array, $request->ids);
+        }else{
+            $result = $array[0];
+        }
+
+        return $result;
     }
 
     public function delete($id)

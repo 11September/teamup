@@ -77,6 +77,8 @@
                                             @endif
 
                                         </div>
+                                    @else
+                                        <input type="hidden" name="user_id" value="{{ $team->user_id }}">
                                     @endif
 
                                     <div class="form-group">

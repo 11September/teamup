@@ -34,8 +34,10 @@
 
             @if(Auth::user()->type == "coach")
                 <input type="text" name="activation" value="full" hidden>
-                <input id="activation_code_hidden" type="text" name="activation_code" value="@php(print(bin2hex(random_bytes(10))))" hidden>
-                <input id="expiration_date_hidden" type="text" name="expiration_date" value="{{ \Carbon\Carbon::now() }}" hidden>
+                <input id="activation_code_hidden" type="text" name="activation_code"
+                       value="@php(print(bin2hex(random_bytes(10))))" hidden>
+                <input id="expiration_date_hidden" type="text" name="expiration_date"
+                       value="{{ \Carbon\Carbon::now() }}" hidden>
             @endif
 
             <div class="row">
@@ -55,9 +57,10 @@
                                             @if(Auth::user()->type == "admin")
                                                 <option selected="selected" value="coach">Coach</option>
                                                 <option value="admin">Admin</option>
+                                                <option value="athlete">Athlete</option>
+                                            @else
+                                                <option value="athlete" selected="selected">Athlete</option>
                                             @endif
-
-                                            <option value="athlete">Athlete</option>
 
                                         </select>
 
@@ -195,7 +198,14 @@
 
                                             <div class="wrapper-code" style="display:none;">
                                                 <div class="form-group">
-                                                    <label for="activation_code" class="col-form-label">Code</label>
+                                                    <label for="activation_code" class="col-form-label">
+                                                        <span class="spanTooltip">
+                                                            Activation code*
+                                                            <a href="#" class="tooltip-has has-tooltip-right" title=""
+                                                               data-original-title="Code to activate the coach in the application."><i
+                                                                    class="fas fa-info-circle"></i></a>
+                                                        </span>
+                                                    </label>
 
                                                     <div class="input-group mb-3">
                                                         <div class="input-group-prepend">
@@ -219,8 +229,16 @@
                                                 </div>
 
                                                 <div class="form-group">
-                                                    <label for="expiration_date" class="col-form-label">Date
-                                                        Expired*</label>
+                                                    <label for="expiration_date" class="col-form-label">
+                                                        <span class="spanTooltip">
+                                                            Date Expired*
+                                                            <a href="#" class="tooltip-has has-tooltip-right" title=""
+                                                               data-original-title="The period expires at night on the set day."><i
+                                                                    class="fas fa-info-circle"></i></a>
+                                                        </span>
+                                                    </label>
+
+
                                                     <input class="form-control" type="date" name="expiration_date"
                                                            value="{{ old('expiration_date') }}"
                                                            id="expiration_date" required>
@@ -304,7 +322,6 @@
 
 @section('scripts')
     <script>
-
         $(".hide_show_password").hover(
             function functionName() {
                 //Change the attribute to text
@@ -382,6 +399,11 @@
 
 
         $(document).ready(function (e) {
+            // $(".has-tooltip-right").tooltip({ placement: 'right'});
+            // $(".has-tooltip-left").tooltip({ placement: 'left'});
+            // $(".has-tooltip-bottom").tooltip({ placement: 'bottom'});
+            // $(".has-tooltip").tooltip();
+
             var code = generateId(10);
             $('#activation_code').val(code);
 
@@ -419,7 +441,8 @@
                 if (activation == "admin") {
                     $('.wrapper-phone-school-block').fadeOut();
                     $('.wrapper-access-block').fadeOut();
-                    $('#activation').val('full');
+                    $('#activation').val('demo');
+                    $('#number_students').val(0);
                     $('#activation_code').val(generateId(10));
                     $('#expiration_date').val(generateId(10));
                     setTodayMinValue();
@@ -429,13 +452,14 @@
                 if (activation == "athlete") {
                     $('.wrapper-phone-school-block').fadeIn();
                     $('.wrapper-access-block').fadeOut();
-                    $('#activation').val('full');
+                    $('#activation').val('demo');
+                    $('#number_students').val(0);
                     $('#activation_code').val(generateId(10));
                     $('#expiration_date').val(generateId(10));
                     setTodayMinValue();
                     setTodayValue();
-
                 }
+
                 if (activation == "coach") {
                     $('.wrapper-phone-school-block').fadeIn();
                     $('.wrapper-access-block').fadeIn();

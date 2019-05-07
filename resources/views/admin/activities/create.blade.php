@@ -62,7 +62,7 @@
 
                                             @foreach($measures as $measure)
                                                 <option value="{{ $measure->id }}"
-                                                    @if(old('measure_id') ==  $measure->id)
+                                                        @if(old('measure_id') ==  $measure->id)
                                                         selected="selected"
                                                     @endif>{{ $measure->name }}</option>
                                             @endforeach
@@ -81,8 +81,12 @@
                                         <label for="graph_type" class="col-form-label">Graph Type*</label>
                                         <select id="graph_type" name="graph_type" required
                                                 class="custom-select{{ $errors->has('graph_type') ? ' is-invalid' : '' }}">
-                                            <option @if(old('graph_type') == "straight")selected="selected" @endif value="straight">straight</option>
-                                            <option @if(old('graph_type') == "reverse")selected="selected" @endif value="reverse">reverse</option>
+                                            <option @if(old('graph_type') == "straight")selected="selected"
+                                                    @endif value="straight">straight
+                                            </option>
+                                            <option @if(old('graph_type') == "reverse")selected="selected"
+                                                    @endif value="reverse">reverse
+                                            </option>
                                         </select>
 
                                         @if ($errors->has('graph_type'))
@@ -116,11 +120,14 @@
 
                                     </div>
 
-
                                     <div class="form-group">
                                         <label for="team_id" class="col-form-label">Team*</label>
                                         <select id="team_id" name="team_id" required
                                                 class="custom-select{{ $errors->has('status') ? ' is-invalid' : '' }}">
+
+                                            @if(Auth::user()->type == "admin")
+                                                <option value="null" selected="selected">Not selected</option>
+                                            @endif
 
                                             @foreach($teams as $team)
                                                 <option value="{{ $team->id }}">{{ $team->name }}</option>

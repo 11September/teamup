@@ -4,19 +4,19 @@ namespace App\Http\Controllers\Admin;
 
 use App\Report;
 use App\Helpers\UserHelper;
-use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
 use App\Services\TeamService;
 use App\Services\ReportsService;
 use App\Services\ActivityService;
 use App\Http\Requests\ReportStore;
+use Illuminate\Foundation\Auth\User;
 use App\Http\Controllers\Controller;
 
 class ReportsController extends Controller
 {
+    protected $teamService;
     protected $reportsService;
     protected $activityService;
-    protected $teamService;
 
     public function __construct(ReportsService $reportsService, TeamService $teamService, ActivityService $activityService)
     {

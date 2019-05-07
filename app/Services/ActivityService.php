@@ -93,6 +93,11 @@ class ActivityService
     {
         $attributes['name'] = $request->name;
         $attributes['team_id'] = $request->team_id;
+
+        if (Auth::user()->type == "admin" && $request->team_id == "null"){
+            $attributes['team_id'] = null;
+        }
+
         $attributes['measure_id'] = $request->measure_id;
         $attributes['graph_type'] = $request->graph_type;
 

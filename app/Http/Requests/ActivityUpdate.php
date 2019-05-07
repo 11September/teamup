@@ -40,7 +40,7 @@ class ActivityUpdate extends FormRequest
                 'required',
                 Rule::in(['blank', 'custom']),
             ],
-            'team_id' => 'required|int|exists:teams,id',
+//            'team_id' => 'required|int|exists:teams,id',
         ];
     }
 }
