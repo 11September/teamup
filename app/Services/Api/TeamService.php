@@ -21,6 +21,6 @@ class TeamService
 
     public function index(Request $request)
     {
-        return $this->teamRepo->getListTeamCoach();
+        return $this->teamRepo->getListTeamCoachWithActivities();
     }
 }

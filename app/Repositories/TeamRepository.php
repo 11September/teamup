@@ -84,6 +84,17 @@ class TeamRepository
         return $this->team->select('id', 'name')->where('user_id', Auth::id())->get();
     }
 
+    public function getListTeamCoachWithActivities()
+    {
+        return $this->team->select('id', 'name')
+            ->where('user_id', Auth::id())
+            ->with(array('activities'=>function($query){
+                $query->select('id','name', 'team_id');
+            }))
+            ->get();
+    }
+
+
     public function find($id)
     {
         return $this->team->find($id);
