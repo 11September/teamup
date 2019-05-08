@@ -35,6 +35,8 @@
                         <div class="col-12 mt-5">
                             <div class="card">
                                 <div class="card-body">
+                                    <h4 class="header-title">Settings</h4>
+
                                     <div class="form-group">
                                         <label for="type_graph_straight" class="col-form-label">Type Graph
                                             Straight</label>

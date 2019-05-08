@@ -79,6 +79,11 @@ class TeamRepository
             })->get();
     }
 
+    public function getListTeamCoach()
+    {
+        return $this->team->select('id', 'name')->where('user_id', Auth::id())->get();
+    }
+
     public function find($id)
     {
         return $this->team->find($id);

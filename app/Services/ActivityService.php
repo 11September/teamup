@@ -9,8 +9,10 @@
 
 namespace App\Services;
 
+use App\Activity;
 use App\Team;
 use App\Measure;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\ActivityRepository;
@@ -74,6 +76,12 @@ class ActivityService
     {
         $attributes = $this->prepareData($request);
 
+        if ($request->team_id == "null") {
+            $activities = $this->prepareDefaultActivitiesForCoachSave($request);
+
+            Activity::insert($activities);
+        }
+
         return $this->activityRepository->create($attributes);
     }
 
@@ -94,7 +102,7 @@ class ActivityService
         $attributes['name'] = $request->name;
         $attributes['team_id'] = $request->team_id;
 
-        if (Auth::user()->type == "admin" && $request->team_id == "null"){
+        if (Auth::user()->type == "admin" && $request->team_id == "null") {
             $attributes['team_id'] = null;
         }
 
@@ -112,5 +120,35 @@ class ActivityService
         $attributes['user_id'] = Auth::id();
 
         return $attributes;
+    }
+
+    public function prepareDefaultActivitiesForCoachSave(Request $request)
+    {
+        $coaches = User::select('id')->where('type', 'coach')->get();
+
+        $coachesIds = $coaches->pluck('id')->toArray();
+        $data = array();
+
+        $i = 0;
+        foreach ($coachesIds as $coachId) {
+            $teams = Team::select('id', 'user_id')->where('user_id', $coachId)->get();
+
+            foreach ($teams as $team) {
+                $data[$i] =
+                    [
+                        'name' => $request->name,
+                        'team_id' => $team->id,
+                        'measure_id' => $request->measure_id,
+                        'graph_type' => $request->graph_type,
+                        'status' => 'default',
+                        'user_id' => $coachId
+                    ];
+                $i++;
+            }
+        }
+
+        dump($data);
+
+        return $data;
     }
 }

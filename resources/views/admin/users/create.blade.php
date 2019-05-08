@@ -55,9 +55,9 @@
                                                 required>
 
                                             @if(Auth::user()->type == "admin")
-                                                <option selected="selected" value="coach">Coach</option>
-                                                <option value="admin">Admin</option>
-                                                <option value="athlete">Athlete</option>
+                                                <option @if(old('type') == "coach" && old('type') != "admin" && old('type') != "athlete") selected="selected" @else selected="selected" @endif value="coach">Coach</option>
+                                                <option @if(old('type') == "admin") selected="selected" @endif value="admin">Admin</option>
+                                                <option @if(old('type') == "athlete") selected="selected" @endif value="athlete">Athlete</option>
                                             @else
                                                 <option value="athlete" selected="selected">Athlete</option>
                                             @endif
@@ -115,7 +115,7 @@
                                     </div>
 
                                     <div class="wrapper-phone-school-block">
-                                        <div class="form-group">
+                                        <div class="form-group" @if(old('type') && old('type') == "admin") style="display:none;" @else style="display:block;" @endif>
                                             <label for="phone" class="col-form-label">Phone Number</label>
                                             <input class="form-control" name="phone" type="tel"
                                                    value="{{ old('phone') }}"
@@ -129,7 +129,7 @@
 
                                         </div>
 
-                                        <div class="form-group">
+                                        <div class="form-group" @if(old('type') && old('type') == "admin") style="display:none;" @else style="display:block;" @endif>
                                             <label for="school" class="col-form-label">School Name</label>
                                             <input class="form-control" name="school" type="text"
                                                    value="{{ old('school') }}" id="school" min="6">
@@ -162,7 +162,7 @@
 
                                     @if(Auth::user()->type == "admin")
                                         <div class="wrapper-access-block">
-                                            <div class="form-group">
+                                            <div class="form-group" @if(old('type') && old('type') != "coach") style="display:none;" @else style="display:block;" @endif>
                                                 <label for="number_students" class="col-form-label">Number of Athletes
                                                     in
                                                     the
@@ -179,7 +179,7 @@
 
                                             </div>
 
-                                            <div class="form-group">
+                                            <div class="form-group" @if(old('type') && old('type') != "coach") style="display:none;" @else style="display:block;" @endif>
                                                 <label for="activation" class="col-form-label">Activation type*</label>
                                                 <select id="activation" name="activation"
                                                         class="custom-select{{ $errors->has('activation') ? ' is-invalid' : '' }}"
@@ -193,7 +193,6 @@
                                                     <strong>{{ $errors->first('activation') }}</strong>
                                                 </span>
                                                 @endif
-
                                             </div>
 
                                             <div class="wrapper-code" style="display:none;">
@@ -462,7 +461,9 @@
 
                 if (activation == "coach") {
                     $('.wrapper-phone-school-block').fadeIn();
+                    $('.wrapper-phone-school-block .form-group').fadeIn();
                     $('.wrapper-access-block').fadeIn();
+                    $('.wrapper-access-block .form-group').fadeIn();
                     $('#activation_code').val(generateId(10));
                     $('#expiration_date').val(generateId(10));
                     setTodayMinValue();

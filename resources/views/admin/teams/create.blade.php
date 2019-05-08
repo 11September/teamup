@@ -122,7 +122,7 @@
                                 <div class="card-body">
 
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-12">
                                             <h4 class="header-title">Team Members</h4>
 
                                             <div class="wrapper-multiselect">
@@ -154,32 +154,32 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
-                                            <div class="wrapper-multiselect">
-                                                <h4 class="header-title">Default Activities</h4>
+                                        {{--<div class="col-md-12">--}}
+                                            {{--<div class="wrapper-multiselect">--}}
+                                                {{--<h4 class="header-title">Default Activities</h4>--}}
 
-                                                <div class="form-group">
-                                                    <label for="activityIds" class="col-form-label">Choose default
-                                                        Exercises</label>
+                                                {{--<div class="form-group">--}}
+                                                    {{--<label for="activityIds" class="col-form-label">Choose default--}}
+                                                        {{--Exercises</label>--}}
 
-                                                    <select name="activityIds[]" class="thisMultiselect"
-                                                            id="activityIds" multiple>
+                                                    {{--<select name="activityIds[]" class="thisMultiselect"--}}
+                                                            {{--id="activityIds" multiple>--}}
 
-                                                        @foreach($activities as $activity)
-                                                            <option value='{{ $activity->id }}'
-                                                                    @if(Session::has('SelectedActivitiesIds'))
-                                                                    @foreach(Session::get('SelectedActivitiesIds') as $key => $value)
-                                                                    @if($activity->id == $value) selected="selected" @endif
-                                                                @endforeach
-                                                                @endif>
-                                                                {{ $activity->name }}
-                                                            </option>
-                                                        @endforeach
+                                                        {{--@foreach($activities as $activity)--}}
+                                                            {{--<option value='{{ $activity->id }}'--}}
+                                                                    {{--@if(Session::has('SelectedActivitiesIds'))--}}
+                                                                    {{--@foreach(Session::get('SelectedActivitiesIds') as $key => $value)--}}
+                                                                    {{--@if($activity->id == $value) selected="selected" @endif--}}
+                                                                {{--@endforeach--}}
+                                                                {{--@endif>--}}
+                                                                {{--{{ $activity->name }}--}}
+                                                            {{--</option>--}}
+                                                        {{--@endforeach--}}
 
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
+                                                    {{--</select>--}}
+                                                {{--</div>--}}
+                                            {{--</div>--}}
+                                        {{--</div>--}}
                                     </div>
                                 </div>
                             </div>

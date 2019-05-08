@@ -53,6 +53,12 @@ Route::namespace('App')->group(function () {
             ]);
         });
 
+        Route::group(['prefix' => 'teams'], function () {
+            Route::resource('teams', 'TeamsController')->only([
+                'index'
+            ]);
+        });
+
         Route::group(['prefix' => 'activities'], function () {
             Route::resource('activities', 'ActivitiesController')->only([
                 'index', 'create' ,'store', 'edit' ,'update'

@@ -40,7 +40,7 @@
                     </div>
 
                     <div class="card-body">
-                        <h4 class="header-title">Users list</h4>
+                        <h4 class="header-title">Exercises list</h4>
                         <div class="data-tables datatable-dark">
                             <table id="dataTable3" class="text-center">
                                 <thead class="text-capitalize">

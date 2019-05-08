@@ -150,7 +150,7 @@ class UsersController extends Controller
                     ? "success"
                     : "danger",
                 'message' => $status
-                    ? "User password successfully deleted!"
+                    ? "User successfully deleted!"
                     : "Whoops, looks like something went wrong! Please try again later."
             ], 200);
     }

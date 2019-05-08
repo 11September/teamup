@@ -85,11 +85,6 @@
                                         </td>
                                         <td class="datatable-actions">
                                             <a class="datatable-actions-link"
-                                               href="{{ url('admin/users', $user->id) }}">
-                                                <i class="fas fa-eye"></i>
-                                            </a>
-
-                                            <a class="datatable-actions-link"
                                                href="{{ url('admin/users/' . $user->id . '/edit') }}">
                                                 <i class="fas fa-edit"></i>
                                             </a>

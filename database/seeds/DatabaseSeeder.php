@@ -15,17 +15,17 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             UserSeeder::class,
-            FeedbackSeeder::class,
-            NoteSeeder::class,
-            MeasuresSeeder::class,
-            TeamSeeder::class,
-            ActivitySeeder::class,
+//            FeedbackSeeder::class,
+//            NoteSeeder::class,
+//            MeasuresSeeder::class,
+//            TeamSeeder::class,
+//            ActivitySeeder::class,
 //
-            ActivityGoalSeeder::class,
-            TeamUserSeeder::class,
+//            ActivityGoalSeeder::class,
+//            TeamUserSeeder::class,
 //
-            RecordsSeeder::class,
-            ReportsSeeder::class,
+//            RecordsSeeder::class,
+//            ReportsSeeder::class,
         ]);
 
         DB::table('oauth_clients')->insert([

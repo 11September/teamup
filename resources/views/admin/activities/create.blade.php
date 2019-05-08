@@ -126,7 +126,7 @@
                                                 class="custom-select{{ $errors->has('status') ? ' is-invalid' : '' }}">
 
                                             @if(Auth::user()->type == "admin")
-                                                <option value="null" selected="selected">Not selected</option>
+                                                <option value="null" selected="selected">For all teams</option>
                                             @endif
 
                                             @foreach($teams as $team)

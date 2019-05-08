@@ -25,7 +25,9 @@ Route::group(['namespace' => 'Admin'], function () {
             Route::group(['as' => 'user.'], function () {
                 Route::get('/users/reset_password/{user}', 'UsersController@reset_password')->name('reset_user_password');
                 Route::post('/users/update_password/{id}', 'UsersController@update_password')->name('update_user_password');
-                Route::resource('users', 'UsersController');
+                Route::resource('users', 'UsersController')->except([
+                    'show'
+                ]);
             });
 
             Route::middleware(['canAdmin'])->group(function () {
