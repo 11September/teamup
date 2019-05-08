@@ -14,10 +14,6 @@ use Illuminate\Http\Request;
 |
 */
 
-//Route::middleware('auth:api')->get('/user', function (Request $request) {
-//    return $request->user();
-//});
-
 Route::namespace('App')->group(function () {
     Route::middleware(['cors'])->group(function () {
 
@@ -53,6 +49,8 @@ Route::namespace('App')->group(function () {
             ]);
         });
 
+
+        Route::get('getTeamAthlets/{teamId}', 'TeamsController@athletsTeam')->name('athletsTeam');
         Route::group(['prefix' => 'teams'], function () {
             Route::resource('teams', 'TeamsController')->only([
                 'index'

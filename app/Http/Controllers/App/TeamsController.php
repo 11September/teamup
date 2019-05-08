@@ -29,4 +29,13 @@ class TeamsController extends Controller
             "data" => $teams
         ]);
     }
+
+    public function athletsTeam($teamId)
+    {
+        $users = $this->teamService->athletsTeam($teamId);
+
+        return response()->json([
+            "data" => $users
+        ]);
+    }
 }
