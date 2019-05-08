@@ -73,7 +73,7 @@
                                                 </a>
                                             @endif
 
-                                            @if(Auth::user()->type == "admin" && $activity->user_id == Auth::id() && $activity->status == "blank")
+                                            @if(Auth::user()->type == "admin" && $activity->user_id == Auth::id() && $activity->status != "blank")
                                                 <a class="datatable-actions-link"
                                                    href="{{ url('admin/activities/' . $activity->id . '/edit') }}">
                                                     <i class="fas fa-edit"></i>

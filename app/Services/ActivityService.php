@@ -9,10 +9,11 @@
 
 namespace App\Services;
 
-use App\Activity;
 use App\Team;
-use App\Measure;
 use App\User;
+use App\Measure;
+use App\Activity;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\ActivityRepository;
@@ -129,6 +130,8 @@ class ActivityService
         $coachesIds = $coaches->pluck('id')->toArray();
         $data = array();
 
+        $now = Carbon::now();
+
         $i = 0;
         foreach ($coachesIds as $coachId) {
             $teams = Team::select('id', 'user_id')->where('user_id', $coachId)->get();
@@ -141,13 +144,13 @@ class ActivityService
                         'measure_id' => $request->measure_id,
                         'graph_type' => $request->graph_type,
                         'status' => 'default',
-                        'user_id' => $coachId
+                        'user_id' => $coachId,
+                        'created_at' => $now,
+                        'updated_at' => $now
                     ];
                 $i++;
             }
         }
-
-        dump($data);
 
         return $data;
     }
