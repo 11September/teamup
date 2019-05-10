@@ -20,7 +20,6 @@ class MeasureService
         $this->measure = $measureRepository;
     }
 
-
     public function index()
     {
         return $this->measure->index();

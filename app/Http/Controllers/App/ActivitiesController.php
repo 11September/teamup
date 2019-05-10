@@ -50,7 +50,7 @@ class ActivitiesController extends Controller
     /**
      * Create new Acticvity in Application
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function create()
@@ -63,7 +63,9 @@ class ActivitiesController extends Controller
             [
                 'data' => array(
                     'typeGraph' => ['straight', 'reverse'],
-                    'typeGraphTips' => [$graphSettingsTips->type_graph_straight, $graphSettingsTips->type_graph_reverse],
+                    'typeGraphTips' => [
+                        isset($graphSettingsTips->type_graph_straight) ? $graphSettingsTips->type_graph_straight : null,
+                        isset($graphSettingsTips->type_graph_reverse) ? $graphSettingsTips->type_graph_reverse : null],
                     'measures' => $measures,
                 )
             ],
@@ -75,7 +77,7 @@ class ActivitiesController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(ActivityStoreApi $request)
@@ -91,7 +93,7 @@ class ActivitiesController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function edit(Activity $activity)
@@ -119,8 +121,8 @@ class ActivitiesController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(ActivityUpdateApi $request, Activity $activity)
