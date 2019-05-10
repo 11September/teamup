@@ -63,6 +63,12 @@ Route::namespace('App')->group(function () {
             ]);
         });
 
+        Route::group(['prefix' => 'measures'], function () {
+            Route::resource('measures', 'MeasuresController')->only([
+                'index'
+            ]);
+        });
+
         Route::group(['prefix' => 'records'], function () {
             Route::resource('records', 'RecordsController')->only([
                 'index', 'store', 'update'

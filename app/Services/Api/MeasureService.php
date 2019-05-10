@@ -26,6 +26,10 @@ class MeasureService
         return $this->measure->index();
     }
 
+    public function indexApi(Request $request)
+    {
+        return $this->measure->indexApi($request->all());
+    }
 
     public function show(Request $request)
     {

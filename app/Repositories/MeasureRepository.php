@@ -26,6 +26,14 @@ class MeasureRepository
         return $this->measure->select('id', 'name')->get();
     }
 
+    public function indexApi($attributes)
+    {
+        return $this->measure
+            ->select('id', 'name')
+            ->filter($attributes)
+            ->get();
+    }
+
     public function findByAttr($attribute, $value)
     {
         return $this->measure->where($attribute, $value)->first();
