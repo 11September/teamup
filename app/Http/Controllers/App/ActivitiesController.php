@@ -37,6 +37,16 @@ class ActivitiesController extends Controller
     }
 
 
+    public function userStats($id)
+    {
+        $activities = $this->activityService->userStats($id);
+
+        return response()->json([
+            'data' => $activities,
+        ], 202);
+    }
+
+
     /**
      * Create new Acticvity in Application
      *

@@ -9,17 +9,33 @@
 
 namespace App\Services\Api;
 
+use App\Record;
+use App\TeamUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\TeamRepository;
+use App\Repositories\RecordRepository;
 use App\Repositories\ActivityRepository;
 
 class ActivityService
 {
-    public function __construct(ActivityRepository $activityRepository, TeamRepository $teamRepository)
+    public function __construct(ActivityRepository $activityRepository, TeamRepository $teamRepository, RecordRepository $recordRepository)
     {
         $this->activityRepository = $activityRepository;
         $this->teamRepository = $teamRepository;
+        $this->recordRepository = $recordRepository;
+    }
+
+    public function userStats($id)
+    {
+        $teams = TeamUser::where('user_id', $id)->get();
+        $teamsIds = $teams->pluck('team_id')->toArray();
+
+        $activities = $this->activityRepository->getAllActivitiesByTeamIdsAndCoachId($teamsIds);
+
+        $activities = $this->prepareActivitiesToUserStats($activities, $id);
+
+        return $activities;
     }
 
     public function filter(Request $request)
@@ -72,5 +88,21 @@ class ActivityService
         $attributes['graph_type'] = $request->graphtype;
 
         return $attributes;
+    }
+
+    public function prepareActivitiesToUserStats($activities, $id)
+    {
+        foreach ($activities as $activity) {
+            $record = Record::where('activity_id', $activity->id)
+                ->select('value')
+                ->where('user_id', $id)
+                ->orderBy('value', $activity->graph_type == "straight" ? "desc" : "asc")
+                ->first();
+
+            unset($activity->graph_type);
+            $activity->record = isset($record->value) ? $record->value : null;
+        }
+
+        return $activities;
     }
 }

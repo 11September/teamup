@@ -57,6 +57,8 @@ Route::namespace('App')->group(function () {
             ]);
         });
 
+//        Route::get('dashboard', 'ActivitiesController@dashboard')->name('dashboard');
+        Route::get('userStats/{id}', 'ActivitiesController@userStats')->name('userStats');
         Route::group(['prefix' => 'activities'], function () {
             Route::resource('activities', 'ActivitiesController')->only([
                 'index', 'create' ,'store', 'edit' ,'update'

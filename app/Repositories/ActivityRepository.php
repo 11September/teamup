@@ -34,7 +34,7 @@ class ActivityRepository
     {
         return $this->activity
             ->filter($attributes)
-            ->with(array('team' => function($query){
+            ->with(array('team' => function ($query) {
                 $query->with('users');
             }))
             ->get();
@@ -53,6 +53,17 @@ class ActivityRepository
     public function getActivitiesIds($ids)
     {
         return $this->activity->whereIn('id', $ids)->get();
+    }
+
+    public function getAllActivitiesByTeamIdsAndCoachId($ids)
+    {
+        return $this->activity
+            ->select('id', 'name', 'graph_type')
+            ->whereIn('team_id', $ids)
+            ->orderBy('status', 'asc')
+            ->where('user_id', Auth::id())
+            ->where('status', '!=', 'blank')
+            ->get();
     }
 
     public function getCoachActivities()
@@ -130,10 +141,10 @@ class ActivityRepository
         return $this->activity
             ->select('id', 'name', 'measure_id', 'graph_type')
             ->where('id', $id)
-            ->with(array('measure' => function($query){
+            ->with(array('measure' => function ($query) {
                 $query->select('id', 'name');
             }))
-            ->with(array('goal' => function($query){
+            ->with(array('goal' => function ($query) {
                 $query->select('id', 'activity_id', 'goal');
             }))
             ->first($id);

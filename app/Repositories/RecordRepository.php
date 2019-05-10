@@ -23,6 +23,17 @@ class RecordRepository
         $this->record = $record;
     }
 
+    public function userStats($id)
+    {
+        return $this->record
+            ->select('id', 'activity_id', 'user_id', 'value', 'date')
+            ->where('user_id', $id)
+            ->whereHas('activities', function ($query) {
+                $query->where('user_id', Auth::id());
+            })
+            ->get();
+    }
+
     public function getUsersRecords($user_id)
     {
         return $this->record
