@@ -25,7 +25,7 @@ class ActivityUpdateApi extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|min:6',
+            'name' => 'required|string|min:3',
             'unit_id' => [
                 'required',
                 'int',
