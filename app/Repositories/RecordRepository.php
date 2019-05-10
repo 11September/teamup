@@ -69,7 +69,7 @@ class RecordRepository
         $format_group = $request->format_group ? $request->format_group : "M";
 
         return $this->record
-            ->where('user_id', Auth::id())
+            ->where('user_id', $request->user_id)
             ->where('activity_id', $request->activity_id)
             ->filter($request)
             ->get()

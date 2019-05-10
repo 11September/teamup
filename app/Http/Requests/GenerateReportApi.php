@@ -27,6 +27,7 @@ class GenerateReportApi extends FormRequest
     {
         return [
             'activity_id' => 'required|int|exists:activities,id',
+            'user_id' => 'required|int|exists:users,id',
 
             'id' => 'nullable|int|exists:records,id',
             'date_from' => [
