@@ -60,6 +60,7 @@ class ActivityService
     public function store(Request $request)
     {
         $attributes = $this->prepareData($request);
+        $attributes['user_id'] = Auth::id();
 
         $teams = $this->teamRepository->getAllCoachesTeamsWithRelation(Auth::id());
 
