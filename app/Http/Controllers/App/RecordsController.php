@@ -24,7 +24,6 @@ class RecordsController extends Controller
      * index
      *
      * @param  [string] activity_id | required
-     * @param  [string] format_group | nullable
      * @param  [int] id | nullable
      * @param  [date] date_from | nullable
      * @param  [date] date_to | nullable
