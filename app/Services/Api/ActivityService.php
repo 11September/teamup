@@ -87,6 +87,7 @@ class ActivityService
         $attributes['name'] = $request->name;
         $attributes['measure_id'] = $request->unit_id;
         $attributes['graph_type'] = $request->graphtype;
+        $attributes['status'] = "custom";
 
         return $attributes;
     }
