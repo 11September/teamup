@@ -63,9 +63,8 @@ class ActivitiesController extends Controller
             [
                 'data' => array(
                     'typeGraph' => ['straight', 'reverse'],
-                    'typeGraphTips' => [
-                        isset($graphSettingsTips->type_graph_straight) ? $graphSettingsTips->type_graph_straight : null,
-                        isset($graphSettingsTips->type_graph_reverse) ? $graphSettingsTips->type_graph_reverse : null],
+                    'typeGraphTipStraight' => isset($graphSettingsTips->type_graph_straight) ? $graphSettingsTips->type_graph_straight : null,
+                    'typeGraphTipReverse' => isset($graphSettingsTips->type_graph_reverse) ? $graphSettingsTips->type_graph_reverse : null,
                     'measures' => $measures,
                 )
             ],
